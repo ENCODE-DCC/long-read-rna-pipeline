@@ -14,6 +14,9 @@ RUN apt-get install -y \
     #pybedtools dependency
     libz-dev \
     bedtools=2.25.0-1 \
+    #samtools dependencies
+    libbz2-dev \
+    libncurses5-dev \
     git
 
 RUN mkdir /software
@@ -51,5 +54,16 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2
 # Get transcriptclean v1.0.7
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
+
+# Install samtools dependency
+
+RUN wget https://tukaani.org/xz/xz-5.2.3.tar.gz && tar -xvf xz-5.2.3.tar.gz
+RUN cd xz-5.2.3 && ./configure && make && make install && rm ../xz-5.2.3.tar.gz
+
+# Install samtools 1.9
+
+RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.git && \
+    git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
+    cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 ENTRYPOINT ["/bin/bash", "-c"]
