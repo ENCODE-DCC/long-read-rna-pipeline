@@ -9,9 +9,17 @@ workflow long_read_rna_pipeline {
     # Input fastqs. Can be gzipped.
     Array[File] fastqs 
 
-    # Reference genome. Fasta format, can be gzipped.
+    # Reference genome. Fasta format, gzipped.
 
     File reference_genome
+
+    # Annotation file, gtf format, gzipped.
+
+    File annotation
+
+    # Variants .vdf
+
+    File variants
 
     # Prefix that gets added into output filenames. Default empty.
 
@@ -28,6 +36,11 @@ workflow long_read_rna_pipeline {
     Int minimap2_ramGB
     String minimap2_disks
 
+    # Task get_splice_junctions
+
+    Int get_splice_junctions_ncpus
+    Int get_splice_junctions_ramGB
+    String get_splice_junctions_disks
 
     # Pipeline starts here
 
@@ -41,6 +54,15 @@ workflow long_read_rna_pipeline {
             ramGB = minimap2_ramGB,
             disks = minimap2_disks,
         }
+    }
+
+    call get_splice_junctions { input:
+        annotation = annotation,
+        reference_genome = reference_genome,
+        output_prefix = experiment_prefix,
+        ncpus = get_splice_junctions_ncpus,
+        ramGB = get_splice_junctions_ramGB,
+        disks = get_splice_junctions_disks,
     }
 }
 
@@ -73,6 +95,36 @@ task minimap2 {
     output {
         File sam = glob("*.sam")[0]
         File log = glob("*_minimap2.log")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+}
+
+task get_splice_junctions {
+    File annotation
+    File reference_genome
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        if [ $(head -n 1 ${reference_genome} | awk '{print NF}') -gt 1 ]; then
+            gzip -cd ${reference_genome} | awk '{print $1}' > ref.fasta
+        else
+            gzip -cd ${reference_genome} > ref.fasta
+        fi
+
+        gzip -cd ${annotation} > anno.gtf
+        python TranscriptClean/accessory_scripts/get_SJs_from_gtf.py --f anno.gtf --g ref.fasta --o ${output_prefix}_SJs.txt
+    }
+
+    output {
+        File splice_junctions = glob("*_SJs.txt")[0]
     }
 
     runtime {
