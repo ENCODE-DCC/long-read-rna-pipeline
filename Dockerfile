@@ -54,7 +54,7 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2
 # Get transcriptclean v1.0.7
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
-RUN chmod 755 Transcriptclean/accessory_scripts/*
+RUN chmod 755 TranscriptClean/accessory_scripts/*
 
 # Install samtools dependency
 
