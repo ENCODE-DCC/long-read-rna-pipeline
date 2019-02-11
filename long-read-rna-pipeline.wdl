@@ -17,10 +17,6 @@ workflow long_read_rna_pipeline {
 
     File annotation
 
-    # Variants .vdf
-
-    File variants
-
     # Prefix that gets added into output filenames. Default empty.
 
     String experiment_prefix=""
@@ -112,16 +108,17 @@ task get_splice_junctions {
     Int ramGB
     String disks
 
-    command {
-        if [ $(head -n 1 ${reference_genome} | awk '{print NF}') -gt 1 ]; then
-            gzip -cd ${reference_genome} | awk '{print $1}' > ref.fasta
+    command <<<
+        gzip -cd ${reference_genome} > ref.fasta
+        if [ $(head -n 1 ref.fasta | grep -oE "[[:space:]]" | wc -l) -gt 1 ]; then
+            cat ref.fasta | awk '{print $1}' > reference.fasta
         else
-            gzip -cd ${reference_genome} > ref.fasta
+            gzip -cd ${reference_genome} > reference.fasta
         fi
 
         gzip -cd ${annotation} > anno.gtf
-        python TranscriptClean/accessory_scripts/get_SJs_from_gtf.py --f anno.gtf --g ref.fasta --o ${output_prefix}_SJs.txt
-    }
+        python TranscriptClean/accessory_scripts/get_SJs_from_gtf.py --f anno.gtf --g refefence.fasta --o ${output_prefix}_SJs.txt
+    >>>
 
     output {
         File splice_junctions = glob("*_SJs.txt")[0]
