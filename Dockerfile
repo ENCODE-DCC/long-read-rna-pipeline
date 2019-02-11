@@ -26,7 +26,7 @@ ENV PATH="/software:${PATH}"
 # Install minimap2
 
 RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.15/minimap2-2.15_x64-linux.tar.bz2 | tar -jxvf -
-ENV PATH "/software//minimap2-2.15_x64-linux/:${PATH}"
+ENV PATH "/software/minimap2-2.15_x64-linux/:${PATH}"
 
 # Install R 3.3.2
 
@@ -55,7 +55,7 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/*
-ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean/:${PATH}"
+ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
 # Install samtools dependency
 

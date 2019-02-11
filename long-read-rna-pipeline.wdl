@@ -10,20 +10,20 @@ workflow long_read_rna_pipeline {
     Array[File] fastqs 
 
     # Reference genome. Fasta format, gzipped.
-
     File reference_genome
 
     # Annotation file, gtf format, gzipped.
-
     File annotation
 
-    # Prefix that gets added into output filenames. Default empty.
+    # Variants file, vcf format, gzipped.
+    File variants
 
+    # Prefix that gets added into output filenames. Default empty.
     String experiment_prefix=""
 
     # Is the data from "pacbio" or "nanopore"
-
     String input_type="pacbio"
+
     # Resouces
 
     # Task minimap2
@@ -38,7 +38,22 @@ workflow long_read_rna_pipeline {
     Int get_splice_junctions_ramGB
     String get_splice_junctions_disks
 
+    # Task transcriptclean
+
+    Int transcriptclean_ncpus
+    Int transcriptclean_ramGB
+    String transcriptclean_disks
+
     # Pipeline starts here
+    
+    call get_splice_junctions { input:
+            annotation = annotation,
+            reference_genome = reference_genome,
+            output_prefix = experiment_prefix,
+            ncpus = get_splice_junctions_ncpus,
+            ramGB = get_splice_junctions_ramGB,
+            disks = get_splice_junctions_disks,
+        }
 
     scatter (i in range(length(fastqs))) {
         call minimap2 { input:
@@ -50,15 +65,17 @@ workflow long_read_rna_pipeline {
             ramGB = minimap2_ramGB,
             disks = minimap2_disks,
         }
-    }
 
-    call get_splice_junctions { input:
-        annotation = annotation,
-        reference_genome = reference_genome,
-        output_prefix = experiment_prefix,
-        ncpus = get_splice_junctions_ncpus,
-        ramGB = get_splice_junctions_ramGB,
-        disks = get_splice_junctions_disks,
+        call transcriptclean { input:
+            sam = minimap2.sam,
+            reference_genome = reference_genome,
+            splice_junctions = get_splice_junctions.splice_junctions,
+            variants = variants,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            ncpus = transcriptclean_ncpus,
+            ramGB = transcriptclean_ramGB,
+            disks = transcriptclean_disks,
+        }
     }
 }
 
@@ -110,10 +127,11 @@ task get_splice_junctions {
 
     command <<<
         gzip -cd ${reference_genome} > ref.fasta
-        if [ $(head -n 1 ref.fasta | grep -oE "[[:space:]]" | wc -l) -gt 1 ]; then
+        
+        if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
         else
-            gzip -cd ${reference_genome} > reference.fasta
+            mv ref.fasta reference.fasta
         fi
 
         gzip -cd ${annotation} > anno.gtf
@@ -122,6 +140,53 @@ task get_splice_junctions {
 
     output {
         File splice_junctions = glob("*_SJs.txt")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+}
+
+task transcriptclean {
+    File sam
+    File reference_genome
+    File splice_junctions
+    File variants
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command <<<
+        gzip -cd ${reference_genome} > ref.fasta
+        gzip -cd ${variants} > variants.vcf
+
+        if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
+            cat ref.fasta | awk '{print $1}' > reference.fasta
+        else
+            mv ref.fasta reference.fasta
+        fi
+
+        python $(which TranscriptClean.py) --sam ${sam} \
+            --genome reference.fasta \
+            --spliceJns ${splice_junctions} \
+            --variants variants.vcf \
+            --maxLenIndel 5 \
+            --maxSJOffset 5 \
+            -m true \
+            -i true \
+            --correctSJs true \
+            --primaryOnly \
+            --outprefix ${output_prefix}
+    >>>
+
+    output {
+        File corrected_sam = glob("*_clean.sam")[0]
+        File corrected_fasta = glob("*_clean.fa")[0]
+        File transcript_log = glob("*_clean.log")[0]
+        File transcript_error_log = glob("*_clean.TE.log")[0]
     }
 
     runtime {
