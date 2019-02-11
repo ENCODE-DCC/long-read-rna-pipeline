@@ -117,7 +117,7 @@ task get_splice_junctions {
         fi
 
         gzip -cd ${annotation} > anno.gtf
-        python TranscriptClean/accessory_scripts/get_SJs_from_gtf.py --f anno.gtf --g refefence.fasta --o ${output_prefix}_SJs.txt
+        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ${output_prefix}_SJs.txt
     >>>
 
     output {
