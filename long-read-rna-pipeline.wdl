@@ -180,6 +180,8 @@ task transcriptclean {
             --correctSJs true \
             --primaryOnly \
             --outprefix ${output_prefix}
+
+        Rscript $(which generate_report.R) ${output_prefix}
     >>>
 
     output {
@@ -187,6 +189,7 @@ task transcriptclean {
         File corrected_fasta = glob("*_clean.fa")[0]
         File transcript_log = glob("*_clean.log")[0]
         File transcript_error_log = glob("*_clean.TE.log")[0]
+        File report = glob("*_report.pdf")[0]
     }
 
     runtime {
