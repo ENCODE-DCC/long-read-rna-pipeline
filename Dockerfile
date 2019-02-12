@@ -48,8 +48,8 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
 
 # Install Intervaltree 2.1.0
 
-RUN pip install --upgrade pip
-RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2
+RUN pip install --upgrade pip 
+RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas
 
 # Get transcriptclean v1.0.7
 
@@ -68,6 +68,10 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
-# Forgotten dependencies
-RUN pip install numpy pandas
+# make code within the repo available
+
+RUN mkdir -p long-rna-seq-pipeline/src
+COPY /src long-rna-seq-pipeline/src
+ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
+
 ENTRYPOINT ["/bin/bash", "-c"]

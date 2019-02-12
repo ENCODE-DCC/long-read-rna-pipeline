@@ -44,6 +44,12 @@ workflow long_read_rna_pipeline {
     Int transcriptclean_ramGB
     String transcriptclean_disks
 
+    # Task filter_transcriptclean
+
+    Int filter_transcriptclean_ncpus
+    Int filter_transcriptclean_ramGB
+    String filter_transcriptclean_disks
+
     # Pipeline starts here
     
     call get_splice_junctions { input:
@@ -197,4 +203,27 @@ task transcriptclean {
         memory: "${ramGB} GB"
         disks: disks
     }
+}
+
+task filter_transcriptclean {
+    File input_sam
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        filter_transcriptclean_result.sh ${input_sam} ${output_prefix + "_filtered.sam"}
+    }
+
+    output {
+        File filtered_sam = glob("*_filtered.sam")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
 }
