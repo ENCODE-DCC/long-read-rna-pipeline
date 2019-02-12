@@ -1,0 +1,8 @@
+{
+    "test_get_splice_junctions.annotation" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
+    "test_get_splice_junctions.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
+    "test_get_splice_junctions.output_prefix" : "TEST_GET_SPLICE_JUNCTIONS",
+    "test_get_splice_junctions.ncpus" : 1,
+    "test_get_splice_junctions.ramGB" : 2,
+    "test_get_splice_junctions.disks" : "local-disk 20 HDD"
+}
