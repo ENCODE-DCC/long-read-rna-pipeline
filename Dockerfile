@@ -26,7 +26,7 @@ ENV PATH="/software:${PATH}"
 # Install minimap2
 
 RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.15/minimap2-2.15_x64-linux.tar.bz2 | tar -jxvf -
-ENV PATH "/software//minimap2-2.15_x64-linux/:${PATH}"
+ENV PATH "/software/minimap2-2.15_x64-linux/:${PATH}"
 
 # Install R 3.3.2
 
@@ -48,12 +48,14 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
 
 # Install Intervaltree 2.1.0
 
-RUN pip install --upgrade pip
-RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2
+RUN pip install --upgrade pip 
+RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas
 
 # Get transcriptclean v1.0.7
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
+RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
+ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
 # Install samtools dependency
 
@@ -66,6 +68,10 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
-# Forgotten dependencies
-RUN pip install numpy pandas
+# make code within the repo available
+
+RUN mkdir -p long-rna-seq-pipeline/src
+COPY /src long-rna-seq-pipeline/src
+ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
+
 ENTRYPOINT ["/bin/bash", "-c"]
