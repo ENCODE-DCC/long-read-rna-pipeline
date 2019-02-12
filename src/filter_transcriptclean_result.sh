@@ -5,7 +5,7 @@ FILT=filt.sam
 OUT=canonical.sam
 SORTOUT=$2
 
-samtools view -H $infile > $HEADER
+samtools view -H $infile > header.h
  
 # Filter out noncanonical reads and add to file. 
 # For this command to work, the second to last column in the sam file needs to be the jM:B:c field. 
@@ -13,7 +13,7 @@ samtools view -H $infile > $HEADER
 samtools view $infile | awk '{if($(NF-1) !~ "0") print $0}' >> $OUT
 
 # Remove duplicate mappings
-cat $HEADER > $FILT
+cat header.h > $FILT
 awk '!seen[$1]++' $OUT >> $FILT
 
 # Sort 
