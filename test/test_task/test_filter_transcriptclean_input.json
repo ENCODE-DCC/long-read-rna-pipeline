@@ -1,0 +1,9 @@
+{
+    "test_filter_transcriptclean.sam" : "test_data/from_transcriptclean.sam",
+    "test_filter_transcriptclean.output_prefix" : "TEST_FILTER_TRANSCRIPTCLEAN",
+    "test_filter_transcriptclean.lines_to_skip" : 3,
+    "test_filter_transcriptclean.output_fn" : "TEST_FILTER_TRANSCRIPTCLEAN_noheader_filtered.sam",
+    "test_filter_transcriptclean.ncpus" : 2,
+    "test_filter_transcriptclean.ramGB" : 4,
+    "test_filter_transcriptclean.disks" : "local-disk 20 HDD"
+}
