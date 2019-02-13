@@ -167,7 +167,7 @@ jobs:
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
             test_transcriptclean.transcriptclean.transcript_error_log \
             test_transcriptclean.transcriptclean.corrected_fasta \
-            test_transcriptclean.skipNfirstlines.output_file 
+            test_transcriptclean.skipNfirstlines.output_file \
             --metadata_json test_transcriptclean_input.metadata.json \
             --reference_json test/test_task/test_transcriptclean_reference_md5.json \
             --outfile test_transcriptclean_input.result.json
@@ -190,12 +190,51 @@ jobs:
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
             test_transcriptclean.transcriptclean.transcript_error_log \
             test_transcriptclean.transcriptclean.corrected_fasta \
-            test_transcriptclean.skipNfirstlines.output_file 
+            test_transcriptclean.skipNfirstlines.output_file \
             --metadata_json test_transcriptclean_input.metadata.json \
             --reference_json test/test_task/test_transcriptclean_reference_md5.json \
             --outfile test_transcriptclean_input.result.json
             cat test_transcriptclean_input.result.json
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_transcriptclean_input.result.json
+          no_output_timeout: 30m
+
+  test_filter_transcriptclean_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
+            --metadata_json test_filter_transcriptclean_input.metadata.json \
+            --reference_json test/test_task/test_filter_transcriptclean_reference_md5.json \
+            --outfile test_filter_transcriptclean_input.result.json
+            cat test_filter_transcriptclean_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
+          no_output_timeout: 30m
+
+  test_filter_transcriptclean_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
+            --metadata_json test_filter_transcriptclean_input.metadata.json \
+            --reference_json test/test_task/test_filter_transcriptclean_reference_md5.json \
+            --outfile test_filter_transcriptclean_input.result.json
+            cat test_filter_transcriptclean_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
           no_output_timeout: 30m
 
 # Workflow
@@ -222,6 +261,12 @@ workflows:
       - test_transcriptclean_singularity:
           requires:
             - build
+      - test_filter_transcriptclean_docker:
+          requires:
+            - build
+      - test_filter_transcriptclean_singularity:
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
@@ -230,3 +275,5 @@ workflows:
             - test_minimap2_singularity
             - test_transcriptclean_docker
             - test_transcriptclean_singularity
+            - test_filter_transcriptclean_docker
+            - test_filter_transcriptclean_singularity
