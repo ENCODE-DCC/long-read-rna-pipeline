@@ -97,6 +97,25 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_get_splice_junctions_input.result.json
           no_output_timeout: 30m
 
+  test_get_splice_junctions_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_get_splice_junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG singularity
+            python3 src/compare_md5.py --keys_to_inspect test_get_splice_junctions.get_splice_junctions.splice_junctions \
+            --metadata_json test_get_splice_junctions_input.metadata.json \
+            --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
+            --outfile test_get_splice_junctions_input.result.json
+            cat test_get_splice_junctions_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_get_splice_junctions_input.result.json
+          no_output_timeout: 30m
+
 # Workflow
 workflows:
   version: 2
@@ -106,6 +125,10 @@ workflows:
       - test_get_splice_junctions_docker:
           requires:
             - build
+      - test_get_splice_junctions_singularity:
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
+            - test_get_splice_junctions_singularity
