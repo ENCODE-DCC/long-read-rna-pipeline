@@ -235,3 +235,26 @@ task filter_transcriptclean {
     }
 
 }
+
+task skipNfirstlines {
+    File input_file
+    String output_fn
+    Int lines_to_skip
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        sed 1,${lines_to_skip}d ${input_file} > ${output_fn}
+    }
+
+    output {
+        File output_file = glob("${output_fn}")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+}
