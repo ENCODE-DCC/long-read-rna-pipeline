@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# from Jin Lee's excellent atac-seq-pipeline in https://www.github.com/encode-dcc/atac-seq-pipeline
-# with minor changes
-
 set -e # exit on error
 
 if [ $# -lt 3 ]; then
