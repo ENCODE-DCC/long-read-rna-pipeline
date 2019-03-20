@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER Otto Jolanki
 
 RUN apt-get update && apt-get install -y software-properties-common
-# RUN add-apt-repository -y ppa:deadsnakes/ppa
+RUN add-apt-repository -y ppa:deadsnakes/ppa
 RUN apt-get install -y \
     python \
     cython \
@@ -17,7 +17,8 @@ RUN apt-get install -y \
     #samtools dependencies
     libbz2-dev \
     libncurses5-dev \
-    git
+    git \
+    python3.7
 
 RUN mkdir /software
 WORKDIR /software
