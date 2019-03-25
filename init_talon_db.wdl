@@ -28,8 +28,10 @@ task init_db {
     String disk
 
     command {
+        gzip -cd ${annotation_gtf} > anno.gtf
+        rm ${annotation_gtf}
         python $(which initialize_talon_database.py) \
-            --f ${annotation_gtf} \
+            --f anno.gtf \
             --a ${annotation_name} \
             --g ${ref_genome_name} \
             --o ${output_prefix}
