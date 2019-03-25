@@ -69,6 +69,11 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
+# Install TALON
+RUN git clone -b v4.0 --single-branch https://github.com/dewyman/TALON.git
+RUN chmod 755 TALON/initialize_talon_database.py
+ENV PATH="/software/TALON:${PATH}"
+
 # make code within the repo available
 
 RUN mkdir -p long-rna-seq-pipeline/src

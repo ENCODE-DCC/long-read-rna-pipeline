@@ -1,0 +1,9 @@
+{
+    "init_talon_db.annotation_gtf" : "",
+    "init_talon_db.annotation_name" : "",
+    "init_talon_db.ref_genome_name" : "",
+    "init_talon_db.output_prefix" : "",
+    "init_talon_db.ncpu" : 2,
+    "init_talon_db.ramGB" : 4,
+    "init_talon_db.disk" : "local-disk 20 SSD"
+}
