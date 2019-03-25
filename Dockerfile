@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER Otto Jolanki
 
 RUN apt-get update && apt-get install -y software-properties-common
-# RUN add-apt-repository -y ppa:deadsnakes/ppa
+RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update
 RUN apt-get install -y \
     python \
     cython \
@@ -17,7 +17,8 @@ RUN apt-get install -y \
     #samtools dependencies
     libbz2-dev \
     libncurses5-dev \
-    git
+    git \
+    python3.7
 
 RUN mkdir /software
 WORKDIR /software
@@ -67,6 +68,11 @@ RUN cd xz-5.2.3 && ./configure && make && make install && rm ../xz-5.2.3.tar.gz
 RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.git && \
     git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
+
+# Install TALON
+RUN git clone -b v4.0 --single-branch https://github.com/dewyman/TALON.git
+RUN chmod 755 TALON/initialize_talon_database.py
+ENV PATH="/software/TALON:${PATH}"
 
 # make code within the repo available
 

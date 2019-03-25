@@ -237,6 +237,45 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
           no_output_timeout: 30m
 
+  test_init_talon_database_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect init_talon_db.init_db.database \
+            --metadata_json test_init_talon_db_input.metadata.json \
+            --reference_json test/test_task/test_init_talon_db_reference_md5.json \
+            --outfile test_init_talon_db_input.result.json
+            cat test_init_talon_db_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
+          no_output_timeout: 30m
+
+  test_init_talon_database_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect init_talon_db.init_db.database \
+            --metadata_json test_init_talon_db_input.metadata.json \
+            --reference_json test/test_task/test_init_talon_db_reference_md5.json \
+            --outfile test_init_talon_db_input.result.json
+            cat test_init_talon_db_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
+          no_output_timeout: 30m
+
 # Workflow
 workflows:
   version: 2
@@ -267,6 +306,12 @@ workflows:
       - test_filter_transcriptclean_singularity:
           requires:
             - build
+      - test_init_talon_database_docker:
+          requires:
+            - build
+      - test_init_talon_database_singularity:
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
@@ -277,3 +322,5 @@ workflows:
             - test_transcriptclean_singularity
             - test_filter_transcriptclean_docker
             - test_filter_transcriptclean_singularity
+            - test_init_talon_database_docker
+            - test_init_talon_database_singularity
