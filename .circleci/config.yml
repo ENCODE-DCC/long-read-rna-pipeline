@@ -89,7 +89,7 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG docker
-            python3 src/compare_md5.py --keys_to_inspect test_get_splice_junctions.get_splice_junctions.splice_junctions \
+            python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
             --metadata_json test_get_splice_junctions_input.metadata.json \
             --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
             --outfile test_get_splice_junctions_input.result.json
@@ -108,7 +108,7 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG singularity
-            python3 src/compare_md5.py --keys_to_inspect test_get_splice_junctions.get_splice_junctions.splice_junctions \
+            python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
             --metadata_json test_get_splice_junctions_input.metadata.json \
             --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
             --outfile test_get_splice_junctions_input.result.json
