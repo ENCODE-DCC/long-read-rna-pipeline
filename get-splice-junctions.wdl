@@ -14,7 +14,7 @@ workflow get_splice_junctions {
 
     # Output prefix, the output filename will be output_prefix_SJs.txt
     String output_prefix
-    
+
     # Resources
     Int ncpus
     Int ramGB
@@ -22,7 +22,7 @@ workflow get_splice_junctions {
 
     # Pipeline starts here
 
-    call get_splice_junctions { input:
+    call get_splice_junctions_ { input:
             annotation = annotation,
             reference_genome = reference_genome,
             output_prefix = experiment_prefix,
@@ -32,7 +32,7 @@ workflow get_splice_junctions {
         }
 }
 
-task get_splice_junctions {
+task get_splice_junctions_ {
     File annotation
     File reference_genome
     String output_prefix
