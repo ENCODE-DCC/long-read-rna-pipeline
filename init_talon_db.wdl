@@ -33,7 +33,7 @@ task init_db {
     command {
         gzip -cd ${annotation_gtf} > anno.gtf
         rm ${annotation_gtf}
-        python $(which initialize_talon_database.py) \
+        python3.7 $(which initialize_talon_database.py) \
             --f anno.gtf \
             --a ${annotation_name} \
             --g ${ref_genome_name} \
