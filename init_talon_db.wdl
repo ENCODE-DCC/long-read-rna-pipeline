@@ -1,3 +1,6 @@
+# ENCODE long read rna pipeline: initialize talon database
+# Maintainer: Otto Jolanki
+
 workflow init_talon_db {
     File annotation_gtf
     String annotation_name
