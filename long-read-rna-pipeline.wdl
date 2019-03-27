@@ -18,6 +18,10 @@ workflow long_read_rna_pipeline {
     # Variants file, vcf format, gzipped.
     File variants
 
+    # Splice junctions file, produced by get-splice-juctions.wdl
+
+    File splice_junctions
+
     # Prefix that gets added into output filenames. Default empty.
     String experiment_prefix=""
 
@@ -60,7 +64,7 @@ workflow long_read_rna_pipeline {
         call transcriptclean { input:
             sam = minimap2.sam,
             reference_genome = reference_genome,
-            splice_junctions = get_splice_junctions.splice_junctions,
+            splice_junctions = splice_junctions,
             variants = variants,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             ncpus = transcriptclean_ncpus,
