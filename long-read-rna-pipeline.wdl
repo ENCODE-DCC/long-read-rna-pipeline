@@ -6,7 +6,7 @@ workflow long_read_rna_pipeline {
 
     # File inputs
 
-    # Input fastqs. Can be gzipped.
+    # Input fastqs, gzipped.
     Array[File] fastqs 
 
     # Reference genome. Fasta format, gzipped.
@@ -91,7 +91,7 @@ task minimap2 {
     Int ramGB
     String disks
 
-    command {
+    command <<<
         if [ "${input_type}" == "pacbio" ]; then
             minimap2 -t ${ncpus} -ax splice -uf --secondary=no -C5 \
                 ${reference_genome} \
@@ -99,6 +99,7 @@ task minimap2 {
                 > ${output_prefix}.sam \
                 2> ${output_prefix}_minimap2.log
         fi
+        
         if [ "${input_type}" == "nanopore" ]; then
             minimap2 -t ${ncpus} -ax splice -uf -k14 \
                 ${reference_genome} \
@@ -106,7 +107,10 @@ task minimap2 {
                 > ${output_prefix}.sam \
                 2> ${output_prefix}_minimap2.log
         fi
-    }
+
+        gzip -cd ${fastq} | grep "^@" | wc -l > FNLC.txt
+        samtools view $infile | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
+    >>>
 
     output {
         File sam = glob("*.sam")[0]

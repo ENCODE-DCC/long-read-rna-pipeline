@@ -50,7 +50,7 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
 # Install Intervaltree 2.1.0
 
 RUN pip install --upgrade pip 
-RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas
+RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas qc-utils
 
 # Get transcriptclean v1.0.7
 
