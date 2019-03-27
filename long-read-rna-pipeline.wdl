@@ -109,7 +109,7 @@ task minimap2 {
         fi
 
         gzip -cd ${fastq} | grep "^@" | wc -l > FNLC.txt
-        samtools view $infile | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
+        samtools view ${output_prefix}.sam | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
     >>>
 
     output {
