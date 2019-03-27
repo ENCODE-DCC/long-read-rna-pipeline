@@ -18,6 +18,10 @@ workflow long_read_rna_pipeline {
     # Variants file, vcf format, gzipped.
     File variants
 
+    # Splice junctions file, produced by get-splice-juctions.wdl
+
+    File splice_junctions
+
     # Prefix that gets added into output filenames. Default empty.
     String experiment_prefix=""
 
@@ -32,12 +36,6 @@ workflow long_read_rna_pipeline {
     Int minimap2_ramGB
     String minimap2_disks
 
-    # Task get_splice_junctions
-
-    Int get_splice_junctions_ncpus
-    Int get_splice_junctions_ramGB
-    String get_splice_junctions_disks
-
     # Task transcriptclean
 
     Int transcriptclean_ncpus
@@ -51,15 +49,6 @@ workflow long_read_rna_pipeline {
     String filter_transcriptclean_disks
 
     # Pipeline starts here
-    
-    call get_splice_junctions { input:
-            annotation = annotation,
-            reference_genome = reference_genome,
-            output_prefix = experiment_prefix,
-            ncpus = get_splice_junctions_ncpus,
-            ramGB = get_splice_junctions_ramGB,
-            disks = get_splice_junctions_disks,
-        }
 
     scatter (i in range(length(fastqs))) {
         call minimap2 { input:
@@ -75,7 +64,7 @@ workflow long_read_rna_pipeline {
         call transcriptclean { input:
             sam = minimap2.sam,
             reference_genome = reference_genome,
-            splice_junctions = get_splice_junctions.splice_junctions,
+            splice_junctions = splice_junctions,
             variants = variants,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             ncpus = transcriptclean_ncpus,
@@ -122,38 +111,6 @@ task minimap2 {
     output {
         File sam = glob("*.sam")[0]
         File log = glob("*_minimap2.log")[0]
-    }
-
-    runtime {
-        cpu: ncpus
-        memory: "${ramGB} GB"
-        disks: disks
-    }
-}
-
-task get_splice_junctions {
-    File annotation
-    File reference_genome
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
-
-    command <<<
-        gzip -cd ${reference_genome} > ref.fasta
-        
-        if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
-            cat ref.fasta | awk '{print $1}' > reference.fasta
-        else
-            mv ref.fasta reference.fasta
-        fi
-
-        gzip -cd ${annotation} > anno.gtf
-        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ${output_prefix}_SJs.txt
-    >>>
-
-    output {
-        File splice_junctions = glob("*_SJs.txt")[0]
     }
 
     runtime {
