@@ -199,6 +199,29 @@ task filter_transcriptclean {
 
 }
 
+task talon {
+    File talon_db
+    String genome_build
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+
+    }
+
+    output {
+
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
 task skipNfirstlines {
     File input_file
     String output_fn
