@@ -3,11 +3,12 @@ FROM ubuntu:16.04
 MAINTAINER Otto Jolanki
 
 RUN apt-get update && apt-get install -y software-properties-common
-RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update
-RUN apt-get install -y \
+RUN add-apt-repository -y ppa:deadsnakes/ppa 
+RUN apt-get update && apt-get install -y \
     python \
     cython \
     python-pip \
+    python3-pip \
     curl \
     wget \
     gdebi \
@@ -51,6 +52,10 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
 
 RUN pip install --upgrade pip 
 RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas
+
+# Install qc-utils to python 3.7
+
+RUN python3.7 -m pip install qc-utils
 
 # Get transcriptclean v1.0.7
 
