@@ -126,7 +126,7 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json $TAG docker
-            python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file \
+            python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
             --metadata_json test_minimap2_input.metadata.json \
             --reference_json test/test_task/test_minimap2_reference_md5.json \
             --outfile test_minimap2_input.result.json
@@ -145,7 +145,7 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json $TAG singularity
-            python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file \
+            python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
             --metadata_json test_minimap2_input.metadata.json \
             --reference_json test/test_task/test_minimap2_reference_md5.json \
             --outfile test_minimap2_input.result.json
