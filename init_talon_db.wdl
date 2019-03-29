@@ -38,10 +38,16 @@ task init_db {
             --a ${annotation_name} \
             --g ${ref_genome_name} \
             --o ${output_prefix}
+
+        python3.7 $(which record_init_db_inputs.py) \
+            --annotation_name ${annotation_name} \
+            --genome ${ref_genome_name} \
+            --outfile ${output_prefix}_talon_inputs.json
         }
     
     output {
         File database = glob("*.db")[0]
+        File talon_inputs = glob("*_talon_inputs.json")[0]
            }
 
     runtime {
