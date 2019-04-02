@@ -243,7 +243,7 @@ task create_abundance_from_talon_db {
     command {
         python3.7 $(which create_abundance_file_from_database.py) --db=${talon_db} \
                                                                   -a ${annotation_name} \
-                                                                  -o=${output_prefix}
+                                                                  --o=${output_prefix}
     }
 
     output {

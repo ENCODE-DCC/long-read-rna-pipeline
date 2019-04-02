@@ -75,7 +75,7 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install TALON
-RUN git clone -b v4.0 --single-branch https://github.com/dewyman/TALON.git
+RUN git clone https://github.com/dewyman/TALON.git
 RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py
 ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 
