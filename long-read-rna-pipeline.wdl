@@ -210,13 +210,45 @@ task talon {
     String disks
 
     command {
-        echo ${output_prefix},${output_prefix},${platform},${sam} > ${output_prefix}_talon_config.txt
+        echo ${output_prefix},${output_prefix},${platform},${sam} > ${output_prefix}_talon_config.csv
+        cp ${talon_db} ./${output_prefix}_talon.db
+        python3.7 $(which talon.py) --f ${output_prefix}_talon_config.csv \
+                                    --db ${output_prefix}_talon.db \
+                                    --build ${genome_build} \
+                                    --o ${output_prefix}
     }
 
     output {
-        File talon_config = glob("*_talon_config.txt")[0]
+        File talon_config = glob("*_talon_config.csv")[0]
+        File talon_log = glob("*_talon_QC.log")[0]
+        File talon_db_out = glob("*_talon.db")[0]
     }
 
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
+
+task create_abundance_from_talon_db {
+    File talon_db
+    String annotation_name
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        python3.7 $(which create_abundance_file_from_database.py) --db=${talon_db} \
+                                                                  -a ${annotation_name} \
+                                                                  -o=${output_prefix}
+    }
+
+    output {
+        File talon_abundance = glob("*_talon_abundance.tsv")[0]
+    }
     runtime {
         cpu: ncpus
         memory: "${ramGB} GB"
