@@ -201,18 +201,20 @@ task filter_transcriptclean {
 
 task talon {
     File talon_db
+    File sam
     String genome_build
     String output_prefix
+    String platform
     Int ncpus
     Int ramGB
     String disks
 
     command {
-
+        echo ${output_prefix},${output_prefix},${platform},${sam} > ${output_prefix}_talon_config.txt
     }
 
     output {
-
+        File talon_config = glob("*_talon_config.txt")[0]
     }
 
     runtime {

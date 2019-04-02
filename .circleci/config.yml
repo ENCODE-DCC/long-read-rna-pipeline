@@ -276,6 +276,27 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
           no_output_timeout: 30m
 
+  test_talon_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+
+  test_talon_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+
 # Workflow
 workflows:
   version: 2
