@@ -315,6 +315,45 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_talon_input.result.json
           no_output_timeout: 30m
 
+  test_create_abundance_from_talon_db_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_create_abundance_from_talon_db_input.metadata.json \
+            --reference_json test/test_task/test_create_abundance_from_talon_db_reference_md5.json \
+            --outfile test_create_abundance_from_talon_db_input.result.json
+            cat test_create_abundance_from_talon_db_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
+          no_output_timeout: 30m
+
+  test_create_abundance_from_talon_db_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_create_abundance_from_talon_db_input.metadata.json \
+            --reference_json test/test_task/test_create_abundance_from_talon_db_reference_md5.json \
+            --outfile test_create_abundance_from_talon_db_input.result.json
+            cat test_create_abundance_from_talon_db_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
+          no_output_timeout: 30m
+
 # Workflow
 workflows:
   version: 2
@@ -357,6 +396,12 @@ workflows:
       - test_talon_singularity:
           requires:
             - build
+      - test_create_abundance_from_talon_db_docker:
+          requires:
+            - build
+      - test_create_abundance_from_talon_db_singularity:
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
@@ -371,3 +416,5 @@ workflows:
             - test_init_talon_database_singularity
             - test_talon_docker
             - test_talon_singularity
+            - test_create_abundance_from_talon_db_docker
+            - test_create_abundance_from_talon_db_singularity
