@@ -28,6 +28,18 @@ workflow long_read_rna_pipeline {
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
 
+    # Talon db, produced by init_talon_db.wdl
+
+    File initial_talon_db
+
+    # Genome build name, for TALON. This must be in the initial_talon_db
+
+    String genome_build
+
+    # Annotation name, for creating abundance from talon db. This must be in the initial_talon_db
+
+    String annotation_name
+
     # Resouces
 
     # Task minimap2
@@ -47,6 +59,18 @@ workflow long_read_rna_pipeline {
     Int filter_transcriptclean_ncpus
     Int filter_transcriptclean_ramGB
     String filter_transcriptclean_disks
+
+    # Task talon
+
+    Int talon_ncpus
+    Int talon_ramGB
+    String talon_disks
+
+    # Task create_abundance_from_talon_db
+
+    Int create_abundance_from_talon_db_ncpus
+    Int create_abundance_from_talon_db_ramGB
+    String create_abundance_from_talon_db_disks
 
     # Pipeline starts here
 
@@ -78,6 +102,26 @@ workflow long_read_rna_pipeline {
             ncpus = filter_transcriptclean_ncpus,
             ramGB = filter_transcriptclean_ramGB,
             disks = filter_transcriptclean_disks,
+        }
+
+        call talon { input:
+            talon_db = initial_talon_db,
+            sam = filter_transcriptclean.filtered_sam,
+            genome_build = genome_build,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            platform = input_type,
+            ncpus = talon_ncpus,
+            ramGB = talon_ramGB,
+            disks = talon_disks,
+        }
+
+        call create_abundance_from_talon_db { input:
+            talon_db = talon.talon_db_out,
+            annotation_name = annotation_name,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            ncpus = create_abundance_from_talon_db_ncpus,
+            ramGB = create_abundance_from_talon_db_ramGB,
+            disks = create_abundance_from_talon_db_disks,
         }
     }
 }
