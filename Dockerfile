@@ -57,6 +57,10 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy panda
 
 RUN python3.7 -m pip install qc-utils
 
+# Install pandas and scipy (for correlations and genes detected calculations)
+
+RUN python3.7 -m pip install pandas scipy
+
 # Get transcriptclean v1.0.7
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
