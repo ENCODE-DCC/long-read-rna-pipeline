@@ -327,6 +327,7 @@ jobs:
             test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
+                              test_create_abundance_from_talon_db.create_abundance_from_talon_db.number_of_genes_detected \
             --metadata_json test_create_abundance_from_talon_db_input.metadata.json \
             --reference_json test/test_task/test_create_abundance_from_talon_db_reference_md5.json \
             --outfile test_create_abundance_from_talon_db_input.result.json
@@ -347,6 +348,7 @@ jobs:
             test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
+                              test_create_abundance_from_talon_db.create_abundance_from_talon_db.number_of_genes_detected \
             --metadata_json test_create_abundance_from_talon_db_input.metadata.json \
             --reference_json test/test_task/test_create_abundance_from_talon_db_reference_md5.json \
             --outfile test_create_abundance_from_talon_db_input.result.json

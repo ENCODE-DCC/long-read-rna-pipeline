@@ -22,8 +22,8 @@ workflow long_read_rna_pipeline {
 
     File splice_junctions
 
-    # Prefix that gets added into output filenames. Default empty.
-    String experiment_prefix=""
+    # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
+    String experiment_prefix="my_experiment"
 
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
@@ -288,10 +288,14 @@ task create_abundance_from_talon_db {
         python3.7 $(which create_abundance_file_from_database.py) --db=${talon_db} \
                                                                   -a ${annotation_name} \
                                                                   --o=${output_prefix}
+        python3.7 $(which calculate_number_of_genes_detected.py) --abundance ${output_prefix}_talon_abundance.tsv \
+                                                                 --counts_colname ${output_prefix} \
+                                                                 --outfile ${output_prefix}_number_of_genes_detected.json
     }
 
     output {
         File talon_abundance = glob("*_talon_abundance.tsv")[0]
+        File number_of_genes_detected = glob("*_number_of_genes_detected.json")[0]
     }
     runtime {
         cpu: ncpus

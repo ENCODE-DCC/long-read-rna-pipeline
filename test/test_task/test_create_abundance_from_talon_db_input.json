@@ -1,7 +1,7 @@
 {
     "test_create_abundance_from_talon_db.talon_db" : "test_data/TEST_TALON_talon.db",
     "test_create_abundance_from_talon_db.annotation_name" : "gencode_V24_chr19",
-    "test_create_abundance_from_talon_db.output_prefix" : "TEST_CREATE_ABUNDANCE",
+    "test_create_abundance_from_talon_db.output_prefix" : "TEST_TALON",
     "test_create_abundance_from_talon_db.ncpus" : 2,
     "test_create_abundance_from_talon_db.ramGB" : 4,
     "test_create_abundance_from_talon_db.disks" : "local-disk 20 HDD"

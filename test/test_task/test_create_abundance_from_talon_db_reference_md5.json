@@ -1,3 +1,4 @@
 {
-    "TEST_CREATE_ABUNDANCE_talon_abundance.tsv" : "0b5226c96670859f98216bd380310b31"
+    "TEST_TALON_talon_abundance.tsv" : "0b5226c96670859f98216bd380310b31",
+    "TEST_TALON_number_of_genes_detected.json" : "7e09d292ea53dff23135b1a60c0de471"
 }
