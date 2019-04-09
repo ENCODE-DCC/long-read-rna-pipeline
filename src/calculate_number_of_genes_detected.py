@@ -10,7 +10,7 @@ def main(args):
     not_starts_with_TALON = abundance['annot_gene_id'].apply(lambda x: not x.startswith('TALON'))
     not_genomic_not_TALON = not_genomic_transcript & not_starts_with_TALON
     gene_counts = abundance[not_genomic_not_TALON].groupby(['annot_gene_id'])[args.counts_colname].sum()
-    number_of_genes = len(gene_counts)
+    number_of_genes = sum(gene_counts >= 1)
     number_of_genes_record = QCMetricRecord()
     number_of_genes_metric = QCMetric('number_of_genes_detected', {'number_of_genes_detected': number_of_genes})
     number_of_genes_record.add(number_of_genes_metric)
