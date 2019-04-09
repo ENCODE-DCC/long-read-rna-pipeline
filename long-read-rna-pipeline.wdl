@@ -72,6 +72,12 @@ workflow long_read_rna_pipeline {
     Int create_abundance_from_talon_db_ramGB
     String create_abundance_from_talon_db_disks
 
+    # Task calculate_spearman
+
+    Int calculate_spearman_ncpus=1
+    Int calculate_spearman_ramGB=2
+    String calculate_spearman_disks="local-disk 20 HDD"
+
     # Pipeline starts here
 
     scatter (i in range(length(fastqs))) {
@@ -122,6 +128,17 @@ workflow long_read_rna_pipeline {
             ncpus = create_abundance_from_talon_db_ncpus,
             ramGB = create_abundance_from_talon_db_ramGB,
             disks = create_abundance_from_talon_db_disks,
+        }
+    }
+
+    if (length(fastqs) == 2) {
+        call calculate_spearman { input:
+            rep1_abundance = create_abundance_from_talon_db.talon_abundance[0],
+            rep2_abundance = create_abundance_from_talon_db.talon_abundance[1],
+            output_prefix = experiment_prefix,
+            ncpus = calculate_spearman_ncpus,
+            ramGB = calculate_spearman_ramGB, 
+            disks = calculate_spearman_disks,
         }
     }
 }
@@ -297,6 +314,33 @@ task create_abundance_from_talon_db {
         File talon_abundance = glob("*_talon_abundance.tsv")[0]
         File number_of_genes_detected = glob("*_number_of_genes_detected.json")[0]
     }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
+
+task calculate_spearman {
+    File rep1_abundance
+    File rep2_abundance
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        python3.7 $(which calculate_correlation.py) --rep1_abundance ${rep1_abundance} \
+                                                    --rep2_abundance ${rep2_abundance} \
+                                                    --outfile ${output_prefix}_spearman.json
+    }
+
+    output {
+        File spearman = glob("*_spearman.json")[0]
+    }
+
     runtime {
         cpu: ncpus
         memory: "${ramGB} GB"
