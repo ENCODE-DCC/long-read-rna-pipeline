@@ -57,6 +57,10 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy panda
 
 RUN python3.7 -m pip install qc-utils
 
+# Install pandas and scipy (for correlations and genes detected calculations)
+
+RUN python3.7 -m pip install pandas scipy
+
 # Get transcriptclean v1.0.7
 
 RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
@@ -75,9 +79,9 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install TALON
-RUN git clone -b v4.0 --single-branch https://github.com/dewyman/TALON.git
-RUN chmod 755 TALON/initialize_talon_database.py
-ENV PATH="/software/TALON:${PATH}"
+RUN git clone https://github.com/dewyman/TALON.git
+RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py
+ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 
 # make code within the repo available
 

@@ -10,6 +10,7 @@ def main(args):
         mapped = int(fp.readline())
     mapping_rate = fnlc / mapped
     qc_record = QCMetricRecord()
+    # FNLC = Full-length nonchimeric reads
     fnlc_metric = QCMetric('fnlc', {'fnlc': fnlc})
     mapped_metric = QCMetric('mapped', {'mapped': mapped})
     mapping_rate_metric = QCMetric('mapping_rate', {'mapping_rate': mapping_rate})

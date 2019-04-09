@@ -22,11 +22,23 @@ workflow long_read_rna_pipeline {
 
     File splice_junctions
 
-    # Prefix that gets added into output filenames. Default empty.
-    String experiment_prefix=""
+    # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
+    String experiment_prefix="my_experiment"
 
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
+
+    # Talon db, produced by init_talon_db.wdl
+
+    File initial_talon_db
+
+    # Genome build name, for TALON. This must be in the initial_talon_db
+
+    String genome_build
+
+    # Annotation name, for creating abundance from talon db. This must be in the initial_talon_db
+
+    String annotation_name
 
     # Resouces
 
@@ -47,6 +59,18 @@ workflow long_read_rna_pipeline {
     Int filter_transcriptclean_ncpus
     Int filter_transcriptclean_ramGB
     String filter_transcriptclean_disks
+
+    # Task talon
+
+    Int talon_ncpus
+    Int talon_ramGB
+    String talon_disks
+
+    # Task create_abundance_from_talon_db
+
+    Int create_abundance_from_talon_db_ncpus
+    Int create_abundance_from_talon_db_ramGB
+    String create_abundance_from_talon_db_disks
 
     # Pipeline starts here
 
@@ -78,6 +102,26 @@ workflow long_read_rna_pipeline {
             ncpus = filter_transcriptclean_ncpus,
             ramGB = filter_transcriptclean_ramGB,
             disks = filter_transcriptclean_disks,
+        }
+
+        call talon { input:
+            talon_db = initial_talon_db,
+            sam = filter_transcriptclean.filtered_sam,
+            genome_build = genome_build,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            platform = input_type,
+            ncpus = talon_ncpus,
+            ramGB = talon_ramGB,
+            disks = talon_disks,
+        }
+
+        call create_abundance_from_talon_db { input:
+            talon_db = talon.talon_db_out,
+            annotation_name = annotation_name,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            ncpus = create_abundance_from_talon_db_ncpus,
+            ramGB = create_abundance_from_talon_db_ramGB,
+            disks = create_abundance_from_talon_db_disks,
         }
     }
 }
@@ -199,6 +243,67 @@ task filter_transcriptclean {
 
 }
 
+task talon {
+    File talon_db
+    File sam
+    String genome_build
+    String output_prefix
+    String platform
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        echo ${output_prefix},${output_prefix},${platform},${sam} > ${output_prefix}_talon_config.csv
+        cp ${talon_db} ./${output_prefix}_talon.db
+        python3.7 $(which talon.py) --f ${output_prefix}_talon_config.csv \
+                                    --db ${output_prefix}_talon.db \
+                                    --build ${genome_build} \
+                                    --o ${output_prefix}
+    }
+
+    output {
+        File talon_config = glob("*_talon_config.csv")[0]
+        File talon_log = glob("*_talon_QC.log")[0]
+        File talon_db_out = glob("*_talon.db")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
+
+task create_abundance_from_talon_db {
+    File talon_db
+    String annotation_name
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        python3.7 $(which create_abundance_file_from_database.py) --db=${talon_db} \
+                                                                  -a ${annotation_name} \
+                                                                  --o=${output_prefix}
+        python3.7 $(which calculate_number_of_genes_detected.py) --abundance ${output_prefix}_talon_abundance.tsv \
+                                                                 --counts_colname ${output_prefix} \
+                                                                 --outfile ${output_prefix}_number_of_genes_detected.json
+    }
+
+    output {
+        File talon_abundance = glob("*_talon_abundance.tsv")[0]
+        File number_of_genes_detected = glob("*_number_of_genes_detected.json")[0]
+    }
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
 task skipNfirstlines {
     File input_file
     String output_fn
