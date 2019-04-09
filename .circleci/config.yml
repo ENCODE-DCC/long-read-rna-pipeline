@@ -18,6 +18,7 @@ python_defaults: &python_defaults
 machine_defaults: &machine_defaults
   machine:
     image: circleci/classic:latest
+  parallelism: 2
   working_directory: ~/long-read-rna-pipeline
 
 make_tag: &make_tag
