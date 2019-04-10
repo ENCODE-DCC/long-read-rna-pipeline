@@ -7,8 +7,6 @@
     "rep2TEST_WORKFLOW_clean.TE.log": "8c55ce40bf57ee916979c98d57a32c2e", 
     "rep1TEST_WORKFLOW_clean.fa": "de1c66dfb4cc8d0a2572800761dc83a7", 
     "rep2TEST_WORKFLOW_clean.fa": "8bc932fd34669697fd079269f1d2f83f", 
-    "rep1TEST_WORKFLOW_talon_config.csv": "fdb28a18ee15c2a4164d57fa1f3b0ae1",
-    "rep2TEST_WORKFLOW_talon_config.csv": "c96dc0279dba49c94a1f31fe7990ccc1",
     "rep1TEST_WORKFLOW_talon_QC.log": "28e4e86f3372ab7a3c9c85419c5da1bb", 
     "rep2TEST_WORKFLOW_talon_QC.log": "7344cbf05124742969e81334e5f7671c", 
     "rep1TEST_WORKFLOW_number_of_genes_detected.json": "c4474ba4f479c7a644c704d3c6958c1a", 
