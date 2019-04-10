@@ -371,7 +371,6 @@ jobs:
                               long_read_rna_pipeline.transcriptclean.transcript_log \
                               long_read_rna_pipeline.transcriptclean.transcript_error_log \
                               long_read_rna_pipeline.transcriptclean.corrected_fasta \
-                              long_read_rna_pipeline.talon.talon_config \
                               long_read_rna_pipeline.talon.talon_log \
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
