@@ -376,7 +376,7 @@ jobs:
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
             --metadata_json test_workflow_input.metadata.json \
-            --reference_json test/test_task/test_workflow_reference_md5.json \
+            --reference_json test/test_workflow/test_workflow_reference_md5.json \
             --outfile test_workflow_input.result.json
             cat test_workflow_input.result.json
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
