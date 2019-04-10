@@ -365,7 +365,7 @@ jobs:
           command: |
             pyenv global 3.5.2
             source ${BASH_ENV}
-            test/test.sh test/test_task/test_workflow.wdl test/test_task/test_workflow_input.json $TAG docker
+            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
                               long_read_rna_pipeline.transcriptclean.transcript_log \
