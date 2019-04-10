@@ -7,7 +7,6 @@
 defaults: &defaults
   docker:
     - image: circleci/buildpack-deps:xenial-scm
-  parallelism: 2
   working_directory: ~/long-read-rna-pipeline
 
 python_defaults: &python_defaults
@@ -18,7 +17,6 @@ python_defaults: &python_defaults
 machine_defaults: &machine_defaults
   machine:
     image: circleci/classic:latest
-  parallelism: 2
   working_directory: ~/long-read-rna-pipeline
 
 make_tag: &make_tag
