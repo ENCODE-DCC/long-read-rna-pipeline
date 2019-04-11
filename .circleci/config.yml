@@ -356,6 +356,108 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
           no_output_timeout: 30m
 
+  test_workflow_onerep_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
+                              long_read_rna_pipeline.transcriptclean.transcript_log \
+                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
+                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
+                              long_read_rna_pipeline.talon.talon_log \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_workflow_input.metadata.json \
+            --reference_json test/test_workflow/test_workflow_reference_md5.json \
+            --outfile test_workflow_input.result.json
+            cat test_workflow_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
+          no_output_timeout: 30m
+
+  test_workflow_onerep_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
+                              long_read_rna_pipeline.transcriptclean.transcript_log \
+                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
+                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
+                              long_read_rna_pipeline.talon.talon_log \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_workflow_input.metadata.json \
+            --reference_json test/test_workflow/test_workflow_reference_md5.json \
+            --outfile test_workflow_input.result.json
+            cat test_workflow_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
+          no_output_timeout: 30m
+
+  test_workflow_tworep_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
+                              long_read_rna_pipeline.transcriptclean.transcript_log \
+                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
+                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
+                              long_read_rna_pipeline.talon.talon_log \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_workflow_2reps_input.metadata.json \
+            --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \
+            --outfile test_workflow_2reps_input.result.json
+            cat test_workflow_2reps_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_2reps_input.result.json
+          no_output_timeout: 30m
+
+  test_workflow_tworep_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: *install_singularity
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
+                              long_read_rna_pipeline.transcriptclean.transcript_log \
+                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
+                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
+                              long_read_rna_pipeline.talon.talon_log \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
+                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+            --metadata_json test_workflow_2reps_input.metadata.json \
+            --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \
+            --outfile test_workflow_2reps_input.result.json
+            cat test_workflow_2reps_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_2reps_input.result.json
+          no_output_timeout: 30m
+
 # Workflow
 workflows:
   version: 2
@@ -404,6 +506,18 @@ workflows:
       - test_create_abundance_from_talon_db_singularity:
           requires:
             - build
+      - test_workflow_onerep_docker:
+          requires:
+            - build
+      - test_workflow_onerep_singularity:
+          requires:
+            - build
+      - test_workflow_tworep_docker:
+          requires:
+            - build
+      - test_workflow_tworep_singularity:
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
@@ -420,3 +534,7 @@ workflows:
             - test_talon_singularity
             - test_create_abundance_from_talon_db_docker
             - test_create_abundance_from_talon_db_singularity
+            - test_workflow_onerep_docker
+            - test_workflow_onerep_singularity
+            - test_workflow_tworep_docker
+            - test_workflow_tworep_singularity
