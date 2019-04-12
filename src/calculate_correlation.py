@@ -2,39 +2,9 @@ from qc_utils import QCMetric, QCMetricRecord
 import argparse
 import json
 import pandas as pd
-
-
-def filter_genomic_transcripts(dataframe):
-    """Remove rows where value on the column 'genomic_transcript' equals to 'genomic_transcript'
-    Args:
-        dataframe: pandas DataFrame
-    Returns:
-        pandas DataFrame
-    """
-    not_genomic_transcript = dataframe['genomic_transcript'] != 'genomic_transcript'
-    return dataframe[not_genomic_transcript]
-
-
-def filter_startswith_TALON(dataframe):
-    """Remove rows where 'annot_gene_id' column value starts with string 'TALON'.
-    Args:
-        dataframe: pandas DataFrame
-    Returns:
-        pandas DataFrame
-    """
-    not_starts_with_TALON = dataframe['annot_gene_id'].apply(lambda x: not x.startswith('TALON'))
-    return dataframe[not_starts_with_TALON]
-
-
-def get_abundances_aggregated_by_gene(dataframe, colname):
-    """Calculate abundance per gene.
-    Args:
-        dataframe: pandas DataFrame
-        colname: String column that contains the abundances
-    Returns:
-        pandas DataFrame with abundances on gene resolution
-    """
-    return dataframe.groupby(['annot_gene_id'])[colname].sum()
+from dataframe_utils import (filter_genomic_transcripts,
+                             filter_startswith_TALON,
+                             get_abundances_aggregated_by_gene)
 
 
 def main(args):
