@@ -42,6 +42,10 @@ install_singularity: &install_singularity
     sudo make install
     singularity --version
 
+only_dev_and_master: &only_dev_and_master
+  filters:
+    branches:
+      only: /^dev*/, master
 # Jobs
 version: 2
 jobs:
@@ -552,15 +556,19 @@ workflows:
           requires:
             - build
       - test_workflow_onerep_docker:
+          <<: *only_dev_and_master
           requires:
             - build
       - test_workflow_onerep_singularity:
+          <<: *only_dev_and_master
           requires:
             - build
       - test_workflow_tworep_docker:
+          <<: *only_dev_and_master
           requires:
             - build
       - test_workflow_tworep_singularity:
+          <<: *only_dev_and_master
           requires:
             - build
       - push_template:

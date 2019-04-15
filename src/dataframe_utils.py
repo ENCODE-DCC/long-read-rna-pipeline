@@ -1,4 +1,4 @@
-def filter_genomic_transcripts(dataframe):
+def remove_genomic_transcripts(dataframe):
     """Remove rows where value on the column 'genomic_transcript' equals to 'genomic_transcript'
     Args:
         dataframe: pandas DataFrame
@@ -9,7 +9,7 @@ def filter_genomic_transcripts(dataframe):
     return dataframe[not_genomic_transcript]
 
 
-def filter_startswith_TALON(dataframe):
+def remove_startswith_TALON(dataframe):
     """Remove rows where 'annot_gene_id' column value starts with string 'TALON'.
     Args:
         dataframe: pandas DataFrame
@@ -20,7 +20,7 @@ def filter_startswith_TALON(dataframe):
     return dataframe[not_starts_with_TALON]
 
 
-def get_abundances_aggregated_by_gene(dataframe, colname):
+def calculate_abundances_aggregated_by_gene(dataframe, colname):
     """Calculate abundance per gene.
     Args:
         dataframe: pandas DataFrame

@@ -2,20 +2,20 @@ from qc_utils import QCMetric, QCMetricRecord
 import argparse
 import json
 import pandas as pd
-from dataframe_utils import (filter_genomic_transcripts,
-                             filter_startswith_TALON,
-                             get_abundances_aggregated_by_gene)
+from dataframe_utils import (remove_genomic_transcripts,
+                             remove_startswith_TALON,
+                             calculate_abundances_aggregated_by_gene)
 
 
 def main(args):
     rep1_abundance = pd.read_csv(args.rep1_abundance, sep='\t')
     rep2_abundance = pd.read_csv(args.rep2_abundance, sep='\t')
-    rep1_filtered = filter_startswith_TALON(filter_genomic_transcripts(rep1_abundance))
-    rep2_filtered = filter_startswith_TALON(filter_genomic_transcripts(rep2_abundance))
+    rep1_filtered = remove_startswith_TALON(remove_genomic_transcripts(rep1_abundance))
+    rep2_filtered = remove_startswith_TALON(remove_genomic_transcripts(rep2_abundance))
     del rep1_abundance
     del rep2_abundance
-    rep1_counts = get_abundances_aggregated_by_gene(rep1_filtered, rep1_filtered.columns[-1])
-    rep2_counts = get_abundances_aggregated_by_gene(rep2_filtered, rep2_filtered.columns[-1])
+    rep1_counts = calculate_abundances_aggregated_by_gene(rep1_filtered, rep1_filtered.columns[-1])
+    rep2_counts = calculate_abundances_aggregated_by_gene(rep2_filtered, rep2_filtered.columns[-1])
     del rep1_filtered
     del rep2_filtered
     aligned_counts = rep1_counts.align(rep2_counts, join='outer', fill_value=0)
