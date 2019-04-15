@@ -169,9 +169,9 @@ task minimap2 {
                 2> ${output_prefix}_minimap2.log
         fi
 
-        gzip -cd ${fastq} | grep "^@" | wc -l > FNLC.txt
+        gzip -cd ${fastq} | grep "^@" | wc -l > FLNC.txt
         samtools view ${output_prefix}.sam | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
-        python3.7 $(which make_minimap_qc.py) --fnlc FNLC.txt --mapped mapped.txt --outfile ${output_prefix}_mapping_qc.json
+        python3.7 $(which make_minimap_qc.py) --flnc FLNC.txt --mapped mapped.txt --outfile ${output_prefix}_mapping_qc.json
     >>>
 
     output {
