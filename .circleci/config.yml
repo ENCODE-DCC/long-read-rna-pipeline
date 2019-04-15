@@ -45,7 +45,9 @@ install_singularity: &install_singularity
 only_dev_and_master: &only_dev_and_master
   filters:
     branches:
-      only: /^dev*/, master
+      only: 
+        - /^dev.*/
+        - master
 # Jobs
 version: 2
 jobs:
