@@ -8,7 +8,7 @@ def main(args):
         flnc = int(fp.readline())
     with open(args.mapped, 'r') as fp:
         mapped = int(fp.readline())
-    mapping_rate = flnc / mapped
+    mapping_rate = mapped / flnc
     qc_record = QCMetricRecord()
     # FLNC = Full-length nonchimeric reads
     flnc_metric = QCMetric('full_length_non_chimeric_reads', {'flnc': flnc})
