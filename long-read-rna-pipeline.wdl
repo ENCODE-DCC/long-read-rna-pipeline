@@ -248,7 +248,7 @@ task filter_transcriptclean {
 
     command {
         filter_transcriptclean_result.sh ${sam} ${output_prefix + "_filtered.sam"}
-        samtools view -S -b ${output_prefix}_filtered.sam ${output_prefix}_filtered.bam
+        samtools view -S -b ${output_prefix}_filtered.sam > ${output_prefix}_filtered.bam
     }
 
     output {
