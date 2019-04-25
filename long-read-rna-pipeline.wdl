@@ -172,10 +172,12 @@ task minimap2 {
         gzip -cd ${fastq} | grep "^@" | wc -l > FLNC.txt
         samtools view ${output_prefix}.sam | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
         python3.7 $(which make_minimap_qc.py) --flnc FLNC.txt --mapped mapped.txt --outfile ${output_prefix}_mapping_qc.json
+        samtools view -S -b ${output_prefix}.sam > ${output_prefix}.bam
     >>>
 
     output {
         File sam = glob("*.sam")[0]
+        File bam = glob("*.bam")[0]
         File log = glob("*_minimap2.log")[0]
         File mapping_qc = glob("*_mapping_qc.json")[0] 
     }
@@ -246,10 +248,12 @@ task filter_transcriptclean {
 
     command {
         filter_transcriptclean_result.sh ${sam} ${output_prefix + "_filtered.sam"}
+        samtools view -S -b ${output_prefix}_filtered.bam
     }
 
     output {
         File filtered_sam = glob("*_filtered.sam")[0]
+        File filtered_bam = glob("*_filtered.bam")[0]
     }
 
     runtime {
