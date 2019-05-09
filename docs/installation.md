@@ -55,5 +55,3 @@ If you are intending to run the pipeline on Google Cloud platform, the following
     ```
       $ gcloud config set project [YOUR_PROJECT_NAME]
     ```
-
-* For an example on how to run the pipeline on Google Cloud, see [HOWTO](howto.md#google-cloud).
