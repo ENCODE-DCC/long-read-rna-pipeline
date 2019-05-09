@@ -33,6 +33,8 @@ Transcriptclean runs on python 2.7, and other parts utilize 3.7.
 
 ## Inputs
 
+
+
 ### Note about resources
 
 ## Outputs
