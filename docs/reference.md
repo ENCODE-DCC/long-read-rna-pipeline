@@ -106,12 +106,12 @@ The resources required by mapping task are quite typical for the mapping and we 
 
 #### Task Filter_transcriptclean
 
-* `filtered_sam` 
-* `filtered_bam`
+* `filtered_sam` sam with noncanonical reads filtered, duplicates are removed and sorting is performed. Input to the TALON step.
+* `filtered_bam` bam with noncanonical reads filtered, duplicates are removed and sorting is performed.
 
 #### Task TALON
 
-* `talon_log` 
+* `talon_log` talon log file.
 * `talon_db_out` TALON database with information from the pipeline run added on top of the initial database.
 
 #### Task Create_abundance_from_talon_db
