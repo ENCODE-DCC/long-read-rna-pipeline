@@ -49,11 +49,11 @@ only_dev_and_master: &only_dev_and_master
       only: 
         - /^dev.*/
         - master
+
 # Jobs
-jobs:
-  # Use singularity orb
-  orbs:
+orbs:
   singularity: singularity/singularity@1.0.3
+jobs:
   build:
     <<: *defaults
     steps:
