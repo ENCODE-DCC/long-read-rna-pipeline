@@ -149,7 +149,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -190,7 +191,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -232,7 +234,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -271,7 +274,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -310,7 +314,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -350,7 +355,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -390,7 +396,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -435,7 +442,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -486,7 +494,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -581,11 +590,11 @@ workflows:
             - test_get_splice_junctions_docker
             - test_get_splice_junctions_singularity
             - test_minimap2_docker
-#            - test_minimap2_singularity
+            - test_minimap2_singularity
             - test_transcriptclean_docker
-#            - test_transcriptclean_singularity
+            - test_transcriptclean_singularity
             - test_filter_transcriptclean_docker
-#            - test_filter_transcriptclean_singularity
+            - test_filter_transcriptclean_singularity
             - test_init_talon_database_docker
 #            - test_init_talon_database_singularity
             - test_talon_docker
