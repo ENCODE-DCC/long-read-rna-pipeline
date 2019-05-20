@@ -124,6 +124,7 @@ workflow long_read_rna_pipeline {
         call create_abundance_from_talon_db { input:
             talon_db = talon.talon_db_out,
             annotation_name = annotation_name,
+            genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             ncpus = create_abundance_from_talon_db_ncpus,
             ramGB = create_abundance_from_talon_db_ramGB,
@@ -300,6 +301,7 @@ task talon {
 task create_abundance_from_talon_db {
     File talon_db
     String annotation_name
+    String genome_build
     String output_prefix
     Int ncpus
     Int ramGB
@@ -308,6 +310,7 @@ task create_abundance_from_talon_db {
     command {
         python3.7 $(which create_abundance_file_from_database.py) --db=${talon_db} \
                                                                   -a ${annotation_name} \
+                                                                  --build ${genome_build} \
                                                                   --o=${output_prefix}
         python3.7 $(which calculate_number_of_genes_detected.py) --abundance ${output_prefix}_talon_abundance.tsv \
                                                                  --counts_colname ${output_prefix} \

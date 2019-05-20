@@ -512,51 +512,51 @@ workflows:
       - test_get_splice_junctions_docker:
           requires:
             - build
-      - test_get_splice_junctions_singularity:
-          requires:
-            - build
+#      - test_get_splice_junctions_singularity:
+#          requires:
+#            - build
       - test_minimap2_docker:
           requires:
             - build
-      - test_minimap2_singularity:
-          requires:
-            - build
+#      - test_minimap2_singularity:
+#          requires:
+#            - build
       - test_transcriptclean_docker:
           requires:
             - build
-      - test_transcriptclean_singularity:
-          requires:
-            - build
+#      - test_transcriptclean_singularity:
+#          requires:
+#            - build
       - test_filter_transcriptclean_docker:
           requires:
             - build
-      - test_filter_transcriptclean_singularity:
-          requires:
-            - build
+#      - test_filter_transcriptclean_singularity:
+#          requires:
+#            - build
       - test_init_talon_database_docker:
           requires:
             - build
-      - test_init_talon_database_singularity:
-          requires:
-            - build
+#      - test_init_talon_database_singularity:
+#          requires:
+#            - build
       - test_talon_docker:
           requires:
             - build
-      - test_talon_singularity:
-          requires:
-            - build
+#      - test_talon_singularity:
+#          requires:
+#            - build
       - test_create_abundance_from_talon_db_docker:
           requires:
             - build
-      - test_create_abundance_from_talon_db_singularity:
-          requires:
-            - build
+#      - test_create_abundance_from_talon_db_singularity:
+#          requires:
+#            - build
       - test_calculate_spearman_docker:
           requires:
             - build
-      - test_calculate_spearman_singularity:
-          requires:
-            - build
+#      - test_calculate_spearman_singularity:
+#          requires:
+#            - build
       - test_workflow_onerep_docker:
           <<: *only_dev_and_master
           requires:

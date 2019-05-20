@@ -1,11 +1,11 @@
 def remove_genomic_transcripts(dataframe):
-    """Remove rows where value on the column 'genomic_transcript' equals to 'genomic_transcript'
+    """Remove rows where value on the column 'transcript_novelty' equals to 'Genomic'
     Args:
         dataframe: pandas DataFrame
     Returns:
         pandas DataFrame
     """
-    not_genomic_transcript = dataframe['genomic_transcript'] != 'genomic_transcript'
+    not_genomic_transcript = dataframe['transcript_novelty'] != 'Genomic'
     return dataframe[not_genomic_transcript]
 
 
