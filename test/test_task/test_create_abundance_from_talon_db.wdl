@@ -5,6 +5,7 @@ import "../../long-read-rna-pipeline.wdl" as longrna
 workflow test_create_abundance_from_talon_db {
     File talon_db
     String annotation_name
+    String genome_build
     String output_prefix
     Int ncpus
     Int ramGB
@@ -13,6 +14,7 @@ workflow test_create_abundance_from_talon_db {
     call longrna.create_abundance_from_talon_db { input:
         talon_db = talon_db,
         annotation_name = annotation_name,
+        genome_build = genome_build,
         output_prefix = output_prefix,
         ncpus = ncpus,
         ramGB = ramGB,
