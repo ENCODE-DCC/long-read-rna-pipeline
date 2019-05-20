@@ -9,9 +9,9 @@
     "rep2TEST_WORKFLOW_clean.fa": "8bc932fd34669697fd079269f1d2f83f", 
     "rep1TEST_WORKFLOW_talon_QC.log": "28e4e86f3372ab7a3c9c85419c5da1bb", 
     "rep2TEST_WORKFLOW_talon_QC.log": "7344cbf05124742969e81334e5f7671c", 
-    "rep1TEST_WORKFLOW_number_of_genes_detected.json": "c4474ba4f479c7a644c704d3c6958c1a", 
-    "rep2TEST_WORKFLOW_number_of_genes_detected.json": "dfac15369461c35d1cf9b5a6ae1e0383", 
-    "rep1TEST_WORKFLOW_talon_abundance.tsv": "0d73c60766fee7bae807f6de4659a92d", 
-    "rep2TEST_WORKFLOW_talon_abundance.tsv": "f1a90539dda6335128723aa37784b7ca",
-    "TEST_WORKFLOW_spearman.json": "98375280d7e26014b069f6491a6a5750"
+    "rep1TEST_WORKFLOW_number_of_genes_detected.json": "4fad212653a577bf1aaaa4ae55504d82", 
+    "rep2TEST_WORKFLOW_number_of_genes_detected.json": "096f6af639d373eb78333444f4b02295", 
+    "rep1TEST_WORKFLOW_talon_abundance.tsv": "61497751b5b1984eea00ae9a285e3f55", 
+    "rep2TEST_WORKFLOW_talon_abundance.tsv": "2e235253da1aea6a9d92914b43afbb85",
+    "TEST_WORKFLOW_spearman.json": "1cedb485e8529fb89744060a0641581a"
 }

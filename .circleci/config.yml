@@ -551,9 +551,9 @@ workflows:
 #      - test_create_abundance_from_talon_db_singularity:
 #          requires:
 #            - build
-#      - test_calculate_spearman_docker:
-#          requires:
-#            - build
+      - test_calculate_spearman_docker:
+          requires:
+            - build
 #      - test_calculate_spearman_singularity:
 #          requires:
 #            - build
@@ -589,7 +589,7 @@ workflows:
 #            - test_talon_singularity
             - test_create_abundance_from_talon_db_docker
 #            - test_create_abundance_from_talon_db_singularity
-#           - test_calculate_spearman_docker
+            - test_calculate_spearman_docker
 #            - test_calculate_spearman_singularity
 #            - test_workflow_onerep_docker
 #            - test_workflow_onerep_singularity
