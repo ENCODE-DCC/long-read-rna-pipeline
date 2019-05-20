@@ -533,9 +533,9 @@ workflows:
 #      - test_filter_transcriptclean_singularity:
 #          requires:
 #            - build
-#      - test_init_talon_database_docker:
-#          requires:
-#            - build
+      - test_init_talon_database_docker:
+          requires:
+            - build
 #      - test_init_talon_database_singularity:
 #          requires:
 #            - build
@@ -583,7 +583,7 @@ workflows:
 #            - test_transcriptclean_singularity
             - test_filter_transcriptclean_docker
 #            - test_filter_transcriptclean_singularity
-#            - test_init_talon_database_docker
+            - test_init_talon_database_docker
 #            - test_init_talon_database_singularity
 #            - test_talon_docker
 #            - test_talon_singularity
