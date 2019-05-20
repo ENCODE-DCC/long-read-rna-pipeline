@@ -561,18 +561,18 @@ workflows:
           <<: *only_dev_and_master
           requires:
             - build
-      - test_workflow_onerep_singularity:
-          <<: *only_dev_and_master
-          requires:
-            - build
+#      - test_workflow_onerep_singularity:
+#          <<: *only_dev_and_master
+#          requires:
+#            - build
       - test_workflow_tworep_docker:
           <<: *only_dev_and_master
           requires:
             - build
-      - test_workflow_tworep_singularity:
-          <<: *only_dev_and_master
-          requires:
-            - build
+#      - test_workflow_tworep_singularity:
+#          <<: *only_dev_and_master
+#          requires:
+#            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
