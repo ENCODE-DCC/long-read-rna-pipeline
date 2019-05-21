@@ -1,9 +1,10 @@
-# CircleCI 2.0 configuration file
+# CircleCI 2.1 configuration file
 # for ENCODE LONG-READ-RNA-SEQ-PIPELINE
 # Maintainer: Otto Jolanki
 
 # Defaults and functions
 ---
+version: 2.1
 defaults: &defaults
   docker:
     - image: circleci/buildpack-deps:xenial-scm
@@ -24,32 +25,16 @@ make_tag: &make_tag
   command: |
     echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" > ${BASH_ENV}
 
-install_singularity: &install_singularity
-  name: install singularity
-  command: |
-    sudo apt-get update
-    sudo apt-get install \
-    python \
-    dh-autoreconf \
-    build-essential \
-    libarchive-dev \
-    squashfs-tools
-    wget https://github.com/singularityware/singularity/releases/download/2.6.0/singularity-2.6.0.tar.gz
-    tar xvf singularity-2.6.0.tar.gz
-    cd singularity-2.6.0
-    ./configure --prefix=/usr/local --sysconfdir=/etc
-    make
-    sudo make install
-    singularity --version
-
 only_dev_and_master: &only_dev_and_master
   filters:
     branches:
       only: 
         - /^dev.*/
         - master
+
 # Jobs
-version: 2
+orbs:
+  singularity: singularity/singularity@1.0.3
 jobs:
   build:
     <<: *defaults
@@ -108,7 +93,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -145,7 +131,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -186,7 +173,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -228,7 +216,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -267,7 +256,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -306,7 +296,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -346,7 +337,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -386,7 +378,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -431,7 +424,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -482,7 +476,8 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
-      - run: *install_singularity
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
@@ -505,93 +500,92 @@ jobs:
 
 # Workflow
 workflows:
-  version: 2
   build_workflow:
     jobs:
       - build
       - test_get_splice_junctions_docker:
           requires:
             - build
-#      - test_get_splice_junctions_singularity:
-#          requires:
-#            - build
+      - test_get_splice_junctions_singularity:
+          requires:
+            - build
       - test_minimap2_docker:
           requires:
             - build
-#      - test_minimap2_singularity:
-#          requires:
-#            - build
+      - test_minimap2_singularity:
+          requires:
+            - build
       - test_transcriptclean_docker:
           requires:
             - build
-#      - test_transcriptclean_singularity:
-#          requires:
-#            - build
+      - test_transcriptclean_singularity:
+          requires:
+            - build
       - test_filter_transcriptclean_docker:
           requires:
             - build
-#      - test_filter_transcriptclean_singularity:
-#          requires:
-#            - build
+      - test_filter_transcriptclean_singularity:
+          requires:
+            - build
       - test_init_talon_database_docker:
           requires:
             - build
-#      - test_init_talon_database_singularity:
-#          requires:
-#            - build
+      - test_init_talon_database_singularity:
+          requires:
+            - build
       - test_talon_docker:
           requires:
             - build
-#      - test_talon_singularity:
-#          requires:
-#            - build
+      - test_talon_singularity:
+          requires:
+            - build
       - test_create_abundance_from_talon_db_docker:
           requires:
             - build
-#      - test_create_abundance_from_talon_db_singularity:
-#          requires:
-#            - build
+      - test_create_abundance_from_talon_db_singularity:
+          requires:
+            - build
       - test_calculate_spearman_docker:
           requires:
             - build
-#      - test_calculate_spearman_singularity:
-#          requires:
-#            - build
+      - test_calculate_spearman_singularity:
+          requires:
+            - build
       - test_workflow_onerep_docker:
           <<: *only_dev_and_master
           requires:
             - build
-#      - test_workflow_onerep_singularity:
-#          <<: *only_dev_and_master
-#          requires:
-#            - build
+      - test_workflow_onerep_singularity:
+          <<: *only_dev_and_master
+          requires:
+            - build
       - test_workflow_tworep_docker:
           <<: *only_dev_and_master
           requires:
             - build
-#      - test_workflow_tworep_singularity:
-#          <<: *only_dev_and_master
-#          requires:
-#            - build
+      - test_workflow_tworep_singularity:
+          <<: *only_dev_and_master
+          requires:
+            - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
-#            - test_get_splice_junctions_singularity
+            - test_get_splice_junctions_singularity
             - test_minimap2_docker
-#            - test_minimap2_singularity
+            - test_minimap2_singularity
             - test_transcriptclean_docker
-#            - test_transcriptclean_singularity
+            - test_transcriptclean_singularity
             - test_filter_transcriptclean_docker
-#            - test_filter_transcriptclean_singularity
+            - test_filter_transcriptclean_singularity
             - test_init_talon_database_docker
-#            - test_init_talon_database_singularity
+            - test_init_talon_database_singularity
             - test_talon_docker
-#            - test_talon_singularity
+            - test_talon_singularity
             - test_create_abundance_from_talon_db_docker
-#            - test_create_abundance_from_talon_db_singularity
+            - test_create_abundance_from_talon_db_singularity
             - test_calculate_spearman_docker
-#            - test_calculate_spearman_singularity
+            - test_calculate_spearman_singularity
             - test_workflow_onerep_docker
-#            - test_workflow_onerep_singularity
+            - test_workflow_onerep_singularity
             - test_workflow_tworep_docker
-#            - test_workflow_tworep_singularity
+            - test_workflow_tworep_singularity
