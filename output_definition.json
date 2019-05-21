@@ -1,0 +1,70 @@
+{
+    "long_read_rna_pipeline.minimap2": {
+        "sam": {
+            "path": "minimap2/rep${i+1}/${basename}"
+        },
+        "bam": {
+            "path": "minimap2/rep${i+1}/${basename}"
+        },
+        "log": {
+            "path": "minimap2/rep${i+1}/${basename}"
+        },
+        "mapping_qc": {
+            "path": "minimap2/rep${i+1}/${basename}"
+        }
+    },
+
+    "long_read_rna_pipeline.transcriptclean": {
+        "corrected_sam": {
+            "path": "transcriptclean/rep${i+1}/${basename}"
+        },
+        "corrected_fasta": {
+            "path": "transcriptclean/rep${i+1}/${basename}"
+        },
+        "transcript_log": {
+            "path": "transcriptclean/rep${i+1}/${basename}"
+        },
+        "transcript_error_log": {
+            "path": "transcriptclean/rep${i+1}/${basename}"
+        },
+        "report": {
+            "path": "transcriptclean/rep${i+1}/${basename}"
+        }
+    },
+
+    "long_read_rna_pipeline.filter_transcriptclean": {
+        "filtered_sam": {
+            "path": "filter_transcriptclean/rep${i+1}/${basename}"
+        },
+        "filtered_bam": {
+            "path": "filter_transcriptclean/rep${i+1}/${basename}"
+        }
+    },
+
+    "long_read_rna_pipeline.talon": {
+        "talon_config": {
+            "path": "talon/rep${i+1}/${basename}"
+        },
+        "talon_log": {
+            "path": "talon/rep${i+1}/${basename}"
+        },
+        "talon_db_out": {
+            "path": "talon/rep${i+1}/${basename}"
+        }
+    },
+
+    "long_read_rna_pipeline.create_abundance_from_talon_db": {
+        "talon_abundance": {
+            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}"
+        },
+        "number_of_genes_detected": {
+            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}"
+        }
+    },
+
+    "long_read_rna_pipeline.calculate_spearman": {
+        "spearman": {
+            "path": "calculate_spearman/${basename}"
+        }
+    }
+}
