@@ -5,7 +5,7 @@ def remove_genomic_transcripts(dataframe):
     Returns:
         pandas DataFrame
     """
-    not_genomic_transcript = dataframe['transcript_novelty'] != 'Genomic'
+    not_genomic_transcript = dataframe["transcript_novelty"] != "Genomic"
     return dataframe[not_genomic_transcript]
 
 
@@ -16,7 +16,9 @@ def remove_startswith_TALON(dataframe):
     Returns:
         pandas DataFrame
     """
-    not_starts_with_TALON = dataframe['annot_gene_id'].apply(lambda x: not x.startswith('TALON'))
+    not_starts_with_TALON = dataframe["annot_gene_id"].apply(
+        lambda x: not x.startswith("TALON")
+    )
     return dataframe[not_starts_with_TALON]
 
 
@@ -28,4 +30,4 @@ def calculate_abundances_aggregated_by_gene(dataframe, colname):
     Returns:
         pandas DataFrame with abundances on gene resolution
     """
-    return dataframe.groupby(['annot_gene_id'])[colname].sum()
+    return dataframe.groupby(["annot_gene_id"])[colname].sum()

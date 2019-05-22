@@ -4,7 +4,7 @@ To run the pipeline you need to install following software. Running the pipeline
 
 ## Java 8
 
-Java is required to run execution engine [Cromwell](https://software.broadinstitute.org/wdl/documentation/execution) and WDL-to-DNAnexus compiler [dxWDL](https://github.com/dnanexus/dxWDL).
+Java is required to run execution engine [Cromwell](https://software.broadinstitute.org/wdl/documentation/execution).
 To check which Java version you already have, run:
 ```bash
   $ java -version
@@ -20,6 +20,14 @@ Download WDL runner Cromwell from [here](https://github.com/broadinstitute/cromw
 
 Pipeline code is packaged and distributed in Docker containers, and thus Docker installation is needed. 
 Follow instructions for [mac](https://docs.docker.com/docker-for-mac/install/) or [linux](https://docs.docker.com/install/linux/docker-ce/ubuntu/#upgrade-docker-after-using-the-convenience-script).
+
+## Caper
+
+For running the pipeline we recommend using [Caper](https://github.com/ENCODE-DCC/caper) that wraps Cromwell in an easier to use package.
+
+## croo
+
+For organizing pipeline outputs we recommend using [croo](https://github.com/ENCODE-DCC/croo) that makes a nicely organized directory from the complicated output tree Cromwell defaults to. The configuration file for `croo` is named `output_definition.json` and can be found in the root of this repository.
 
 ## Singularity
 
