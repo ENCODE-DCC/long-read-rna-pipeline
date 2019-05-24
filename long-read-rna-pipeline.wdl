@@ -16,7 +16,7 @@ workflow long_read_rna_pipeline {
     File annotation
 
     # Variants file, vcf format, gzipped.
-    File variants
+    File? variants
 
     # Splice junctions file, produced by get-splice-juctions.wdl
 
@@ -194,7 +194,7 @@ task transcriptclean {
     File sam
     File reference_genome
     File splice_junctions
-    File variants
+    File? variants
     String output_prefix
     Int ncpus
     Int ramGB
@@ -202,7 +202,6 @@ task transcriptclean {
 
     command <<<
         gzip -cd ${reference_genome} > ref.fasta
-        gzip -cd ${variants} > variants.vcf
 
         if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
@@ -213,7 +212,7 @@ task transcriptclean {
         python $(which TranscriptClean.py) --sam ${sam} \
             --genome reference.fasta \
             --spliceJns ${splice_junctions} \
-            --variants variants.vcf \
+            ${if defined(variants) then "--variants <(gzip -cd ${variants})" else ""} \
             --maxLenIndel 5 \
             --maxSJOffset 5 \
             -m true \

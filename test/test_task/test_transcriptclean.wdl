@@ -6,7 +6,7 @@ workflow test_transcriptclean {
     File sam
     File reference_genome
     File splice_junctions
-    File variants
+    File? variants
     String output_prefix
     Int lines_to_skip 
     String output_fn
