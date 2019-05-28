@@ -5,10 +5,9 @@ Before following these instructions, make sure you have completed installation a
 
 # CONTENTS
 
-## Running Analyses
+## Running the Pipeline
 
 [Google Cloud](howto.md#google-cloud)  
-[Local with Docker](howto.md#local-with-docker)  
 [SLURM](howto.md#slurm-singularity)
 
 # RUNNING THE PIPELINE
@@ -80,4 +79,55 @@ The goal is to run the pipeline with test data using Google Cloud Platform.
 
 7. See the outputs in `gs://YOUR_BUCKET_NAME/output`. You can also use [croo](https://github.com/ENCODE-DCC/croo) to organize the outputs before taking a look. The required configuration json file `output_definition.json` is provided with this repo.
 
+## SLURM Singularity
 
+For this example you need to have Singularity installed. For details see [installation instructions](installation.md). The goal is to run the pipeline with testdata using Singularity on a SLURM cluster. Login into your cluster first and then follow the instructions.
+When running workflows on SLURM (or other) HPC clusters, use [Caper](https://github.com/ENCODE-DCC/caper), it takes care of backend configuration for you.
+
+1. Get the code and move into the code directory:
+
+```bash
+  git clone https://github.com/ENCODE-DCC/long-read-rna-pipeline.git
+  cd long-read-rna-pipeline
+``` 
+
+3. Build the singularity image for the pipeline. The following pulls the pipeline docker image, and uses that to construct the singularity image. The image will be stored in `~/.singularity`. It is bad practice to build images (or do any other intensive work) on login nodes. For this reason we will first invoke an interactive session on a different node by running `sdev` command, and building there (It will take few seconds to get back into the shell after running `sdev`).
+
+```bash
+  sdev
+  mkdir -p ~/.singularity && cd ~/.singularity && SINGULARITY_CACHEDIR=~/.singularity SINGULARITY_PULLFOLDER=~/.singularity singularity pull --name long_read_rna_pipeline-v1.0.simg -F docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.0
+  exit #this takes you back to the login node
+```
+
+Note: If you want to store your inputs `/in/some/data/directory1`and `/in/some/data/directory2`you must edit `workflow_opts/singularity.json` in the following way:
+```
+{
+    "default_runtime_attributes" : {
+        "singularity_container" : "~/.singularity/long-read-rna-pipeline-v1.0.simg",
+        "singularity_bindpath" : "~/, /in/some/data/directory1/, /in/some/data/directory2/"
+    }
+}
+```
+
+4. Install caper. Python 3.4.1 or newer is required.
+
+```bash
+  pip install caper
+```
+
+5. Follow [Caper configuration instructions](https://github.com/ENCODE-DCC/caper#configuration-file). 
+
+Note: In Caper configuration file, you will need to give a value to `--time` parameter by editing `slurm-extra-param` line. For example:
+```
+  slurm-extra-param=--time=01:00:00
+```
+to give one hour of runtime.
+
+6. Edit the input file `test/test_workflow/test_workflow_2reps_input.json` so that all the input file paths are absolute.
+For example replace `test_data/chr19_test_10000_reads.fastq.gz` in fastq inputs with `[PATH-TO-REPO]/test_data/chr19_test_10000_reads.fastq.gz`. You can find out the `[PATH-TO-REPO]` by running `pwd` command in the `long-read-rna-pipeline` directory.
+
+7. Run the pipeline using Caper:
+
+```bash
+  caper run -i test/test_workflow/test_workflow_2reps_input.json -o workflow_opts/singularity.json -m metadata.json
+```
