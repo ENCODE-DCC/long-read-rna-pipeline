@@ -8,6 +8,9 @@ This is the ENCODE-DCC Long read RNA-seq pipeline. This pipeline can handle data
 ## INSTALLATION
 Installation instructions [here](docs/installation.md)
 
+## HOWTO
+Howto guides [here](docs/howto.md)
+
 ## INPUTS
 Description of the pipeline [inputs](docs/reference.md#inputs)
 
