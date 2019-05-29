@@ -1,6 +1,0 @@
-{
-    "default_runtime_attributes" : {
-        "sge_pe" : "shm",
-        "singularity_container" : "~/.singularity/long-read-rna-pipeline-template.simg"
-    }
-}
