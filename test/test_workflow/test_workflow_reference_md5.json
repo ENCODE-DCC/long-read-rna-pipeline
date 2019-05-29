@@ -1,0 +1,9 @@
+{
+"rep1TEST_WORKFLOW_mapping_qc.json" : "5745442e83a3559a2789ce7ea6c2ac42",
+"rep1TEST_WORKFLOW_clean.log" : "0cac2cb51ba1839eaeb1078201aea191",
+"rep1TEST_WORKFLOW_clean.TE.log" : "2dabfde5147e9cef8964334f52b13622",
+"rep1TEST_WORKFLOW_clean.fa" : "de1c66dfb4cc8d0a2572800761dc83a7",
+"rep1TEST_WORKFLOW_talon_QC.log" : "28e4e86f3372ab7a3c9c85419c5da1bb",
+"rep1TEST_WORKFLOW_number_of_genes_detected.json" : "4fad212653a577bf1aaaa4ae55504d82",
+"rep1TEST_WORKFLOW_talon_abundance.tsv" : "61497751b5b1984eea00ae9a285e3f55"
+}

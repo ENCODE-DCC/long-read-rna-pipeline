@@ -1,0 +1,10 @@
+{
+    "test_talon.talon_db" : "test_data/test_init_talon_db.db",
+    "test_talon.sam" : "test_data/from_transcriptclean.sam",
+    "test_talon.genome_build" : "GRCh38_chr19",
+    "test_talon.output_prefix" : "TEST_TALON",
+    "test_talon.platform" : "PacBio-Sequel",
+    "test_talon.ncpus" : 2,
+    "test_talon.ramGB" : 4,
+    "test_talon.disks" : "local-disk 20 HDD"
+}

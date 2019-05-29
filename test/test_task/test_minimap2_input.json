@@ -1,0 +1,11 @@
+{
+    "test_minimap2.fastq" : "test_data/chr19_test_10000_reads.fastq.gz",
+    "test_minimap2.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
+    "test_minimap2.output_prefix" : "TEST_MINIMAP2",
+    "test_minimap2.input_type" : "pacbio",
+    "test_minimap2.lines_to_skip" : 2,
+    "test_minimap2.output_fn" : "TEST_MINIMAP_noheader.sam",
+    "test_minimap2.ncpus" : 2,
+    "test_minimap2.ramGB" : 4,
+    "test_minimap2.disks" : "local-disk 20 HDD"
+}
