@@ -250,7 +250,7 @@ task filter_transcriptclean {
     String disks
 
     command {
-        filter_transcriptclean_result.sh ${sam} ${output_prefix + "_filtered.sam"}
+        python $(which filter_transcriptclean_result.py) --f ${sam} --o ${output_prefix + "_filtered.sam"}
         samtools view -S -b ${output_prefix}_filtered.sam > ${output_prefix}_filtered.bam
     }
 
