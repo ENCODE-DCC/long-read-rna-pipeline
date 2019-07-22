@@ -88,5 +88,3 @@ ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 RUN mkdir -p long-rna-seq-pipeline/src
 COPY /src long-rna-seq-pipeline/src
 ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
-
-ENTRYPOINT ["/bin/bash", "-c"]
