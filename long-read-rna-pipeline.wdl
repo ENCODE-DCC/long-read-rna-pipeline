@@ -350,7 +350,7 @@ task create_gtf_from_talon_db {
     command {
         python3.7 $(which create_GTF_from_database.py) --db ${talon_db} \
                                                         -a ${annotation_name} \
-                                                        --build ${genome_build}
+                                                        --build ${genome_build} \
                                                         --o ${output_prefix}
     }
 
