@@ -13,5 +13,7 @@
     "rep2TEST_WORKFLOW_number_of_genes_detected.json": "57bdea4923f91d24feb250febe145fc2", 
     "rep1TEST_WORKFLOW_talon_abundance.tsv": "913d96aef9c2d30e82c8a71abce9c12c", 
     "rep2TEST_WORKFLOW_talon_abundance.tsv": "4cc69cba2ff62740a080e46c84c33b92",
+    "rep1TEST_WORKFLOW_talon.gtf" : "57728c16e6f20a14d441884eb2dd9189",
+    "rep2TEST_WORKFLOW_talon.gtf" : "2830668e241b804935e26d67dc6045d3",
     "TEST_WORKFLOW_spearman.json": "6c6a405a313d26a6ae4b497e8c687fc9"
 }

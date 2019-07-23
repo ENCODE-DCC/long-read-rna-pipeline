@@ -24,6 +24,9 @@
     "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus" : 1,
     "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB" : 4,
     "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
+    "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 1,
+    "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 4,
+    "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.calculate_spearman_ncpus" : 2,
     "long_read_rna_pipeline.calculate_spearman_ramGB" : 4,
     "long_read_rna_pipeline.calculate_spearman_disks" : "local-disk 20 HDD"
