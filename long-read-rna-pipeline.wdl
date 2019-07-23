@@ -75,6 +75,12 @@ workflow long_read_rna_pipeline {
     Int create_abundance_from_talon_db_ramGB
     String create_abundance_from_talon_db_disks
 
+    # Task create_gtf_from_talon_db
+
+    Int create_gtf_from_talon_db_ncpus
+    Int create_gtf_from_talon_db_ramGB
+    String create_gtf_from_talon_db_disks
+
     # Task calculate_spearman
 
     Int calculate_spearman_ncpus=1
@@ -322,6 +328,34 @@ task create_abundance_from_talon_db {
     output {
         File talon_abundance = glob("*_talon_abundance.tsv")[0]
         File number_of_genes_detected = glob("*_number_of_genes_detected.json")[0]
+    }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+    }
+
+}
+
+task create_gtf_from_talon_db {
+    File talon_db
+    String annotation_name
+    String genome_build
+    String output_prefix
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        python3.7 $(which create_GTF_from_database.py) --db ${talon_db} \
+                                                        -a ${annotation_name} \
+                                                        --build ${genome_build}
+                                                        --o ${output_prefix}
+    }
+
+    output {
+        File gtf = glob("*.gtf")[0]
     }
 
     runtime {
