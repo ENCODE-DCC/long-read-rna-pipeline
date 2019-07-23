@@ -452,6 +452,7 @@ jobs:
                               long_read_rna_pipeline.talon.talon_log \
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
             --metadata_json test_workflow_input.metadata.json \
             --reference_json test/test_workflow/test_workflow_reference_md5.json \
             --outfile test_workflow_input.result.json
@@ -479,6 +480,7 @@ jobs:
                               long_read_rna_pipeline.talon.talon_log \
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
             --metadata_json test_workflow_input.metadata.json \
             --reference_json test/test_workflow/test_workflow_reference_md5.json \
             --outfile test_workflow_input.result.json
@@ -504,6 +506,7 @@ jobs:
                               long_read_rna_pipeline.talon.talon_log \
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
                               long_read_rna_pipeline.calculate_spearman.spearman \
             --metadata_json test_workflow_2reps_input.metadata.json \
             --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \
@@ -532,6 +535,7 @@ jobs:
                               long_read_rna_pipeline.talon.talon_log \
                               long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
                               long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
+                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
                               long_read_rna_pipeline.calculate_spearman.spearman \
             --metadata_json test_workflow_2reps_input.metadata.json \
             --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \

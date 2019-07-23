@@ -139,6 +139,16 @@ workflow long_read_rna_pipeline {
             ramGB = create_abundance_from_talon_db_ramGB,
             disks = create_abundance_from_talon_db_disks,
         }
+
+        call create_gtf_from_talon_db { input:
+            talon_db = talon.talon_db_out,
+            annotation_name = annotation_name,
+            genome_build = genome_build,
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            ncpus = create_abundance_from_talon_db_ncpus,
+            ramGB = create_abundance_from_talon_db_ramGB,
+            disks = create_abundance_from_talon_db_disks,
+        }
     }
 
     if (length(fastqs) == 2) {
