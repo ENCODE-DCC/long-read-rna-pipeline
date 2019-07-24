@@ -1,70 +1,94 @@
 {
     "long_read_rna_pipeline.minimap2": {
         "sam": {
-            "path": "minimap2/rep${i+1}/${basename}"
+            "path": "minimap2/rep${i+1}/${basename}",
+            "table": "Minimap2/Replicate ${i+1}/alignments in sam format"
         },
         "bam": {
-            "path": "minimap2/rep${i+1}/${basename}"
+            "path": "minimap2/rep${i+1}/${basename}",
+            "table": "Minimap2/Replicate ${i+1}/alignments in bam format"
         },
         "log": {
-            "path": "minimap2/rep${i+1}/${basename}"
+            "path": "minimap2/rep${i+1}/${basename}",
+            "table": "Minimap2/Replicate ${i+1}/minimap2 log"
         },
         "mapping_qc": {
-            "path": "minimap2/rep${i+1}/${basename}"
+            "path": "minimap2/rep${i+1}/${basename}",
+            "table": "Minimap2/Replicate ${i+1}/mapping QC"
         }
     },
 
     "long_read_rna_pipeline.transcriptclean": {
         "corrected_sam": {
-            "path": "transcriptclean/rep${i+1}/${basename}"
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/cleaned sam"
         },
         "corrected_fasta": {
-            "path": "transcriptclean/rep${i+1}/${basename}"
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/cleaned fasta"
         },
         "transcript_log": {
-            "path": "transcriptclean/rep${i+1}/${basename}"
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/transcript log file"
         },
         "transcript_error_log": {
-            "path": "transcriptclean/rep${i+1}/${basename}"
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/Transcript error log file"
         },
         "report": {
-            "path": "transcriptclean/rep${i+1}/${basename}"
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/Transcriptclean report"
         }
     },
 
     "long_read_rna_pipeline.filter_transcriptclean": {
         "filtered_sam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}"
+            "path": "filter_transcriptclean/rep${i+1}/${basename}",
+            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned sam"
         },
         "filtered_bam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}"
+            "path": "filter_transcriptclean/rep${i+1}/${basename}",
+            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned bam"
         }
     },
 
     "long_read_rna_pipeline.talon": {
         "talon_config": {
-            "path": "talon/rep${i+1}/${basename}"
+            "path": "talon/rep${i+1}/${basename}",
+            "table": "TALON/Replicate ${i+1}/TALON options csv"
         },
         "talon_log": {
-            "path": "talon/rep${i+1}/${basename}"
+            "path": "talon/rep${i+1}/${basename}",
+            "table": "TALON/Replicate ${i+1}/TALON log"
         },
         "talon_db_out": {
-            "path": "talon/rep${i+1}/${basename}"
+            "path": "talon/rep${i+1}/${basename}",
+            "table": "TALON/Replicate ${i+1}/TALON database"
         }
     },
 
     "long_read_rna_pipeline.create_abundance_from_talon_db": {
         "talon_abundance": {
-            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}"
+            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}",
+            "table": "Create_Abundance_from_TALON/Replicate ${i+1}/abundance .tsv"
         },
         "number_of_genes_detected": {
-            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}"
+            "path": "create_abundance_from_talon_db/rep${i+1}/${basename}",
+            "table": "Create_Abundance_from_TALON/Replicate ${i+1}/number of genes detected"
+        }
+    },
+
+    "long_read_rna_pipeline.create_gtf_from_talon_db": {
+        "gtf": {
+            "path": "create_gtf_from_talon_db/rep${i+1}/${basename}",
+            "table": "Create_GTF_from_TALON/Replicate ${i+1}/gtf from updated TALON db"
         }
     },
 
     "long_read_rna_pipeline.calculate_spearman": {
         "spearman": {
-            "path": "calculate_spearman/${basename}"
+            "path": "calculate_spearman/${basename}",
+            "table": "Spearman/replicates spearman correlation"
         }
     }
 }
