@@ -1,9 +1,9 @@
 {
-    "init_talon_db.annotation_gtf" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
-    "init_talon_db.annotation_name" : "gencode_V24_chr19",
-    "init_talon_db.ref_genome_name" : "GRCh38_chr19",
-    "init_talon_db.output_prefix" : "test_init_talon_db",
-    "init_talon_db.ncpu" : 2,
-    "init_talon_db.ramGB" : 4,
-    "init_talon_db.disk" : "local-disk 20 SSD"
+    "test_init_talon_db.annotation_gtf" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
+    "test_init_talon_db.annotation_name" : "gencode_V24_chr19",
+    "test_init_talon_db.ref_genome_name" : "GRCh38_chr19",
+    "test_init_talon_db.output_prefix" : "test_init_talon_db",
+    "test_init_talon_db.ncpu" : 2,
+    "test_init_talon_db.ramGB" : 4,
+    "test_init_talon_db.disk" : "local-disk 20 SSD"
 }
