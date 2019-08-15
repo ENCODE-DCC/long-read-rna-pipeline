@@ -6,7 +6,6 @@
     "long_read_rna_pipeline.splice_junctions" : "test_data/splice_junctions.txt",
     "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
     "long_read_rna_pipeline.input_type" : "pacbio",
-    "long_read_rna_pipeline.initial_talon_db" : "test_data/test_init_talon_db.db",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
     "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
