@@ -14,7 +14,7 @@ workflow test_init_talon_db {
     call longrna.init_talon_db { input:
         talon_db = talon_db,
         annotation_name = annotation_name,
-        genome_build = genome_build,
+        ref_genome_name = ref_genome_name,
         output_prefix = output_prefix,
         ncpus = ncpus,
         ramGB = ramGB,
