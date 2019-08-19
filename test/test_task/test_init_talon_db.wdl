@@ -12,7 +12,7 @@ workflow test_init_talon_db {
     String disks
 
     call longrna.init_talon_db { input:
-        talon_db = talon_db,
+        annotation_gtf = annotation_gtf,
         annotation_name = annotation_name,
         ref_genome_name = ref_genome_name,
         output_prefix = output_prefix,
