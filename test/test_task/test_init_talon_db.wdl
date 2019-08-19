@@ -7,7 +7,7 @@ workflow test_init_talon_db {
     String annotation_name
     String ref_genome_name
     String output_prefix
-    String? idxprefix
+    String? idprefix
     Int ncpus
     Int ramGB
     String disks
@@ -17,7 +17,7 @@ workflow test_init_talon_db {
         annotation_name = annotation_name,
         ref_genome_name = ref_genome_name,
         output_prefix = output_prefix,
-        idxprefix = idxprefix,
+        idprefix = idprefix,
         ncpus = ncpus,
         ramGB = ramGB,
         disks = disks,
