@@ -33,7 +33,7 @@ workflow long_read_rna_pipeline {
 
     # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = 'TALON').
     # If defined, length of this array needs to be equal to number of replicates.
-    Array[String]? talon_prefixes 
+    Array[String?] talon_prefixes 
 
     # Genome build name, for TALON. This must be in the initial_talon_db
 

@@ -8,6 +8,7 @@
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
+    "long_read_rna_pipeline.talon_prefixes" : ["FOO", "BAR"],
     "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
     "long_read_rna_pipeline.init_talon_db_ramGB" : 4,
     "long_read_rna_pipeline.init_talon_db_disks" : "local-disk 20 HDD",
