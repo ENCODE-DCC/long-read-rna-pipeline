@@ -184,6 +184,7 @@ task init_talon_db {
     String annotation_name
     String ref_genome_name
     String output_prefix
+    String? idxprefix 
     Int ncpus
     Int ramGB
     String disks
@@ -195,6 +196,7 @@ task init_talon_db {
             --f anno.gtf \
             --a ${annotation_name} \
             --g ${ref_genome_name} \
+            ${"--idxprefix " + idxprefix} \
             --o ${output_prefix}
 
         python3.7 $(which record_init_db_inputs.py) \
