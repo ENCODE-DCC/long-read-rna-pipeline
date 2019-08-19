@@ -31,9 +31,9 @@ workflow long_read_rna_pipeline {
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
 
-    # Talon db, produced by init_talon_db.wdl
-
-    File initial_talon_db
+    # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = 'TALON').
+    # If defined, length of this array needs to be equal to number of replicates.
+    Array[String?] talon_prefixes 
 
     # Genome build name, for TALON. This must be in the initial_talon_db
 
@@ -44,6 +44,12 @@ workflow long_read_rna_pipeline {
     String annotation_name
 
     # Resouces
+
+    # Task init_talon_db
+
+    Int init_talon_db_ncpus
+    Int init_talon_db_ramGB
+    String init_talon_db_disks
 
     # Task minimap2
 
@@ -90,6 +96,17 @@ workflow long_read_rna_pipeline {
     # Pipeline starts here
 
     scatter (i in range(length(fastqs))) {
+
+        call init_talon_db { input:
+            annotation_gtf = annotation,
+            annotation_name = annotation_name,
+            ref_genome_name = genome_build,
+            idprefix =  talon_prefixes[i],
+            output_prefix = "rep"+(i+1)+experiment_prefix,
+            ncpus = init_talon_db_ncpus,
+            ramGB = init_talon_db_ramGB,
+            disks = init_talon_db_disks
+        }
         call minimap2 { input:
             fastq = fastqs[i],
             reference_genome = reference_genome,
@@ -120,7 +137,7 @@ workflow long_read_rna_pipeline {
         }
 
         call talon { input:
-            talon_db = initial_talon_db,
+            talon_db = init_talon_db.database,
             sam = filter_transcriptclean.filtered_sam,
             genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
@@ -161,6 +178,44 @@ workflow long_read_rna_pipeline {
             disks = calculate_spearman_disks,
         }
     }
+}
+
+task init_talon_db {
+    File annotation_gtf
+    String annotation_name
+    String ref_genome_name
+    String output_prefix
+    String? idprefix 
+    Int ncpus
+    Int ramGB
+    String disks
+
+    command {
+        gzip -cd ${annotation_gtf} > anno.gtf
+        rm ${annotation_gtf}
+        python3.7 $(which initialize_talon_database.py) \
+            --f anno.gtf \
+            --a ${annotation_name} \
+            --g ${ref_genome_name} \
+            ${"--idprefix " + idprefix} \
+            --o ${output_prefix}
+
+        python3.7 $(which record_init_db_inputs.py) \
+            --annotation_name ${annotation_name} \
+            --genome ${ref_genome_name} \
+            --outfile ${output_prefix}_talon_inputs.json
+        }
+
+    output {
+        File database = glob("*.db")[0]
+        File talon_inputs = glob("*_talon_inputs.json")[0]
+           }
+
+    runtime {
+        cpu: ncpus
+        memory: "${ramGB} GB"
+        disks: disks
+        }
 }
 
 task minimap2 {

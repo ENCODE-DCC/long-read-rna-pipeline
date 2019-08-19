@@ -17,7 +17,7 @@ python_defaults: &python_defaults
 
 machine_defaults: &machine_defaults
   machine:
-    image: circleci/classic:latest
+    image: ubuntu-1604:201903-01
   working_directory: ~/long-read-rna-pipeline
 
 make_tag: &make_tag
@@ -93,6 +93,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -131,6 +132,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -173,6 +175,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -216,6 +219,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -241,9 +245,9 @@ jobs:
           command: |
             pyenv global 3.5.2
             source ${BASH_ENV}
-            test/test.sh init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
+            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
             python3 src/compare_md5.py \
-            --keys_to_inspect init_talon_db.init_db.database init_talon_db.init_db.talon_inputs \
+            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
             --metadata_json test_init_talon_db_input.metadata.json \
             --reference_json test/test_task/test_init_talon_db_reference_md5.json \
             --outfile test_init_talon_db_input.result.json
@@ -256,20 +260,62 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
             source ${BASH_ENV}
-            test/test.sh init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG singularity
+            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG singularity
             python3 src/compare_md5.py \
-            --keys_to_inspect init_talon_db.init_db.database init_talon_db.init_db.talon_inputs \
+            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
             --metadata_json test_init_talon_db_input.metadata.json \
             --reference_json test/test_task/test_init_talon_db_reference_md5.json \
             --outfile test_init_talon_db_input.result.json
             cat test_init_talon_db_input.result.json
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
+          no_output_timeout: 30m
+
+  test_init_talon_database_idxprefix_docker:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json $TAG docker
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
+            --metadata_json test_init_talon_db_idxprefix_input.metadata.json \
+            --reference_json test/test_task/test_init_talon_db_idxprefix_reference_md5.json \
+            --outfile test_init_talon_db_idxprefix_input.result.json
+            cat test_init_talon_db_idxprefix_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_idxprefix_input.result.json
+          no_output_timeout: 30m
+
+  test_init_talon_database_idxprefix_singularity:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - run: *make_tag
+      - run: sudo apt-get update
+      - singularity/install-go
+      - singularity/debian-install-3
+      - run: 
+          command: |
+            pyenv global 3.5.2
+            source ${BASH_ENV}
+            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json $TAG singularity
+            python3 src/compare_md5.py \
+            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
+            --metadata_json test_init_talon_db_idxprefix_input.metadata.json \
+            --reference_json test/test_task/test_init_talon_db_idxprefix_reference_md5.json \
+            --outfile test_init_talon_db_idxprefix_input.result.json
+            cat test_init_talon_db_idxprefix_input.result.json
+            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_idxprefix_input.result.json
           no_output_timeout: 30m
 
   test_talon_docker:
@@ -296,6 +342,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -337,6 +384,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -378,6 +426,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -418,6 +467,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -465,6 +515,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -520,6 +571,7 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
       - singularity/install-go
       - singularity/debian-install-3
       - run: 
@@ -577,6 +629,12 @@ workflows:
           requires:
             - build
       - test_init_talon_database_singularity:
+          requires:
+            - build
+      - test_init_talon_database_idxprefix_docker:
+          requires:
+            - build
+      - test_init_talon_database_idxprefix_singularity:
           requires:
             - build
       - test_talon_docker:
