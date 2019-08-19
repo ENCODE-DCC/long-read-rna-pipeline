@@ -44,7 +44,6 @@ A typical `input.json` is structured in the following way:
     "long_read_rna_pipeline.splice_junctions" : "test_data/splice_junctions.txt",
     "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
     "long_read_rna_pipeline.input_type" : "pacbio",
-    "long_read_rna_pipeline.initial_talon_db" : "test_data/test_init_talon_db.db",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
     "long_read_rna_pipeline.minimap2_ncpus" : 1,
@@ -77,7 +76,6 @@ The following elaborates on the meaning of each line in the input file.
 * `long_read_rna_pipeline.splice_junctions` Is the splice junctions file, generated with `get-splice-junctions.wdl` workflow based on the annotation and reference genome. This will be made available for download from The ENCODE Portal.
 * `long_read_rna_pipeline.experiment_prefix` This will be a prefix for the output files.
 * `long_read_rna_pipeline.input_type` Platform that was used for generating the data. Options are `pacbio` and `nanopore`.
-* `long_read_rna_pipeline.initial_talon_db` Initial TALON database, generated with `init_talon_db.wdl` workflow based on the annotation. This will be made available for download from The ENCODE Portal.
 * `long_read_rna_pipeline.genome_build` Genome build name in the initial TALON database. This is internal metadata variable you typically do not need to touch.
 * `long_read_rna_pipeline.annotation_name` Annotation name in the initial TALON database. This is internal metadata variable you typically do not need to touch.
 
@@ -88,6 +86,11 @@ Rest of the variables are for adjusting the computational resources of the pipel
 The resources required by mapping task are quite typical for the mapping and we find that 16 cores with 60GB of memory get the job done quite fast. The resources required by TALON related tasks and filter transcriptclean are roughly 2cpus with 12GB memory. Right now we Transcriptclean is very memory intensive, using up to over 100GB of memory on full sized data, and we are working on making the task more memory efficient.
 
 ## Outputs
+
+#### Task Init_talon_db
+
+* `database` TALON database
+* `talon_inputs` this file contains the annotation name and reference genome name that are stored in database and are needed in the subsequent TALON call.
 
 #### Task Minimap2
 
