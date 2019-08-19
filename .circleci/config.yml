@@ -301,6 +301,9 @@ jobs:
     steps:
       - checkout
       - run: *make_tag
+      - run: sudo apt-get update
+      - singularity/install-go
+      - singularity/debian-install-3
       - run: 
           command: |
             pyenv global 3.5.2
