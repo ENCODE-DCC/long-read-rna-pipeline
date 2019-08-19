@@ -101,6 +101,7 @@ workflow long_read_rna_pipeline {
             annotation_gtf = annotation,
             annotation_name = annotation_name,
             ref_genome_name = genome_build,
+            idxprefix =  talon_prefixes[i],
             output_prefix = "rep"+(i+1)+experiment_prefix,
             ncpus = init_talon_db_ncpus,
             ramGB = init_talon_db_ramGB,
@@ -196,7 +197,7 @@ task init_talon_db {
             --f anno.gtf \
             --a ${annotation_name} \
             --g ${ref_genome_name} \
-            ${"--idxprefix " + idxprefix} \
+            ${"--idxprefix " + idxprefix \}
             --o ${output_prefix}
 
         python3.7 $(which record_init_db_inputs.py) \
