@@ -55,7 +55,7 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy panda
 
 # Install qc-utils to python 3.7
 
-RUN python3.7 -m pip install qc-utils
+RUN python3.7 -m pip install qc-utils==19.8.1
 
 # Install pandas and scipy (for correlations and genes detected calculations)
 
