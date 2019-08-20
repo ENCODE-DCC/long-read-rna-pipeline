@@ -88,3 +88,10 @@ ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 RUN mkdir -p long-rna-seq-pipeline/src
 COPY /src long-rna-seq-pipeline/src
 ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
+ARG GIT_COMMIT_HASH
+ENV GIT_HASH=${GIT_COMMIT_HASH}
+ARG BRANCH
+ENV BUILD_BRANCH=${BRANCH}
+ARG BUILD_TAG
+ENV MY_TAG=${BUILD_TAG}
+
