@@ -55,7 +55,7 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy panda
 
 # Install qc-utils to python 3.7
 
-RUN python3.7 -m pip install qc-utils
+RUN python3.7 -m pip install qc-utils==19.8.1
 
 # Install pandas and scipy (for correlations and genes detected calculations)
 
@@ -88,3 +88,10 @@ ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 RUN mkdir -p long-rna-seq-pipeline/src
 COPY /src long-rna-seq-pipeline/src
 ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
+ARG GIT_COMMIT_HASH
+ENV GIT_HASH=${GIT_COMMIT_HASH}
+ARG BRANCH
+ENV BUILD_BRANCH=${BRANCH}
+ARG BUILD_TAG
+ENV MY_TAG=${BUILD_TAG}
+
