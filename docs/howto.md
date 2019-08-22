@@ -9,7 +9,7 @@ Before following these instructions, make sure you have completed installation a
 
 [Google Cloud](howto.md#google-cloud)  
 [SLURM](howto.md#slurm-singularity)  
-[Splice Junctions and TALON database](howto.md#splice-junctions-and-talon-database)
+[Splice Junctions](howto.md#splice-junctions)  
 
 
 # RUNNING WORKFLOWS
@@ -133,7 +133,7 @@ For example replace `test_data/chr19_test_10000_reads.fastq.gz` in fastq inputs 
   caper run -i test/test_workflow/test_workflow_2reps_input.json -o workflow_opts/singularity.json -m metadata.json
 ```
 
-## Splice junctions and TALON database
+## Splice junctions
 
 You may want to run the pipeline using other references than the ones used by ENCODE. In this case you must prepare your own splice junctions file. The workflows for this is in this repo and it is `get-splice-junctions.wdl`. This workflow uses the same Docker/Singularity images as the main pipeline and running this workflow is done in exactly same way as the running of the main pipeline.
 
@@ -146,6 +146,6 @@ You may want to run the pipeline using other references than the ones used by EN
     "get_splice_junctions.output_prefix" : "gencode_V24_splice_junctions",
     "get_splice_junctions.ncpus" : 2,
     "get_splice_junctions.ramGB" : 7,
-        "get_splice_junctions.disks" : "local-disk 50 SSD"
+    "get_splice_junctions.disks" : "local-disk 50 SSD"
 }
 ```

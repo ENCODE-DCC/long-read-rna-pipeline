@@ -27,7 +27,7 @@ Transcriptclean runs on python 2.7, and other parts utilize 3.7.
 
 [Transcriptclean](https://github.com/dewyman/TranscriptClean) is a program that corrects for mismatches, microindels and non-canonical splice junctions. For publication describing the software in detail, see [Paper by Dana Wyman, Ali Mortazavi](https://doi.org/10.1093/bioinformatics/bty483).
 
-### TALON v4.1
+### TALON v4.2
 
 [TALON](https://github.com/dewyman/TALON) is a Python program for identifying known and novel genes/isoforms in long read transcriptome data sets. TALON is technology-agnostic in that it works from mapped SAM files, allowing data from different sequencing platforms (i.e. PacBio and Oxford Nanopore) to be analyzed side by side.
 
@@ -46,6 +46,10 @@ A typical `input.json` is structured in the following way:
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
+    "long_read_rna_pipeline.talon_prefixes" : ["FOO", "BAR"],
+    "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
+    "long_read_rna_pipeline.init_talon_db_ramGB" : 4,
+    "long_read_rna_pipeline.init_talon_db_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.minimap2_ncpus" : 1,
     "long_read_rna_pipeline.minimap2_ramGB" : 4,
     "long_read_rna_pipeline.minimap2_disks" : "local-disk 20 HDD",
@@ -61,6 +65,9 @@ A typical `input.json` is structured in the following way:
     "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus" : 1,
     "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB" : 4,
     "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
+    "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 1,
+    "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 4,
+    "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.calculate_spearman_ncpus" : 2,
     "long_read_rna_pipeline.calculate_spearman_ramGB" : 4,
     "long_read_rna_pipeline.calculate_spearman_disks" : "local-disk 20 HDD"
@@ -121,6 +128,10 @@ The resources required by mapping task are quite typical for the mapping and we 
 
 * `talon_abundance` Transcript and Gene quantitation .tsv from TALON database.
 * `number_of_genes_detected` .json file containing the information on the number of genes detected in the pipeline run.
+
+#### Task Create_gtf_from_talon_db
+
+* `gtf` a transcriptome reference file containing the new transcripts found in the replicate.
 
 #### Task Calculate_spearman (run when there are exactly 2 replicates)
 
