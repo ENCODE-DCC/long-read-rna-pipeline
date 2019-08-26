@@ -9,7 +9,7 @@ Before following these instructions, make sure you have completed installation a
 
 [Google Cloud](howto.md#google-cloud)  
 [SLURM](howto.md#slurm-singularity)  
-[Splice Junctions and TALON database](howto.md#splice-junctions-and-talon-database)
+[Splice Junctions](howto.md#splice-junctions)  
 
 
 # RUNNING WORKFLOWS
@@ -32,7 +32,7 @@ The goal is to run the pipeline with test data using Google Cloud Platform.
 
 ```bash
   gsutil cp gsutil cp test_data/chr19_test_10000_reads.fastq.gz gs://YOUR_BUCKET_NAME/input/
-  gsutil cp test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz test_data/test_init_talon_db.db test_data/splice_junctions.txt test_data/00-common_chr19_only.vcf.gz test_data/gencode.v24.annotation_chr19.gtf.gz gs://YOUR_BUCKET_NAME/reference/
+  gsutil cp test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz test_data/splice_junctions.txt test_data/00-common_chr19_only.vcf.gz test_data/gencode.v24.annotation_chr19.gtf.gz gs://YOUR_BUCKET_NAME/reference/
 ```
 
 4. Prepare the `input.json`. In the following template fill in the actual URI of your Google Cloud Bucket and save the file as `input.json` in the `long-read-rna-pipeline` directory.
@@ -46,7 +46,6 @@ The goal is to run the pipeline with test data using Google Cloud Platform.
     "long_read_rna_pipeline.splice_junctions" : "gs://YOUR_BUCKET_NAME/reference/splice_junctions.txt",
     "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
     "long_read_rna_pipeline.input_type" : "pacbio",
-    "long_read_rna_pipeline.initial_talon_db" : "gs://YOUR_BUCKET_NAME/reference/test_init_talon_db.db",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
     "long_read_rna_pipeline.minimap2_ncpus" : 2,
@@ -134,9 +133,9 @@ For example replace `test_data/chr19_test_10000_reads.fastq.gz` in fastq inputs 
   caper run -i test/test_workflow/test_workflow_2reps_input.json -o workflow_opts/singularity.json -m metadata.json
 ```
 
-## Splice junctions and TALON database
+## Splice junctions
 
-You may want to run the pipeline using other references than the ones used by ENCODE. In this case you must prepare your own splice junctions file, and initialize your own talon database. The workflows for this are contained in this repo and they are `get-splice-junctions.wdl` and `init_talon_db.wdl`. These workflows use the same Docker/Singularity images as the main pipeline and running these workflows is done in exactly same way as the running of the main pipeline.
+You may want to run the pipeline using other references than the ones used by ENCODE. In this case you must prepare your own splice junctions file. The workflows for this is in this repo and it is `get-splice-junctions.wdl`. This workflow uses the same Docker/Singularity images as the main pipeline and running this workflow is done in exactly same way as the running of the main pipeline.
 
 `input.json` for splice junction workflow with gencode v24 annotation, and GRCh38 reference genome looks like this:
 
@@ -147,21 +146,6 @@ You may want to run the pipeline using other references than the ones used by EN
     "get_splice_junctions.output_prefix" : "gencode_V24_splice_junctions",
     "get_splice_junctions.ncpus" : 2,
     "get_splice_junctions.ramGB" : 7,
-        "get_splice_junctions.disks" : "local-disk 50 SSD"
+    "get_splice_junctions.disks" : "local-disk 50 SSD"
 }
 ```
-
-`input.json` for `init_talon_db.wdl` with gencode v24 annotation looks like this:
-```
-{
-    "init_talon_db.annotation_gtf" : "gs://long_read_rna/splice_junctions/inputs/gencode.v24.primary_assembly.annotation.gtf.gz",
-    "init_talon_db.annotation_name" : "gencode_V24",
-    "init_talon_db.ref_genome_name" : "GRCh38",
-    "init_talon_db.output_prefix" : "gencode_V24_GRCh38_initial_talon_database",
-    "init_talon_db.ncpu" : 4,
-    "init_talon_db.ramGB" : 16,
-    "init_talon_db.disk" : "local-disk 200 SSD"
-}
-```
-
-`init_talon_db.annotation_name` and `init_talon_db.ref_genome_name` are important inputs, that correspond to variables `annotation_name` and `genome_build` in the main pipeline (in some use cases talon database could contain several annotations and genomes and these variables are used to select the correct one). Make sure these values match when using the talon database you build for running the main pipeline.

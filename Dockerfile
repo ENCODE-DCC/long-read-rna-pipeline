@@ -55,7 +55,7 @@ RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy panda
 
 # Install qc-utils to python 3.7
 
-RUN python3.7 -m pip install qc-utils
+RUN python3.7 -m pip install qc-utils==19.8.1
 
 # Install pandas and scipy (for correlations and genes detected calculations)
 
@@ -78,9 +78,9 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     git clone --branch 1.9 --single-branch git://github.com/samtools/htslib.git && \
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
-# Install TALON
-RUN git clone -b 'v4.1' --single-branch https://github.com/dewyman/TALON.git
-RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py
+# Install TALON 4.2
+RUN git clone -b 'v4.2' --single-branch https://github.com/dewyman/TALON.git
+RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py TALON/post-TALON_tools/create_GTF_from_database.py
 ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 
 # make code within the repo available
@@ -88,3 +88,10 @@ ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
 RUN mkdir -p long-rna-seq-pipeline/src
 COPY /src long-rna-seq-pipeline/src
 ENV PATH="/software/long-rna-seq-pipeline/src:${PATH}"
+ARG GIT_COMMIT_HASH
+ENV GIT_HASH=${GIT_COMMIT_HASH}
+ARG BRANCH
+ENV BUILD_BRANCH=${BRANCH}
+ARG BUILD_TAG
+ENV MY_TAG=${BUILD_TAG}
+

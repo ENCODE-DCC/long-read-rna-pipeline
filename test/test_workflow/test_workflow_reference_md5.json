@@ -3,7 +3,8 @@
 "rep1TEST_WORKFLOW_clean.log" : "0cac2cb51ba1839eaeb1078201aea191",
 "rep1TEST_WORKFLOW_clean.TE.log" : "2dabfde5147e9cef8964334f52b13622",
 "rep1TEST_WORKFLOW_clean.fa" : "de1c66dfb4cc8d0a2572800761dc83a7",
-"rep1TEST_WORKFLOW_talon_QC.log" : "28e4e86f3372ab7a3c9c85419c5da1bb",
-"rep1TEST_WORKFLOW_number_of_genes_detected.json" : "4fad212653a577bf1aaaa4ae55504d82",
-"rep1TEST_WORKFLOW_talon_abundance.tsv" : "61497751b5b1984eea00ae9a285e3f55"
+"rep1TEST_WORKFLOW_talon_QC.log" : "d70aab314ece9d547d2b564c1d1b0c78",
+"rep1TEST_WORKFLOW_number_of_genes_detected.json" : "cdc07eedbe282f6f7d049250cae03044",
+"rep1TEST_WORKFLOW_talon_abundance.tsv" : "231589a40549064e5d0735d49d6e9b53",
+"rep1TEST_WORKFLOW_talon.gtf" : "17438db6c329fe2f49ebd1d3d961916b"
 }
