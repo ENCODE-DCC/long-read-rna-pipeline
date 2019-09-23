@@ -61,9 +61,9 @@ RUN python3.7 -m pip install qc-utils==19.8.1
 
 RUN python3.7 -m pip install pandas scipy
 
-# Get transcriptclean v1.0.7
+# Get transcriptclean v1.0.8
 
-RUN git clone -b 'v1.0.7' --single-branch https://github.com/dewyman/TranscriptClean.git
+RUN git clone -b 'v1.0.8' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
 ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
