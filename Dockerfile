@@ -25,6 +25,11 @@ RUN mkdir /software
 WORKDIR /software
 ENV PATH="/software:${PATH}"
 
+# Install samtools dependency
+
+RUN wget https://tukaani.org/xz/xz-5.2.3.tar.gz && tar -xvf xz-5.2.3.tar.gz
+RUN cd xz-5.2.3 && ./configure && make && make install && rm ../xz-5.2.3.tar.gz
+
 # Install minimap2
 
 RUN curl -L https://github.com/lh3/minimap2/releases/download/v2.15/minimap2-2.15_x64-linux.tar.bz2 | tar -jxvf -
@@ -66,11 +71,6 @@ RUN python3.7 -m pip install pandas scipy
 RUN git clone -b 'v1.0.8' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
 ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
-
-# Install samtools dependency
-
-RUN wget https://tukaani.org/xz/xz-5.2.3.tar.gz && tar -xvf xz-5.2.3.tar.gz
-RUN cd xz-5.2.3 && ./configure && make && make install && rm ../xz-5.2.3.tar.gz
 
 # Install samtools 1.9
 
