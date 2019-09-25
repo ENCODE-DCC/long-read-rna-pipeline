@@ -77,10 +77,10 @@ A typical `input.json` is structured in the following way:
 The following elaborates on the meaning of each line in the input file.
 
 * `long_read_rna_pipeline.fastqs` Is a list of gzipped input fastqs, one file per replicate.
-* `long_read_rna_pipeline.reference_genome` Is the gzipped fasta file containing the reference genome used in mapping.
-* `long_read_rna_pipeline.annotation` Is the gzipped gtf file containing the annotations.
-* `long_read_rna_pipeline.variants` Is the gzipped vcf file containing variants.
-* `long_read_rna_pipeline.splice_junctions` Is the splice junctions file, generated with `get-splice-junctions.wdl` workflow based on the annotation and reference genome. This will be made available for download from The ENCODE Portal.
+* `long_read_rna_pipeline.reference_genome` Is the gzipped fasta file containing the reference genome used in mapping. Files for [human](https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/) and [mouse](https://www.encodeproject.org/files/mm10_no_alt_analysis_set_ENCODE/) are available on the [ENCODE Portal](https://https://www.encodeproject.org/).
+* `long_read_rna_pipeline.annotation` Is the gzipped gtf file containing the annotations. Files for [human V29](https://www.encodeproject.org/files/gencode.v29.primary_assembly.annotation_UCSC_names/) and [mouse M21](https://www.encodeproject.org/files/gencode.vM21.primary_assembly.annotation_UCSC_names/) are available on the [ENCODE Portal](https://https://www.encodeproject.org/).
+* `long_read_rna_pipeline.variants` Is the gzipped vcf file containing variants. File for [human](https://www.encodeproject.org/files/dbsnp-variants-00-common_all/) available on the [ENCODE Portal](https://https://www.encodeproject.org/). Not used for mouse, this input is optional and can be left undefined.
+* `long_read_rna_pipeline.splice_junctions` Is the splice junctions file, generated with `get-splice-junctions.wdl` workflow based on the annotation and reference genome. Files for [human](https://www.encodeproject.org/files/ENCFF055LPJ/) and [mouse](https://www.encodeproject.org/files/ENCFF495CGH/) are available on the [ENCODE Portal](https://https://www.encodeproject.org/).
 * `long_read_rna_pipeline.experiment_prefix` This will be a prefix for the output files.
 * `long_read_rna_pipeline.input_type` Platform that was used for generating the data. Options are `pacbio` and `nanopore`.
 * `long_read_rna_pipeline.genome_build` Genome build name in the initial TALON database. This is internal metadata variable you typically do not need to touch.

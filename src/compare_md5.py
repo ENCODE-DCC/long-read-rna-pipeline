@@ -4,7 +4,6 @@ Script for comparing md5 sums of results to a reference json.
 """
 
 __author__ = "Otto Jolanki"
-__version__ = "0.1.0"
 __license__ = "MIT"
 
 import argparse
