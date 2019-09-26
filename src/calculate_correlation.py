@@ -12,8 +12,12 @@ from dataframe_utils import (
 def main(args):
     rep1_abundance = pd.read_csv(args.rep1_abundance, sep="\t")
     rep2_abundance = pd.read_csv(args.rep2_abundance, sep="\t")
-    rep1_filtered = filter_startswith_prefix(remove_genomic_transcripts(rep1_abundance))
-    rep2_filtered = filter_startswith_prefix(remove_genomic_transcripts(rep2_abundance))
+    rep1_filtered = filter_startswith_prefix(
+        remove_genomic_transcripts(rep1_abundance), args.rep1_idprefix
+    )
+    rep2_filtered = filter_startswith_prefix(
+        remove_genomic_transcripts(rep2_abundance), args.rep2_idprefix
+    )
     del rep1_abundance
     del rep2_abundance
     rep1_counts = calculate_abundances_aggregated_by_gene(
@@ -46,6 +50,8 @@ if __name__ == "__main__":
         type=str,
         help=".tsv file containing the abundance from rep2.",
     )
+    parser.add_argument("--rep1_idprefix", type=str, help="idprefix of the first rep.")
+    parser.add_argument("--rep2_idprefix", type=str, help="idprefix of the second rep.")
     parser.add_argument("--outfile", type=str, help="output filename.")
     args = parser.parse_args()
     main(args)

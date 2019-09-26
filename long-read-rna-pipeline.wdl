@@ -170,9 +170,13 @@ workflow long_read_rna_pipeline {
     }
 
     if (length(fastqs) == 2) {
+        String rep1_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[0] else "TALON"
+        String rep2_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[1] else "TALON"
         call calculate_spearman { input:
             rep1_abundance = create_abundance_from_talon_db.talon_abundance[0],
             rep2_abundance = create_abundance_from_talon_db.talon_abundance[1],
+            rep1_idprefix = rep1_idprefix,
+            rep2_idprefix = rep2_idprefix,
             output_prefix = experiment_prefix,
             ncpus = calculate_spearman_ncpus,
             ramGB = calculate_spearman_ramGB, 
@@ -437,6 +441,8 @@ task create_gtf_from_talon_db {
 task calculate_spearman {
     File rep1_abundance
     File rep2_abundance
+    String rep1_idprefix
+    String rep2_idprefix
     String output_prefix
     Int ncpus
     Int ramGB
@@ -445,6 +451,8 @@ task calculate_spearman {
     command {
         python3.7 $(which calculate_correlation.py) --rep1_abundance ${rep1_abundance} \
                                                     --rep2_abundance ${rep2_abundance} \
+                                                    --rep1_idprefix ${rep1_idprefix} \
+                                                    --rep2_idprefix ${rep2_idprefix} \
                                                     --outfile ${output_prefix}_spearman.json
     }
 
