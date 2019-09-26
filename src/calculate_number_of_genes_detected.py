@@ -4,14 +4,14 @@ import json
 import pandas as pd
 from dataframe_utils import (
     remove_genomic_transcripts,
-    remove_startswith_TALON,
+    filter_startswith_prefix,
     calculate_abundances_aggregated_by_gene,
 )
 
 
 def main(args):
     abundance = pd.read_csv(args.abundance, sep="\t")
-    abundance_filtered = remove_startswith_TALON(remove_genomic_transcripts(abundance))
+    abundance_filtered = filter_startswith_prefix(remove_genomic_transcripts(abundance))
     gene_counts = calculate_abundances_aggregated_by_gene(
         abundance_filtered, args.counts_colname
     )

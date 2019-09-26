@@ -31,7 +31,7 @@ workflow long_read_rna_pipeline {
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
 
-    # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = 'TALON').
+    # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = "TALON").
     # If defined, length of this array needs to be equal to number of replicates.
     Array[String] talon_prefixes=[]
 

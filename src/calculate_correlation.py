@@ -4,7 +4,7 @@ import json
 import pandas as pd
 from dataframe_utils import (
     remove_genomic_transcripts,
-    remove_startswith_TALON,
+    filter_startswith_prefix,
     calculate_abundances_aggregated_by_gene,
 )
 
@@ -12,8 +12,8 @@ from dataframe_utils import (
 def main(args):
     rep1_abundance = pd.read_csv(args.rep1_abundance, sep="\t")
     rep2_abundance = pd.read_csv(args.rep2_abundance, sep="\t")
-    rep1_filtered = remove_startswith_TALON(remove_genomic_transcripts(rep1_abundance))
-    rep2_filtered = remove_startswith_TALON(remove_genomic_transcripts(rep2_abundance))
+    rep1_filtered = filter_startswith_prefix(remove_genomic_transcripts(rep1_abundance))
+    rep2_filtered = filter_startswith_prefix(remove_genomic_transcripts(rep2_abundance))
     del rep1_abundance
     del rep2_abundance
     rep1_counts = calculate_abundances_aggregated_by_gene(
