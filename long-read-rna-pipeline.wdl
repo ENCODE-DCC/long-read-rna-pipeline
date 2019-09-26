@@ -389,7 +389,7 @@ task create_abundance_from_talon_db {
                                                                   --o=${output_prefix}
         python3.7 $(which calculate_number_of_genes_detected.py) --abundance ${output_prefix}_talon_abundance.tsv \
                                                                  --counts_colname ${output_prefix} \
-                                                                 --idprefix ${idprefix}
+                                                                 --idprefix ${idprefix} \
                                                                  --outfile ${output_prefix}_number_of_genes_detected.json
     }
 
