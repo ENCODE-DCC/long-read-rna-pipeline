@@ -31,7 +31,7 @@ workflow long_read_rna_pipeline {
     # Is the data from "pacbio" or "nanopore"
     String input_type="pacbio"
 
-    # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = 'TALON').
+    # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = "TALON").
     # If defined, length of this array needs to be equal to number of replicates.
     Array[String] talon_prefixes=[]
 
@@ -152,6 +152,7 @@ workflow long_read_rna_pipeline {
             annotation_name = annotation_name,
             genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
+            idprefix = talon_prefix,
             ncpus = create_abundance_from_talon_db_ncpus,
             ramGB = create_abundance_from_talon_db_ramGB,
             disks = create_abundance_from_talon_db_disks,
@@ -169,9 +170,13 @@ workflow long_read_rna_pipeline {
     }
 
     if (length(fastqs) == 2) {
+        String rep1_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[0] else "TALON"
+        String rep2_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[1] else "TALON"
         call calculate_spearman { input:
             rep1_abundance = create_abundance_from_talon_db.talon_abundance[0],
             rep2_abundance = create_abundance_from_talon_db.talon_abundance[1],
+            rep1_idprefix = rep1_idprefix,
+            rep2_idprefix = rep2_idprefix,
             output_prefix = experiment_prefix,
             ncpus = calculate_spearman_ncpus,
             ramGB = calculate_spearman_ramGB, 
@@ -376,6 +381,7 @@ task create_abundance_from_talon_db {
     String annotation_name
     String genome_build
     String output_prefix
+    String idprefix
     Int ncpus
     Int ramGB
     String disks
@@ -387,6 +393,7 @@ task create_abundance_from_talon_db {
                                                                   --o=${output_prefix}
         python3.7 $(which calculate_number_of_genes_detected.py) --abundance ${output_prefix}_talon_abundance.tsv \
                                                                  --counts_colname ${output_prefix} \
+                                                                 --idprefix ${idprefix} \
                                                                  --outfile ${output_prefix}_number_of_genes_detected.json
     }
 
@@ -434,6 +441,8 @@ task create_gtf_from_talon_db {
 task calculate_spearman {
     File rep1_abundance
     File rep2_abundance
+    String rep1_idprefix
+    String rep2_idprefix
     String output_prefix
     Int ncpus
     Int ramGB
@@ -442,6 +451,8 @@ task calculate_spearman {
     command {
         python3.7 $(which calculate_correlation.py) --rep1_abundance ${rep1_abundance} \
                                                     --rep2_abundance ${rep2_abundance} \
+                                                    --rep1_idprefix ${rep1_idprefix} \
+                                                    --rep2_idprefix ${rep2_idprefix} \
                                                     --outfile ${output_prefix}_spearman.json
     }
 
