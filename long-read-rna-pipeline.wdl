@@ -1,9 +1,9 @@
 # ENCODE long read rna pipeline
 # Maintainer: Otto Jolanki
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.1
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.1
-
+#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.2
+#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.2
+#CROO out_def https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json
 workflow long_read_rna_pipeline {
     # Inputs
 
