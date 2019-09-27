@@ -9,17 +9,18 @@ def remove_genomic_transcripts(dataframe):
     return dataframe[not_genomic_transcript]
 
 
-def remove_startswith_TALON(dataframe):
-    """Remove rows where 'annot_gene_id' column value starts with string 'TALON'.
+def filter_startswith_prefix(dataframe, prefix="TALON"):
+    """Filter out rows where 'annot_gene_id' column value starts with prefix.
     Args:
         dataframe: pandas DataFrame
+        prefix: string
     Returns:
         pandas DataFrame
     """
-    not_starts_with_TALON = dataframe["annot_gene_id"].apply(
-        lambda x: not x.startswith("TALON")
+    not_starts_with_prefix = dataframe["annot_gene_id"].apply(
+        lambda x: not x.startswith(prefix)
     )
-    return dataframe[not_starts_with_TALON]
+    return dataframe[not_starts_with_prefix]
 
 
 def calculate_abundances_aggregated_by_gene(dataframe, colname):

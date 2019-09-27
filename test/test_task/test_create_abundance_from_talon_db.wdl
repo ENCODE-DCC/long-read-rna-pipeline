@@ -7,6 +7,7 @@ workflow test_create_abundance_from_talon_db {
     String annotation_name
     String genome_build
     String output_prefix
+    String idprefix
     Int ncpus
     Int ramGB
     String disks
@@ -16,6 +17,7 @@ workflow test_create_abundance_from_talon_db {
         annotation_name = annotation_name,
         genome_build = genome_build,
         output_prefix = output_prefix,
+        idprefix = idprefix,
         ncpus = ncpus,
         ramGB = ramGB,
         disks = disks,
