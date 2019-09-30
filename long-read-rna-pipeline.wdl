@@ -288,7 +288,7 @@ task transcriptclean {
             mv ref.fasta reference.fasta
         fi
 
-        python $(which TranscriptClean.py) --sam ${sam} \
+        python3.7 $(which TranscriptClean.py) --sam ${sam} \
             --genome reference.fasta \
             --spliceJns ${splice_junctions} \
             ${if defined(variants) then "--variants <(gzip -cd ${variants})" else ""} \

@@ -19,7 +19,10 @@ RUN apt-get update && apt-get install -y \
     libbz2-dev \
     libncurses5-dev \
     git \
-    python3.7
+    python3.7 \
+    python3.7-dev \
+    libssl-dev \
+    build-essential
 
 RUN mkdir /software
 WORKDIR /software
@@ -53,10 +56,10 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
     Rscript -e "install.packages('gridExtra')" && \
     Rscript -e "install.packages('readr')"
 
-# Install Intervaltree 2.1.0
-
-RUN pip install --upgrade pip 
-RUN pip install intervaltree==2.1.0 pybedtools==0.7.8 pyfasta==0.5.2 numpy pandas
+# Install TC dependencies
+RUN python3.7 -m pip install --upgrade pip
+RUN python3.7 -m pip install cython
+RUN python3.7 -m pip install pybedtools==0.8.0 pyfasta==0.5.2 numpy pandas
 
 # Install qc-utils to python 3.7
 
