@@ -61,6 +61,11 @@ RUN python3.7 -m pip install --upgrade pip
 RUN python3.7 -m pip install cython
 RUN python3.7 -m pip install pybedtools==0.8.0 pyfasta==0.5.2 numpy pandas
 
+# splice junction finding accessory script from TC still runs in python2 and requires pyfasta, which in turn requires numpy
+
+RUN python -m pip install --upgrade pip
+RUN python -m pip install pyfasta==0.5.2 numpy
+
 # Install qc-utils to python 3.7
 
 RUN python3.7 -m pip install qc-utils==19.8.1
