@@ -10,7 +10,7 @@ workflow long_read_rna_pipeline {
     # File inputs
 
     # Input fastqs, gzipped.
-    Array[File] fastqs 
+    Array[File] fastqs
 
     # Reference genome. Fasta format, gzipped.
     File reference_genome
@@ -179,7 +179,7 @@ workflow long_read_rna_pipeline {
             rep2_idprefix = rep2_idprefix,
             output_prefix = experiment_prefix,
             ncpus = calculate_spearman_ncpus,
-            ramGB = calculate_spearman_ramGB, 
+            ramGB = calculate_spearman_ramGB,
             disks = calculate_spearman_disks,
         }
     }
@@ -190,7 +190,7 @@ task init_talon_db {
     String annotation_name
     String ref_genome_name
     String output_prefix
-    String? idprefix 
+    String? idprefix
     Int ncpus
     Int ramGB
     String disks
@@ -240,7 +240,7 @@ task minimap2 {
                 > ${output_prefix}.sam \
                 2> ${output_prefix}_minimap2.log
         fi
-        
+
         if [ "${input_type}" == "nanopore" ]; then
             minimap2 -t ${ncpus} -ax splice -uf -k14 \
                 ${reference_genome} \
@@ -259,7 +259,7 @@ task minimap2 {
         File sam = glob("*.sam")[0]
         File bam = glob("*.bam")[0]
         File log = glob("*_minimap2.log")[0]
-        File mapping_qc = glob("*_mapping_qc.json")[0] 
+        File mapping_qc = glob("*_mapping_qc.json")[0]
     }
 
     runtime {

@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 MAINTAINER Otto Jolanki
 
 RUN apt-get update && apt-get install -y software-properties-common
-RUN add-apt-repository -y ppa:deadsnakes/ppa 
+RUN add-apt-repository -y ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y \
     python \
     cython \
@@ -108,4 +108,3 @@ ARG BRANCH
 ENV BUILD_BRANCH=${BRANCH}
 ARG BUILD_TAG
 ENV MY_TAG=${BUILD_TAG}
-
