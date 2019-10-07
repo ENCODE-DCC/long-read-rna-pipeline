@@ -2,7 +2,7 @@
     "test_transcriptclean.sam" : "test_data/from_minimap2.sam",
     "test_transcriptclean.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
     "test_transcriptclean.splice_junctions" : "test_data/splice_junctions.txt",
-    "test_transcriptclean.variants" : "test_data/00-common_chr19_only.vcf.gz",
+    "test_transcriptclean.variants" : "test_data/00-common_chr19_only_expanded_chrnames.vcf.gz",
     "test_transcriptclean.output_prefix" : "TEST_TRANSCRIPTCLEAN",
     "test_transcriptclean.lines_to_skip" : 2,
     "test_transcriptclean.output_fn" : "TEST_TRANSCRIPTCLEAN_noheader_clean.sam",

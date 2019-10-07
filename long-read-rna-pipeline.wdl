@@ -288,10 +288,13 @@ task transcriptclean {
             mv ref.fasta reference.fasta
         fi
 
+        test -f ${variants} && gzip -cd ${variants} > variants.vcf
+
+
         python3.7 $(which TranscriptClean.py) --sam ${sam} \
             --genome reference.fasta \
             --spliceJns ${splice_junctions} \
-            ${if defined(variants) then "--variants <(gzip -cd ${variants})" else ""} \
+            ${if defined(variants) then "--variants variants.vcf" else ""} \
             --maxLenIndel 5 \
             --maxSJOffset 5 \
             -m true \

@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
     gdebi \
     #pybedtools dependency
     libz-dev \
-    bedtools=2.25.0-1 \
     #samtools dependencies
     libbz2-dev \
     libncurses5-dev \
@@ -90,6 +89,13 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
 RUN git clone -b 'v4.2' --single-branch https://github.com/dewyman/TALON.git
 RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py TALON/post-TALON_tools/create_GTF_from_database.py
 ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
+
+# Install bedtools 2.29
+
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.29.0/bedtools-2.29.0.tar.gz
+RUN tar xzvf bedtools-2.29.0.tar.gz
+RUN cd bedtools2/ && make
+ENV PATH="/software/bedtools2/bin:${PATH}"
 
 # make code within the repo available
 
