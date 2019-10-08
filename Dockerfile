@@ -73,9 +73,16 @@ RUN python3.7 -m pip install qc-utils==19.8.1
 
 RUN python3.7 -m pip install pandas scipy
 
-# Get transcriptclean v2.0
+# Install bedtools 2.29
 
-RUN git clone -b 'v2.0' --single-branch https://github.com/dewyman/TranscriptClean.git
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.29.0/bedtools-2.29.0.tar.gz
+RUN tar xzvf bedtools-2.29.0.tar.gz
+RUN cd bedtools2/ && make
+ENV PATH="/software/bedtools2/bin:${PATH}"
+
+# Get transcriptclean v2.0.2
+
+RUN git clone -b 'v2.0.2' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
 ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
@@ -89,13 +96,6 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
 RUN git clone -b 'v4.2' --single-branch https://github.com/dewyman/TALON.git
 RUN chmod 755 TALON/initialize_talon_database.py TALON/talon.py TALON/post-TALON_tools/create_abundance_file_from_database.py TALON/post-TALON_tools/create_GTF_from_database.py
 ENV PATH="/software/TALON:/software/TALON/post-TALON_tools:${PATH}"
-
-# Install bedtools 2.29
-
-RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.29.0/bedtools-2.29.0.tar.gz
-RUN tar xzvf bedtools-2.29.0.tar.gz
-RUN cd bedtools2/ && make
-ENV PATH="/software/bedtools2/bin:${PATH}"
 
 # make code within the repo available
 
