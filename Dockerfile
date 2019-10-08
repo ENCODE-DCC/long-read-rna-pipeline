@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y \
     python3.7 \
     python3.7-dev \
     libssl-dev \
-    build-essential \
-&& rm -rf /var/lib/apt/lists/*
+    build-essential 
 
 RUN mkdir /software
 WORKDIR /software
@@ -48,6 +47,9 @@ RUN yes | gdebi r-recommended_3.3.2-1xenial0_all.deb
 
 RUN wget https://cran.r-project.org/bin/linux/ubuntu/xenial/r-base_3.3.2-1xenial0_all.deb
 RUN yes | gdebi r-base_3.3.2-1xenial0_all.deb
+
+# clear apt lists
+RUN rm -rf /var/lib/apt/lists/*
 
 # Install R packages
 
