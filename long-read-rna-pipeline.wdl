@@ -301,7 +301,8 @@ task transcriptclean {
             -i true \
             --correctSJs true \
             --primaryOnly \
-            --outprefix ${output_prefix}
+            --outprefix ${output_prefix} \
+            --threads ${ncpus}
 
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
