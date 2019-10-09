@@ -43,6 +43,11 @@ workflow long_read_rna_pipeline {
 
     String annotation_name
 
+    # If this option is set, TranscriptClean will only output transcripts that are either canonical
+    # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end 
+    # of the run.
+    Boolean canonical_only=true
+
     # Resouces
 
     # Task init_talon_db
@@ -123,6 +128,7 @@ workflow long_read_rna_pipeline {
             splice_junctions = splice_junctions,
             variants = variants,
             output_prefix = "rep"+(i+1)+experiment_prefix,
+            canonical_only = canonical_only,
             ncpus = transcriptclean_ncpus,
             ramGB = transcriptclean_ramGB,
             disks = transcriptclean_disks,
@@ -275,6 +281,7 @@ task transcriptclean {
     File splice_junctions
     File? variants
     String output_prefix
+    Boolean canonical_only
     Int ncpus
     Int ramGB
     String disks
@@ -302,7 +309,8 @@ task transcriptclean {
             --correctSJs true \
             --primaryOnly \
             --outprefix ${output_prefix} \
-            --threads ${ncpus}
+            --threads ${ncpus} \
+            ${if canonical_only then "--canonOnly" else ""}
 
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
