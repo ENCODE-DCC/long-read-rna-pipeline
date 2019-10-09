@@ -68,12 +68,6 @@ workflow long_read_rna_pipeline {
     Int transcriptclean_ramGB
     String transcriptclean_disks
 
-    # Task filter_transcriptclean
-
-    Int filter_transcriptclean_ncpus
-    Int filter_transcriptclean_ramGB
-    String filter_transcriptclean_disks
-
     # Task talon
 
     Int talon_ncpus
@@ -134,17 +128,9 @@ workflow long_read_rna_pipeline {
             disks = transcriptclean_disks,
         }
 
-        call filter_transcriptclean { input:
-            sam = transcriptclean.corrected_sam,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            ncpus = filter_transcriptclean_ncpus,
-            ramGB = filter_transcriptclean_ramGB,
-            disks = filter_transcriptclean_disks,
-        }
-
         call talon { input:
             talon_db = init_talon_db.database,
-            sam = filter_transcriptclean.filtered_sam,
+            sam = transcriptclean.corrected_sam,
             genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             platform = input_type,

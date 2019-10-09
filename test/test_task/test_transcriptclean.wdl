@@ -6,6 +6,7 @@ workflow test_transcriptclean {
     File sam
     File reference_genome
     File splice_junctions
+    Boolean canonical_only
     File? variants
     String output_prefix
     Int lines_to_skip 
@@ -20,6 +21,7 @@ workflow test_transcriptclean {
         splice_junctions = splice_junctions,
         variants = variants,
         output_prefix = output_prefix,
+        canonical_only = canonical_only,
         ncpus = ncpus,
         ramGB = ramGB,
         disks = disks,
