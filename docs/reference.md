@@ -23,9 +23,9 @@ Transcriptclean runs on python 2.7, and other parts utilize 3.7.
 
 [Minimap2](https://github.com/lh3/minimap2) is a versatile sequence alignment program that aligns DNA or mRNA sequences against a large reference database. For publication describing the software in detail, see [Paper by Li, H](https://doi.org/10.1093/bioinformatics/bty191).
 
-### Transcriptclean v1.0.8
+### Transcriptclean v2.0.2
 
-[Transcriptclean](https://github.com/dewyman/TranscriptClean) is a program that corrects for mismatches, microindels and non-canonical splice junctions. For publication describing the software in detail, see [Paper by Dana Wyman, Ali Mortazavi](https://doi.org/10.1093/bioinformatics/bty483).
+[Transcriptclean](https://github.com/dewyman/TranscriptClean) is a program that corrects for mismatches, microindels and non-canonical splice junctions. For publication describing the software in detail, see [Paper by Dana Wyman, Ali Mortazavi](https://doi.org/10.1093/bioinformatics/bty483). Version 2.x is an extensive rewrite of the first version, featuring parallel processing and very significant improvements in memory efficiency.
 
 ### TALON v4.2
 
