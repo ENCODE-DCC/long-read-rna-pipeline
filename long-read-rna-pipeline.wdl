@@ -43,6 +43,11 @@ workflow long_read_rna_pipeline {
 
     String annotation_name
 
+    # If this option is set, TranscriptClean will only output transcripts that are either canonical
+    # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end 
+    # of the run.
+    Boolean canonical_only=true
+
     # Resouces
 
     # Task init_talon_db
@@ -62,12 +67,6 @@ workflow long_read_rna_pipeline {
     Int transcriptclean_ncpus
     Int transcriptclean_ramGB
     String transcriptclean_disks
-
-    # Task filter_transcriptclean
-
-    Int filter_transcriptclean_ncpus
-    Int filter_transcriptclean_ramGB
-    String filter_transcriptclean_disks
 
     # Task talon
 
@@ -123,22 +122,15 @@ workflow long_read_rna_pipeline {
             splice_junctions = splice_junctions,
             variants = variants,
             output_prefix = "rep"+(i+1)+experiment_prefix,
+            canonical_only = canonical_only,
             ncpus = transcriptclean_ncpus,
             ramGB = transcriptclean_ramGB,
             disks = transcriptclean_disks,
         }
 
-        call filter_transcriptclean { input:
-            sam = transcriptclean.corrected_sam,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            ncpus = filter_transcriptclean_ncpus,
-            ramGB = filter_transcriptclean_ramGB,
-            disks = filter_transcriptclean_disks,
-        }
-
         call talon { input:
             talon_db = init_talon_db.database,
-            sam = filter_transcriptclean.filtered_sam,
+            sam = transcriptclean.corrected_sam,
             genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             platform = input_type,
@@ -275,6 +267,7 @@ task transcriptclean {
     File splice_junctions
     File? variants
     String output_prefix
+    Boolean canonical_only
     Int ncpus
     Int ramGB
     String disks
@@ -302,7 +295,8 @@ task transcriptclean {
             --correctSJs true \
             --primaryOnly \
             --outprefix ${output_prefix} \
-            --threads ${ncpus}
+            --threads ${ncpus} \
+            ${if canonical_only then "--canonOnly" else ""}
 
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
