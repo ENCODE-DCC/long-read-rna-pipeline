@@ -23,6 +23,10 @@
             "path": "transcriptclean/rep${i+1}/${basename}",
             "table": "Transcriptclean/Replicate ${i+1}/cleaned sam"
         },
+        "corrected_bam": {
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/cleaned bam"
+        },
         "corrected_fasta": {
             "path": "transcriptclean/rep${i+1}/${basename}",
             "table": "Transcriptclean/Replicate ${i+1}/cleaned fasta"
