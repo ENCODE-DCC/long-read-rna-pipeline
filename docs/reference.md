@@ -109,15 +109,11 @@ The resources required by mapping task are quite typical for the mapping and we 
 #### Task Transcriptclean
 
 * `corrected_sam` SAM file of corrected transcripts. Unmapped/non-primary transcript alignments from the input file are included in their original form.
+* `corrected_bam` BAM file of corrected transcripts. Unmapped/non-primary transcript alignments from the input file are included in their original form.
 * `corrected_fasta` Fasta file of corrected transcript sequences. Unmapped transcripts from the input file are included in their original form.
 * `transcript_log ` Each row represents a transcript. The columns track the mapping status of the transcript, as well as how many errors of each type were found and corrected/not corrected in the transcript.
 * `transcript_error_log` Each row represents a potential error in a given transcript. The column values track whether the error was corrected or not and why.
 * `report` Report of the cleaning process in .pdf format.
-
-#### Task Filter_transcriptclean
-
-* `filtered_sam` sam with noncanonical reads filtered, duplicates are removed and sorting is performed. Input to the TALON step.
-* `filtered_bam` bam with noncanonical reads filtered, duplicates are removed and sorting is performed.
 
 #### Task TALON
 
@@ -136,7 +132,3 @@ The resources required by mapping task are quite typical for the mapping and we 
 #### Task Calculate_spearman (run when there are exactly 2 replicates)
 
 * `spearman` .json file with spearman correlation metric between the replicates.
-
-#### Crowell output directory structure
-
-Cromwell: Cromwell will store outputs for each task under directory cromwell-executions/[WORKFLOW_ID]/call-[TASK_NAME]/shard-[IDX]. For all tasks [IDX] means a zero-based index for each replicate.

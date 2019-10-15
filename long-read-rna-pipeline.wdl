@@ -318,31 +318,6 @@ task transcriptclean {
     }
 }
 
-task filter_transcriptclean {
-    File sam
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
-
-    command {
-        python $(which filter_transcriptclean_result.py) --f ${sam} --o ${output_prefix + "_filtered.sam"}
-        samtools view -S -b ${output_prefix}_filtered.sam > ${output_prefix}_filtered.bam
-    }
-
-    output {
-        File filtered_sam = glob("*_filtered.sam")[0]
-        File filtered_bam = glob("*_filtered.bam")[0]
-    }
-
-    runtime {
-        cpu: ncpus
-        memory: "${ramGB} GB"
-        disks: disks
-    }
-
-}
-
 task talon {
     File talon_db
     File sam
