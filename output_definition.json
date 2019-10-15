@@ -41,17 +41,6 @@
         }
     },
 
-    "long_read_rna_pipeline.filter_transcriptclean": {
-        "filtered_sam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}",
-            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned sam"
-        },
-        "filtered_bam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}",
-            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned bam"
-        }
-    },
-
     "long_read_rna_pipeline.talon": {
         "talon_config": {
             "path": "talon/rep${i+1}/${basename}",
