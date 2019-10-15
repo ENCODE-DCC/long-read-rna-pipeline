@@ -303,7 +303,7 @@ task transcriptclean {
     >>>
 
     output {
-        File corrected_bam = glob("*_cleam.bam")[0]
+        File corrected_bam = glob("*_clean.bam")[0]
         File corrected_sam = glob("*_clean.sam")[0]
         File corrected_fasta = glob("*_clean.fa")[0]
         File transcript_log = glob("*_clean.log")[0]
