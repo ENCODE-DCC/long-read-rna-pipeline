@@ -298,10 +298,12 @@ task transcriptclean {
             --threads ${ncpus} \
             ${if canonical_only then "--canonOnly" else ""}
 
+        samtools view -S -b ${output_prefix}_clean.sam > ${output_prefix}_clean.bam
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
 
     output {
+        File corrected_bam = glob("*_cleam.bam")[0]
         File corrected_sam = glob("*_clean.sam")[0]
         File corrected_fasta = glob("*_clean.fa")[0]
         File transcript_log = glob("*_clean.log")[0]
