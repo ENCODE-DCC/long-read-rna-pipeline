@@ -298,10 +298,12 @@ task transcriptclean {
             --threads ${ncpus} \
             ${if canonical_only then "--canonOnly" else ""}
 
+        samtools view -S -b ${output_prefix}_clean.sam > ${output_prefix}_clean.bam
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
 
     output {
+        File corrected_bam = glob("*_clean.bam")[0]
         File corrected_sam = glob("*_clean.sam")[0]
         File corrected_fasta = glob("*_clean.fa")[0]
         File transcript_log = glob("*_clean.log")[0]
@@ -314,31 +316,6 @@ task transcriptclean {
         memory: "${ramGB} GB"
         disks: disks
     }
-}
-
-task filter_transcriptclean {
-    File sam
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
-
-    command {
-        python $(which filter_transcriptclean_result.py) --f ${sam} --o ${output_prefix + "_filtered.sam"}
-        samtools view -S -b ${output_prefix}_filtered.sam > ${output_prefix}_filtered.bam
-    }
-
-    output {
-        File filtered_sam = glob("*_filtered.sam")[0]
-        File filtered_bam = glob("*_filtered.bam")[0]
-    }
-
-    runtime {
-        cpu: ncpus
-        memory: "${ramGB} GB"
-        disks: disks
-    }
-
 }
 
 task talon {
