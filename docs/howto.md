@@ -8,8 +8,6 @@ Note that the files used in these exampled are first restricted to reads from ch
 # CONTENTS
 
 [Google Cloud](howto.md#google-cloud)  
-[Local with Docker](howto.md#local-with-docker)  
-[Local with Singularity](howto.md#local-with-singularity)  
 [Other Platforms](howto.md#other-platforms)  
 [Splice Junctions](howto.md#splice-junctions)  
 
@@ -82,14 +80,13 @@ The goal is to run the pipeline with test data using Google Cloud Platform.
 
 This command will output into the bucket an HTML table, that shows the locations of the outputs nicely organized. Note that if your output bucket is not public, you need to be logged into your google account to be able to follow the links.
 
-
-## Local with Docker
-
-## Local with Singularity
-
-# Other platforms
+## Other platforms
 
 Running on other platforms is similar, because the caper takes care of the details for you. See [caper documentation](https://github.com/ENCODE-DCC/caper#installation) for further details.
+
+## Using Singularity
+
+Caper comes with built-in support for singularity with `--singularity` option. See [caper documentation](https://github.com/ENCODE-DCC/caper/blob/master/DETAILS.md) for more information. 
 
 ## Splice junctions
 

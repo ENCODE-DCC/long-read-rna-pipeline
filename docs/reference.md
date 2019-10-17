@@ -90,7 +90,7 @@ Rest of the variables are for adjusting the computational resources of the pipel
 
 ### Note about resources
 
-The resources required by mapping task are quite typical for the mapping and we find that 16 cores with 60GB of memory get the job done quite fast. The resources required by TALON related tasks roughly 2cpus with 12GB memory. For replicates with depth of around 1M reads, TranscriptClean should be given 16 cpus and 60GB of memory.
+The resources required by mapping task are quite typical for the mapping and we find that 16 cores with 60GB of memory get the job done quite fast. The resources required by TALON related tasks roughly 2cpus with 12GB memory. TranscriptClean should be given 16 cpus and 60GB of memory.
 
 ## Outputs
 
