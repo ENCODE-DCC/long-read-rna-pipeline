@@ -92,13 +92,13 @@ Caper comes with built-in support for singularity with `--singularity` option. S
 
 You may want to run the pipeline using other references than the ones used by ENCODE. In this case you must prepare your own splice junctions file. The workflows for this is in this repo and it is `get-splice-junctions.wdl`. This workflow uses the same Docker/Singularity images as the main pipeline and running this workflow is done in exactly same way as the running of the main pipeline.
 
-`input.json` for splice junction workflow with gencode v24 annotation, and GRCh38 reference genome looks like this:
+`input.json` for splice junction workflow with gencode V29 annotation, and GRCh38 reference genome looks like this:
 
 ```
 {
-    "get_splice_junctions.annotation" : "gs://long_read_rna/splice_junctions/inputs/gencode.v24.primary_assembly.annotation.gtf.gz",
+    "get_splice_junctions.annotation" : "gs://long_read_rna/splice_junctions/inputs/gencode.v29.primary_assembly.annotation_UCSC_names.gtf.gz",
     "get_splice_junctions.reference_genome" : "gs://long_read_rna/splice_junctions/inputs/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz",
-    "get_splice_junctions.output_prefix" : "gencode_V24_splice_junctions",
+    "get_splice_junctions.output_prefix" : "gencode_V29_splice_junctions",
     "get_splice_junctions.ncpus" : 2,
     "get_splice_junctions.ramGB" : 7,
     "get_splice_junctions.disks" : "local-disk 50 SSD"
