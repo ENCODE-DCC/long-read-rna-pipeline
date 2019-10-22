@@ -1,8 +1,8 @@
 # ENCODE long read rna pipeline
 # Maintainer: Otto Jolanki
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.2
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.2
+#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
+#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 #CROO out_def https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json
 workflow long_read_rna_pipeline {
     # Inputs
@@ -44,7 +44,7 @@ workflow long_read_rna_pipeline {
     String annotation_name
 
     # If this option is set, TranscriptClean will only output transcripts that are either canonical
-    # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end 
+    # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end
     # of the run.
     Boolean canonical_only=true
 
