@@ -1,6 +1,6 @@
 {
-    "TEST_TRANSCRIPTCLEAN_clean.log" : "0cac2cb51ba1839eaeb1078201aea191",
-    "TEST_TRANSCRIPTCLEAN_clean.TE.log" : "2dabfde5147e9cef8964334f52b13622",
-    "TEST_TRANSCRIPTCLEAN_clean.fa" : "d72fd30a4e0be28ddaff3713bf7a6b7b",
-    "TEST_TRANSCRIPTCLEAN_noheader_clean.sam" : "a39dc5d6661c20a51bab192c2419430a"
+    "TEST_TRANSCRIPTCLEAN_clean.log" : "eaf281d39087034e66c3fce4595d7898",
+    "TEST_TRANSCRIPTCLEAN_clean.TE.log" : "078be510c933242636a466091c075bb6",
+    "TEST_TRANSCRIPTCLEAN_clean.fa" : "58806053ec670ef74aa6326547ac165c",
+    "TEST_TRANSCRIPTCLEAN_noheader_clean.sam" : "08c8969787896ae3faf1dcd5890f8e9d"
 }

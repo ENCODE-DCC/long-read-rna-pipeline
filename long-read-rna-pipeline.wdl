@@ -1,8 +1,8 @@
 # ENCODE long read rna pipeline
 # Maintainer: Otto Jolanki
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.2
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.2
+#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
+#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 #CROO out_def https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json
 workflow long_read_rna_pipeline {
     # Inputs
@@ -10,7 +10,7 @@ workflow long_read_rna_pipeline {
     # File inputs
 
     # Input fastqs, gzipped.
-    Array[File] fastqs 
+    Array[File] fastqs
 
     # Reference genome. Fasta format, gzipped.
     File reference_genome
@@ -43,6 +43,11 @@ workflow long_read_rna_pipeline {
 
     String annotation_name
 
+    # If this option is set, TranscriptClean will only output transcripts that are either canonical
+    # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end
+    # of the run.
+    Boolean canonical_only=true
+
     # Resouces
 
     # Task init_talon_db
@@ -62,12 +67,6 @@ workflow long_read_rna_pipeline {
     Int transcriptclean_ncpus
     Int transcriptclean_ramGB
     String transcriptclean_disks
-
-    # Task filter_transcriptclean
-
-    Int filter_transcriptclean_ncpus
-    Int filter_transcriptclean_ramGB
-    String filter_transcriptclean_disks
 
     # Task talon
 
@@ -123,22 +122,15 @@ workflow long_read_rna_pipeline {
             splice_junctions = splice_junctions,
             variants = variants,
             output_prefix = "rep"+(i+1)+experiment_prefix,
+            canonical_only = canonical_only,
             ncpus = transcriptclean_ncpus,
             ramGB = transcriptclean_ramGB,
             disks = transcriptclean_disks,
         }
 
-        call filter_transcriptclean { input:
-            sam = transcriptclean.corrected_sam,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            ncpus = filter_transcriptclean_ncpus,
-            ramGB = filter_transcriptclean_ramGB,
-            disks = filter_transcriptclean_disks,
-        }
-
         call talon { input:
             talon_db = init_talon_db.database,
-            sam = filter_transcriptclean.filtered_sam,
+            sam = transcriptclean.corrected_sam,
             genome_build = genome_build,
             output_prefix = "rep"+(i+1)+experiment_prefix,
             platform = input_type,
@@ -179,7 +171,7 @@ workflow long_read_rna_pipeline {
             rep2_idprefix = rep2_idprefix,
             output_prefix = experiment_prefix,
             ncpus = calculate_spearman_ncpus,
-            ramGB = calculate_spearman_ramGB, 
+            ramGB = calculate_spearman_ramGB,
             disks = calculate_spearman_disks,
         }
     }
@@ -190,7 +182,7 @@ task init_talon_db {
     String annotation_name
     String ref_genome_name
     String output_prefix
-    String? idprefix 
+    String? idprefix
     Int ncpus
     Int ramGB
     String disks
@@ -240,7 +232,7 @@ task minimap2 {
                 > ${output_prefix}.sam \
                 2> ${output_prefix}_minimap2.log
         fi
-        
+
         if [ "${input_type}" == "nanopore" ]; then
             minimap2 -t ${ncpus} -ax splice -uf -k14 \
                 ${reference_genome} \
@@ -259,7 +251,7 @@ task minimap2 {
         File sam = glob("*.sam")[0]
         File bam = glob("*.bam")[0]
         File log = glob("*_minimap2.log")[0]
-        File mapping_qc = glob("*_mapping_qc.json")[0] 
+        File mapping_qc = glob("*_mapping_qc.json")[0]
     }
 
     runtime {
@@ -275,6 +267,7 @@ task transcriptclean {
     File splice_junctions
     File? variants
     String output_prefix
+    Boolean canonical_only
     Int ncpus
     Int ramGB
     String disks
@@ -288,22 +281,29 @@ task transcriptclean {
             mv ref.fasta reference.fasta
         fi
 
-        python $(which TranscriptClean.py) --sam ${sam} \
+        test -f ${variants} && gzip -cd ${variants} > variants.vcf
+
+
+        python3.7 $(which TranscriptClean.py) --sam ${sam} \
             --genome reference.fasta \
             --spliceJns ${splice_junctions} \
-            ${if defined(variants) then "--variants <(gzip -cd ${variants})" else ""} \
+            ${if defined(variants) then "--variants variants.vcf" else ""} \
             --maxLenIndel 5 \
             --maxSJOffset 5 \
             -m true \
             -i true \
             --correctSJs true \
             --primaryOnly \
-            --outprefix ${output_prefix}
+            --outprefix ${output_prefix} \
+            --threads ${ncpus} \
+            ${if canonical_only then "--canonOnly" else ""}
 
+        samtools view -S -b ${output_prefix}_clean.sam > ${output_prefix}_clean.bam
         Rscript $(which generate_report.R) ${output_prefix}
     >>>
 
     output {
+        File corrected_bam = glob("*_clean.bam")[0]
         File corrected_sam = glob("*_clean.sam")[0]
         File corrected_fasta = glob("*_clean.fa")[0]
         File transcript_log = glob("*_clean.log")[0]
@@ -316,31 +316,6 @@ task transcriptclean {
         memory: "${ramGB} GB"
         disks: disks
     }
-}
-
-task filter_transcriptclean {
-    File sam
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
-
-    command {
-        python $(which filter_transcriptclean_result.py) --f ${sam} --o ${output_prefix + "_filtered.sam"}
-        samtools view -S -b ${output_prefix}_filtered.sam > ${output_prefix}_filtered.bam
-    }
-
-    output {
-        File filtered_sam = glob("*_filtered.sam")[0]
-        File filtered_bam = glob("*_filtered.bam")[0]
-    }
-
-    runtime {
-        cpu: ncpus
-        memory: "${ramGB} GB"
-        disks: disks
-    }
-
 }
 
 task talon {

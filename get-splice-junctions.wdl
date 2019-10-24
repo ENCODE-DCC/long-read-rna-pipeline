@@ -1,8 +1,8 @@
 # ENCODE long read rna pipeline: get splice junctions
 # Maintainer: Otto Jolanki
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.2
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.2
+#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
+#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 
 workflow get_splice_junctions {
     # Inputs
@@ -46,7 +46,7 @@ task get_splice_junctions_ {
     command <<<
         gzip -cd ${reference_genome} > ref.fasta
         rm ${reference_genome}
-        
+
         if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
         else

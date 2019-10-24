@@ -23,6 +23,10 @@
             "path": "transcriptclean/rep${i+1}/${basename}",
             "table": "Transcriptclean/Replicate ${i+1}/cleaned sam"
         },
+        "corrected_bam": {
+            "path": "transcriptclean/rep${i+1}/${basename}",
+            "table": "Transcriptclean/Replicate ${i+1}/cleaned bam"
+        },
         "corrected_fasta": {
             "path": "transcriptclean/rep${i+1}/${basename}",
             "table": "Transcriptclean/Replicate ${i+1}/cleaned fasta"
@@ -38,17 +42,6 @@
         "report": {
             "path": "transcriptclean/rep${i+1}/${basename}",
             "table": "Transcriptclean/Replicate ${i+1}/Transcriptclean report"
-        }
-    },
-
-    "long_read_rna_pipeline.filter_transcriptclean": {
-        "filtered_sam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}",
-            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned sam"
-        },
-        "filtered_bam": {
-            "path": "filter_transcriptclean/rep${i+1}/${basename}",
-            "table": "Filter_Transcriptclean/Replicate ${i+1}/filtered cleaned bam"
         }
     },
 
