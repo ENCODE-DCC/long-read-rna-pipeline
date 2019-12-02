@@ -399,10 +399,11 @@ task create_gtf_from_talon_db {
                                                         -a ${annotation_name} \
                                                         --build ${genome_build} \
                                                         --o ${output_prefix}
+        gzip -n ${output_prefix}_talon.gtf
     }
 
     output {
-        File gtf = glob("*.gtf")[0]
+        File gtf = glob("*.gtf.gz")[0]
     }
 
     runtime {

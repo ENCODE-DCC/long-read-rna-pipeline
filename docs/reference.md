@@ -123,7 +123,7 @@ The rest of the variables are for adjusting the computational resources of the p
 
 #### Task Create_gtf_from_talon_db
 
-* `gtf` a transcriptome reference file containing the new transcripts found in the replicate.
+* `gtf` a transcriptome reference file in gzipped .gtf format containing the new transcripts found in the replicate.
 
 #### Task Calculate_spearman (run when there are exactly 2 replicates)
 

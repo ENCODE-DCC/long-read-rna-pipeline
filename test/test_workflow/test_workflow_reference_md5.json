@@ -4,7 +4,7 @@
   "rep1TEST_WORKFLOW_clean.log": "eaf281d39087034e66c3fce4595d7898",
   "rep1TEST_WORKFLOW_mapping_qc.json": "5745442e83a3559a2789ce7ea6c2ac42",
   "rep1TEST_WORKFLOW_number_of_genes_detected.json": "dc7199a61f01492dca070d65103c73e4",
-  "rep1TEST_WORKFLOW_talon.gtf": "815c9f718ea55018a48e851c02d27728",
+  "rep1TEST_WORKFLOW_talon.gtf.gz": "eb6b1166436086e1bea576537ecdf744",
   "rep1TEST_WORKFLOW_talon_QC.log": "470eb3417e59eeb4c90cab9a7f7eba1c",
   "rep1TEST_WORKFLOW_talon_abundance.tsv": "096ed5cbf46580fb05f37b64333e5aa8"
 }
