@@ -1,5 +1,5 @@
 # Dockerfile for ENCODE-DCC long read rna seq pipeline
-FROM ubuntu:16.04
+FROM ubuntu@sha256:db6697a61d5679b7ca69dbde3dad6be0d17064d5b6b0e9f7be8d456ebb337209
 MAINTAINER Otto Jolanki
 
 RUN apt-get update && apt-get install -y software-properties-common
@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
     python3.7 \
     python3.7-dev \
     libssl-dev \
-    build-essential 
+    build-essential
 
 RUN mkdir /software
 WORKDIR /software
