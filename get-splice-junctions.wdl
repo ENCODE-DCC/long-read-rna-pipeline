@@ -26,12 +26,12 @@ workflow get_splice_junctions {
     # Pipeline starts here
 
     call get_splice_junctions_ { input:
-            annotation = annotation,
-            reference_genome = reference_genome,
-            output_prefix = output_prefix,
-            ncpus = ncpus,
-            ramGB = ramGB,
-            disks = disks,
+            annotation=annotation,
+            reference_genome=reference_genome,
+            output_prefix=output_prefix,
+            ncpus=ncpus,
+            ramGB=ramGB,
+            disks=disks,
         }
 }
 
