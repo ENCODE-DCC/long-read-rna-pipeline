@@ -56,7 +56,8 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; options(repos = r);" > ~/.Rprofile && \
     Rscript -e "install.packages('ggplot2')" && \
     Rscript -e "install.packages('gridExtra')" && \
-    Rscript -e "install.packages('readr')"
+    Rscript -e "install.packages('readr')" && \
+    Rscript -e "install.packages('reshape2')"
 
 # Install TC dependencies
 RUN python3.7 -m pip install --upgrade pip
