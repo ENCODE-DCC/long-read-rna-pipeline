@@ -13,13 +13,13 @@ workflow test_calculate_spearman {
     String disks
 
     call longrna.calculate_spearman { input:
-        rep1_abundance = rep1_abundance,
-        rep2_abundance = rep2_abundance,
-        rep1_idprefix = rep1_idprefix,
-        rep2_idprefix = rep2_idprefix,
-        output_prefix = output_prefix,
-        ncpus = ncpus,
-        ramGB = ramGB,
-        disks = disks
+        rep1_abundance=rep1_abundance,
+        rep2_abundance=rep2_abundance,
+        rep1_idprefix=rep1_idprefix,
+        rep2_idprefix=rep2_idprefix,
+        output_prefix=output_prefix,
+        ncpus=ncpus,
+        ramGB=ramGB,
+        disks=disks
     }
 }

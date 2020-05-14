@@ -26,14 +26,14 @@ workflow long_read_rna_pipeline {
     File splice_junctions
 
     # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
-    String experiment_prefix="my_experiment"
+    String experiment_prefix = "my_experiment"
 
     # Is the data from "pacbio" or "nanopore"
-    String input_type="pacbio"
+    String input_type = "pacbio"
 
     # Array[String] of prefixes for naming novel discoveries in eventual TALON runs (default = "TALON").
     # If defined, length of this array needs to be equal to number of replicates.
-    Array[String] talon_prefixes=[]
+    Array[String] talon_prefixes = []
 
     # Genome build name, for TALON. This must be in the initial_talon_db
 
@@ -46,7 +46,7 @@ workflow long_read_rna_pipeline {
     # If this option is set, TranscriptClean will only output transcripts that are either canonical
     # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end
     # of the run.
-    Boolean canonical_only=true
+    Boolean canonical_only = true
 
     # Resouces
 
@@ -88,76 +88,76 @@ workflow long_read_rna_pipeline {
 
     # Task calculate_spearman
 
-    Int calculate_spearman_ncpus=1
-    Int calculate_spearman_ramGB=2
-    String calculate_spearman_disks="local-disk 20 HDD"
+    Int calculate_spearman_ncpus = 1
+    Int calculate_spearman_ramGB = 2
+    String calculate_spearman_disks = "local-disk 20 HDD"
 
     # Pipeline starts here
 
     scatter (i in range(length(fastqs))) {
         String talon_prefix = if length(talon_prefixes) > 0 then talon_prefixes[i] else "TALON"
         call init_talon_db { input:
-            annotation_gtf = annotation,
-            annotation_name = annotation_name,
-            ref_genome_name = genome_build,
-            idprefix = talon_prefix,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            ncpus = init_talon_db_ncpus,
-            ramGB = init_talon_db_ramGB,
-            disks = init_talon_db_disks
+            annotation_gtf=annotation,
+            annotation_name=annotation_name,
+            ref_genome_name=genome_build,
+            idprefix=talon_prefix,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            ncpus=init_talon_db_ncpus,
+            ramGB=init_talon_db_ramGB,
+            disks=init_talon_db_disks
         }
         call minimap2 { input:
-            fastq = fastqs[i],
-            reference_genome = reference_genome,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            input_type = input_type,
-            ncpus = minimap2_ncpus,
-            ramGB = minimap2_ramGB,
-            disks = minimap2_disks,
+            fastq=fastqs[i],
+            reference_genome=reference_genome,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            input_type=input_type,
+            ncpus=minimap2_ncpus,
+            ramGB=minimap2_ramGB,
+            disks=minimap2_disks,
         }
 
         call transcriptclean { input:
-            sam = minimap2.sam,
-            reference_genome = reference_genome,
-            splice_junctions = splice_junctions,
-            variants = variants,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            canonical_only = canonical_only,
-            ncpus = transcriptclean_ncpus,
-            ramGB = transcriptclean_ramGB,
-            disks = transcriptclean_disks,
+            sam=minimap2.sam,
+            reference_genome=reference_genome,
+            splice_junctions=splice_junctions,
+            variants=variants,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            canonical_only=canonical_only,
+            ncpus=transcriptclean_ncpus,
+            ramGB=transcriptclean_ramGB,
+            disks=transcriptclean_disks,
         }
 
         call talon { input:
-            talon_db = init_talon_db.database,
-            sam = transcriptclean.corrected_sam,
-            genome_build = genome_build,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            platform = input_type,
-            ncpus = talon_ncpus,
-            ramGB = talon_ramGB,
-            disks = talon_disks,
+            talon_db=init_talon_db.database,
+            sam=transcriptclean.corrected_sam,
+            genome_build=genome_build,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            platform=input_type,
+            ncpus=talon_ncpus,
+            ramGB=talon_ramGB,
+            disks=talon_disks,
         }
 
         call create_abundance_from_talon_db { input:
-            talon_db = talon.talon_db_out,
-            annotation_name = annotation_name,
-            genome_build = genome_build,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            idprefix = talon_prefix,
-            ncpus = create_abundance_from_talon_db_ncpus,
-            ramGB = create_abundance_from_talon_db_ramGB,
-            disks = create_abundance_from_talon_db_disks,
+            talon_db=talon.talon_db_out,
+            annotation_name=annotation_name,
+            genome_build=genome_build,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            idprefix=talon_prefix,
+            ncpus=create_abundance_from_talon_db_ncpus,
+            ramGB=create_abundance_from_talon_db_ramGB,
+            disks=create_abundance_from_talon_db_disks,
         }
 
         call create_gtf_from_talon_db { input:
-            talon_db = talon.talon_db_out,
-            annotation_name = annotation_name,
-            genome_build = genome_build,
-            output_prefix = "rep"+(i+1)+experiment_prefix,
-            ncpus = create_abundance_from_talon_db_ncpus,
-            ramGB = create_abundance_from_talon_db_ramGB,
-            disks = create_abundance_from_talon_db_disks,
+            talon_db=talon.talon_db_out,
+            annotation_name=annotation_name,
+            genome_build=genome_build,
+            output_prefix="rep"+(i+1)+experiment_prefix,
+            ncpus=create_abundance_from_talon_db_ncpus,
+            ramGB=create_abundance_from_talon_db_ramGB,
+            disks=create_abundance_from_talon_db_disks,
         }
     }
 
@@ -165,14 +165,14 @@ workflow long_read_rna_pipeline {
         String rep1_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[0] else "TALON"
         String rep2_idprefix = if length(talon_prefixes) > 0 then talon_prefixes[1] else "TALON"
         call calculate_spearman { input:
-            rep1_abundance = create_abundance_from_talon_db.talon_abundance[0],
-            rep2_abundance = create_abundance_from_talon_db.talon_abundance[1],
-            rep1_idprefix = rep1_idprefix,
-            rep2_idprefix = rep2_idprefix,
-            output_prefix = experiment_prefix,
-            ncpus = calculate_spearman_ncpus,
-            ramGB = calculate_spearman_ramGB,
-            disks = calculate_spearman_disks,
+            rep1_abundance=create_abundance_from_talon_db.talon_abundance[0],
+            rep2_abundance=create_abundance_from_talon_db.talon_abundance[1],
+            rep1_idprefix=rep1_idprefix,
+            rep2_idprefix=rep2_idprefix,
+            output_prefix=experiment_prefix,
+            ncpus=calculate_spearman_ncpus,
+            ramGB=calculate_spearman_ramGB,
+            disks=calculate_spearman_disks,
         }
     }
 }

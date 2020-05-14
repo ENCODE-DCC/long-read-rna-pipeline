@@ -13,13 +13,13 @@ workflow test_talon {
     String disks
 
     call longrna.talon { input:
-        talon_db = talon_db,
-        sam = sam,
-        genome_build = genome_build,
-        output_prefix = output_prefix,
-        platform = platform,
-        ncpus = ncpus,
-        ramGB = ramGB,
-        disks = disks
+        talon_db=talon_db,
+        sam=sam,
+        genome_build=genome_build,
+        output_prefix=output_prefix,
+        platform=platform,
+        ncpus=ncpus,
+        ramGB=ramGB,
+        disks=disks
     }
 }

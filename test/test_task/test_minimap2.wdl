@@ -14,21 +14,21 @@ workflow test_minimap2 {
     String disks
 
     call longrna.minimap2 { input:
-        fastq = fastq,
-        reference_genome = reference_genome,
-        output_prefix = output_prefix,
-        input_type = input_type,
-        ncpus = ncpus,
-        ramGB = ramGB,
-        disks = disks,
+        fastq=fastq,
+        reference_genome=reference_genome,
+        output_prefix=output_prefix,
+        input_type=input_type,
+        ncpus=ncpus,
+        ramGB=ramGB,
+        disks=disks,
     }
 
     call longrna.skipNfirstlines { input:
-        input_file = minimap2.sam,
-        output_fn = output_fn,
-        lines_to_skip = lines_to_skip,
-        ncpus = ncpus,
-        ramGB = ramGB,
-        disks = disks,
+        input_file=minimap2.sam,
+        output_fn=output_fn,
+        lines_to_skip=lines_to_skip,
+        ncpus=ncpus,
+        ramGB=ramGB,
+        disks=disks,
     }
 }

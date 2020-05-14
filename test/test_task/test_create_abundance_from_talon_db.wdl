@@ -13,13 +13,13 @@ workflow test_create_abundance_from_talon_db {
     String disks
 
     call longrna.create_abundance_from_talon_db { input:
-        talon_db = talon_db,
-        annotation_name = annotation_name,
-        genome_build = genome_build,
-        output_prefix = output_prefix,
-        idprefix = idprefix,
-        ncpus = ncpus,
-        ramGB = ramGB,
-        disks = disks,
+        talon_db=talon_db,
+        annotation_name=annotation_name,
+        genome_build=genome_build,
+        output_prefix=output_prefix,
+        idprefix=idprefix,
+        ncpus=ncpus,
+        ramGB=ramGB,
+        disks=disks,
     }
 }
