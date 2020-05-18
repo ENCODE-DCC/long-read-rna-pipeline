@@ -1,3 +1,5 @@
+version 1.0
+
 # ENCODE long read rna pipeline: get splice junctions
 # Maintainer: Otto Jolanki
 
@@ -5,25 +7,14 @@
 #CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 
 workflow get_splice_junctions {
-    # Inputs
-
-    # File inputs
-
-    # Annotation file, gtf format, gzipped.
-    File annotation
-
-    # Reference genome, fasta format, gzipped.
-    File reference_genome
-
-    # Output prefix, the output filename will be output_prefix_SJs.txt
-    String output_prefix
-
-    # Resources
-    Int ncpus
-    Int ramGB
-    String disks
-
-    # Pipeline starts here
+    input {
+        File annotation
+        File reference_genome
+        String output_prefix
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     call get_splice_junctions_ { input:
             annotation=annotation,
@@ -32,20 +23,22 @@ workflow get_splice_junctions {
             ncpus=ncpus,
             ramGB=ramGB,
             disks=disks,
-        }
+    }
 }
 
 task get_splice_junctions_ {
-    File annotation
-    File reference_genome
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
+    input {
+        File annotation
+        File reference_genome
+        String output_prefix
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     command <<<
-        gzip -cd ${reference_genome} > ref.fasta
-        rm ${reference_genome}
+        gzip -cd ~{reference_genome} > ref.fasta
+        rm ~{reference_genome}
 
         if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
@@ -53,18 +46,18 @@ task get_splice_junctions_ {
             mv ref.fasta reference.fasta
         fi
 
-        gzip -cd ${annotation} > anno.gtf
-        rm ${annotation}
-        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ${output_prefix}_SJs.txt
+        gzip -cd ~{annotation} > anno.gtf
+        rm ~{annotation}
+        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ~{output_prefix}_SJs.txt
     >>>
 
     output {
-        File splice_junctions = glob("*_SJs.txt")[0]
+        File splice_junctions = "~{output_prefix}_SJs.txt"
     }
 
     runtime {
         cpu: ncpus
-        memory: "${ramGB} GB"
+        memory: "~{ramGB} GB"
         disks: disks
     }
 }
