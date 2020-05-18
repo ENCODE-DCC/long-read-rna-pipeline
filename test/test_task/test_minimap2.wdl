@@ -1,17 +1,21 @@
+version 1.0
+
 # Test workflow for minimap2 task in ENCODE long read rna pipeline
 
 import "../../long-read-rna-pipeline.wdl" as longrna
 
 workflow test_minimap2 {
-    File fastq
-    File reference_genome
-    String output_prefix
-    String input_type
-    Int lines_to_skip
-    String output_fn
-    Int ncpus
-    Int ramGB
-    String disks
+    input {
+        File fastq
+        File reference_genome
+        String output_prefix
+        String input_type
+        Int lines_to_skip
+        String output_fn
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     call longrna.minimap2 { input:
         fastq=fastq,

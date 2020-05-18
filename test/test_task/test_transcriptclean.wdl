@@ -1,19 +1,23 @@
+version 1.0
+
 # Test workflow for transcriptclean task in ENCODE long read rna pipeline
 
 import "../../long-read-rna-pipeline.wdl" as longrna
 
 workflow test_transcriptclean {
-    File sam
-    File reference_genome
-    File splice_junctions
-    Boolean canonical_only
-    File? variants
-    String output_prefix
-    Int lines_to_skip
-    String output_fn
-    Int ncpus
-    Int ramGB
-    String disks
+    input {
+        File sam
+        File reference_genome
+        File splice_junctions
+        Boolean canonical_only
+        File? variants
+        String output_prefix
+        Int lines_to_skip
+        String output_fn
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     call longrna.transcriptclean { input:
         sam=sam,
