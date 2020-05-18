@@ -52,7 +52,7 @@ task get_splice_junctions_ {
     >>>
 
     output {
-        File splice_junctions = glob("*_SJs.txt")[0]
+        File splice_junctions = "~{output_prefix}_SJs.txt"
     }
 
     runtime {
