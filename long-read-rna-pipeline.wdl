@@ -227,10 +227,10 @@ task minimap2 {
     >>>
 
     output {
-        File sam = glob("*.sam")[0]
-        File bam = glob("*.bam")[0]
-        File log = glob("*_minimap2.log")[0]
-        File mapping_qc = glob("*_mapping_qc.json")[0]
+        File sam = "~{output_prefix}.sam"
+        File bam = "{output_prefix}.bam"
+        File log = "~{output_prefix}_minimap2.log"
+        File mapping_qc = "~{output_prefix}_mapping_qc.json"
     }
 
     runtime {
@@ -284,12 +284,12 @@ task transcriptclean {
     >>>
 
     output {
-        File corrected_bam = glob("*_clean.bam")[0]
-        File corrected_sam = glob("*_clean.sam")[0]
-        File corrected_fasta = glob("*_clean.fa")[0]
-        File transcript_log = glob("*_clean.log")[0]
-        File transcript_error_log = glob("*_clean.TE.log")[0]
-        File report = glob("*_report.pdf")[0]
+        File corrected_bam = "~{output_prefix}_clean.bam"
+        File corrected_sam = "~{output_prefix}_clean.sam"
+        File corrected_fasta = "{output_prefix}_clean.fa"
+        File transcript_log = "~{output_prefix}_clean.log"
+        File transcript_error_log = "~{output_prefix}_clean.TE.log"
+        File report = "~{output_prefix}_report.pdf"
     }
 
     runtime {
