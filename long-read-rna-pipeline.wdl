@@ -358,8 +358,8 @@ task create_abundance_from_talon_db {
     }
 
     output {
-        File talon_abundance = glob("*_talon_abundance.tsv")[0]
-        File number_of_genes_detected = glob("*_number_of_genes_detected.json")[0]
+        File talon_abundance = "~{output_prefix}_talon_abundance.tsv"
+        File number_of_genes_detected = "~{output_prefix}_number_of_genes_detected.json"
     }
 
     runtime {
@@ -390,7 +390,7 @@ task create_gtf_from_talon_db {
     }
 
     output {
-        File gtf = glob("*.gtf.gz")[0]
+        File gtf = "~{output_prefix}_talon.gtf.gz"
     }
 
     runtime {
@@ -422,7 +422,7 @@ task calculate_spearman {
     }
 
     output {
-        File spearman = glob("*_spearman.json")[0]
+        File spearman = "~{output_prefix}_spearman.json"
     }
 
     runtime {
@@ -447,7 +447,7 @@ task skipNfirstlines {
     }
 
     output {
-        File output_file = glob("~{output_fn}")[0]
+        File output_file = output_fn
     }
 
     runtime {
