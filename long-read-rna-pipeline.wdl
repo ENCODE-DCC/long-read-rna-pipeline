@@ -254,7 +254,7 @@ task transcriptclean {
     }
 
     command <<<
-        gzip -cd ${reference_genome} > ref.fasta
+        gzip -cd ~{reference_genome} > ref.fasta
 
         if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
@@ -262,25 +262,25 @@ task transcriptclean {
             mv ref.fasta reference.fasta
         fi
 
-        test -f ${variants} && gzip -cd ${variants} > variants.vcf
+        test -f ~{variants} && gzip -cd ~{variants} > variants.vcf
 
 
-        python3.7 $(which TranscriptClean.py) --sam ${sam} \
+        python3.7 $(which TranscriptClean.py) --sam ~{sam} \
             --genome reference.fasta \
-            --spliceJns ${splice_junctions} \
-            ${if defined(variants) then "--variants variants.vcf" else ""} \
+            --spliceJns ~{splice_junctions} \
+            ~{if defined(variants) then "--variants variants.vcf" else ""} \
             --maxLenIndel 5 \
             --maxSJOffset 5 \
             -m true \
             -i true \
             --correctSJs true \
             --primaryOnly \
-            --outprefix ${output_prefix} \
-            --threads ${ncpus} \
-            ${if canonical_only then "--canonOnly" else ""}
+            --outprefix ~{output_prefix} \
+            --threads ~{ncpus} \
+            ~{if canonical_only then "--canonOnly" else ""}
 
-        samtools view -S -b ${output_prefix}_clean.sam > ${output_prefix}_clean.bam
-        Rscript $(which generate_report.R) ${output_prefix}
+        samtools view -S -b ~{output_prefix}_clean.sam > ~{output_prefix}_clean.bam
+        Rscript $(which generate_report.R) ~{output_prefix}
     >>>
 
     output {
