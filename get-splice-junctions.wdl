@@ -7,25 +7,14 @@ version 1.0
 #CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 
 workflow get_splice_junctions {
-    # Inputs
-
-    # File inputs
-
-    # Annotation file, gtf format, gzipped.
-    File annotation
-
-    # Reference genome, fasta format, gzipped.
-    File reference_genome
-
-    # Output prefix, the output filename will be output_prefix_SJs.txt
-    String output_prefix
-
-    # Resources
-    Int ncpus
-    Int ramGB
-    String disks
-
-    # Pipeline starts here
+    input {
+        File annotation
+        File reference_genome
+        String output_prefix
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     call get_splice_junctions_ { input:
             annotation=annotation,
@@ -34,16 +23,18 @@ workflow get_splice_junctions {
             ncpus=ncpus,
             ramGB=ramGB,
             disks=disks,
-        }
+    }
 }
 
 task get_splice_junctions_ {
-    File annotation
-    File reference_genome
-    String output_prefix
-    Int ncpus
-    Int ramGB
-    String disks
+    input {
+        File annotation
+        File reference_genome
+        String output_prefix
+        Int ncpus
+        Int ramGB
+        String disks
+    }
 
     command <<<
         gzip -cd ~{reference_genome} > ref.fasta
