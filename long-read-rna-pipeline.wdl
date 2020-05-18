@@ -321,9 +321,9 @@ task talon {
     }
 
     output {
-        File talon_config = glob("*_talon_config.csv")[0]
-        File talon_log = glob("*_talon_QC.log")[0]
-        File talon_db_out = glob("*_talon.db")[0]
+        File talon_config = "~{output_prefix}_talon_config.csv"
+        File talon_log = "~{output_prefix}_talon_QC.log"
+        File talon_db_out = "~{output_prefix}_talon.db"
     }
 
     runtime {
