@@ -1,3 +1,5 @@
+version 1.0
+
 # ENCODE long read rna pipeline: get splice junctions
 # Maintainer: Otto Jolanki
 
@@ -44,8 +46,8 @@ task get_splice_junctions_ {
     String disks
 
     command <<<
-        gzip -cd ${reference_genome} > ref.fasta
-        rm ${reference_genome}
+        gzip -cd ~{reference_genome} > ref.fasta
+        rm ~{reference_genome}
 
         if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
             cat ref.fasta | awk '{print $1}' > reference.fasta
@@ -53,9 +55,9 @@ task get_splice_junctions_ {
             mv ref.fasta reference.fasta
         fi
 
-        gzip -cd ${annotation} > anno.gtf
-        rm ${annotation}
-        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ${output_prefix}_SJs.txt
+        gzip -cd ~{annotation} > anno.gtf
+        rm ~{annotation}
+        python $(which get_SJs_from_gtf.py) --f anno.gtf --g reference.fasta --o ~{output_prefix}_SJs.txt
     >>>
 
     output {
@@ -64,7 +66,7 @@ task get_splice_junctions_ {
 
     runtime {
         cpu: ncpus
-        memory: "${ramGB} GB"
+        memory: "~{ramGB} GB"
         disks: disks
     }
 }
