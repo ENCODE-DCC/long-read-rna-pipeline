@@ -181,8 +181,8 @@ task init_talon_db {
         }
 
     output {
-        File database = glob("*.db")[0]
-        File talon_inputs = glob("*_talon_inputs.json")[0]
+        File database = "~{output_prefix}.db"
+        File talon_inputs = "~{output_prefix}_talon_inputs.json"
     }
 
     runtime {
