@@ -78,6 +78,7 @@ workflow long_read_rna_pipeline {
             ramGB=init_talon_db_ramGB,
             disks=init_talon_db_disks
         }
+
         call minimap2 { input:
             fastq=fastqs[i],
             reference_genome=reference_genome,
@@ -182,13 +183,13 @@ task init_talon_db {
     output {
         File database = glob("*.db")[0]
         File talon_inputs = glob("*_talon_inputs.json")[0]
-           }
+    }
 
     runtime {
         cpu: ncpus
         memory: "${ramGB} GB"
         disks: disks
-        }
+    }
 }
 
 task minimap2 {
@@ -203,26 +204,26 @@ task minimap2 {
     }
 
     command <<<
-        if [ "${input_type}" == "pacbio" ]; then
-            minimap2 -t ${ncpus} -ax splice -uf --secondary=no -C5 \
-                ${reference_genome} \
-                ${fastq} \
-                > ${output_prefix}.sam \
-                2> ${output_prefix}_minimap2.log
+        if [ "~{input_type}" == "pacbio" ]; then
+            minimap2 -t ~{ncpus} -ax splice -uf --secondary=no -C5 \
+                ~{reference_genome} \
+                ~{fastq} \
+                > ~{output_prefix}.sam \
+                2> ~{output_prefix}_minimap2.log
         fi
 
-        if [ "${input_type}" == "nanopore" ]; then
-            minimap2 -t ${ncpus} -ax splice -uf -k14 \
-                ${reference_genome} \
-                ${fastq} \
-                > ${output_prefix}.sam \
-                2> ${output_prefix}_minimap2.log
+        if [ "~{input_type}" == "nanopore" ]; then
+            minimap2 -t ~{ncpus} -ax splice -uf -k14 \
+                ~{reference_genome} \
+                ~{fastq} \
+                > ~{output_prefix}.sam \
+                2> ~{output_prefix}_minimap2.log
         fi
 
-        gzip -cd ${fastq} | grep "^@" | wc -l > FLNC.txt
-        samtools view ${output_prefix}.sam | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
-        python3.7 $(which make_minimap_qc.py) --flnc FLNC.txt --mapped mapped.txt --outfile ${output_prefix}_mapping_qc.json
-        samtools view -S -b ${output_prefix}.sam > ${output_prefix}.bam
+        gzip -cd ~{fastq} | grep "^@" | wc -l > FLNC.txt
+        samtools view ~{output_prefix}.sam | awk '{if($2 == "0" || $2 == "16") print $1}' | sort -u | wc -l > mapped.txt
+        python3.7 $(which make_minimap_qc.py) --flnc FLNC.txt --mapped mapped.txt --outfile ~{output_prefix}_mapping_qc.json
+        samtools view -S -b ~{output_prefix}.sam > ~{output_prefix}.bam
     >>>
 
     output {
