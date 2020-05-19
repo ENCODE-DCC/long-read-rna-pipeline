@@ -1,12 +1,16 @@
 version 1.0
 
 # ENCODE long read rna pipeline: get splice junctions
-# Maintainer: Otto Jolanki
 
 #CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 #CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
 
 workflow get_splice_junctions {
+    meta {
+        author: "Otto Jolanki"
+        version: "dev_1.4"
+    }
+
     input {
         File annotation
         File reference_genome
