@@ -98,7 +98,7 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
 
 # Install TALON v5.0
 RUN git clone -b 'v5.0' --single-branch https://github.com/mortazavilab/TALON.git
-RUN chmod 755 TALON/src/talon/initialize_talon_database.py TALON/src/talon/talon.py TALON/src/talon/post/create_abundance_file_from_database.py TALON/src/talon/post/create_GTF_from_database.py
+RUN chmod 755 TALON/src/talon/initialize_talon_database.py TALON/src/talon/talon.py TALON/src/talon/post/create_abundance_file_from_database.py TALON/src/talon/post/create_GTF_from_database.py /software/TALON/src/talon/post/filter_talon_transcripts.py
 ENV PATH="/software/TALON/src/talon:/software/TALON/src/talon/post:${PATH}"
 
 # make code within the repo available
