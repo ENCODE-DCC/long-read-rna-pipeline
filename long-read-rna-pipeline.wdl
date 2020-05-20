@@ -171,7 +171,7 @@ task init_talon_db {
     command {
         gzip -cd ~{annotation_gtf} > anno.gtf
         rm ~{annotation_gtf}
-        python3.7 $(which initialize_talon_database.py) \
+        talon_initialize_database \
             --f anno.gtf \
             --a ~{annotation_name} \
             --g ~{ref_genome_name} \
@@ -318,7 +318,7 @@ task talon {
     command {
         echo ~{output_prefix},~{output_prefix},~{platform},~{sam} > ~{output_prefix}_talon_config.csv
         cp ~{talon_db} ./~{output_prefix}_talon.db
-        python3.7 $(which talon.py) --f ~{output_prefix}_talon_config.csv \
+        talon --f ~{output_prefix}_talon_config.csv \
                                     --db ~{output_prefix}_talon.db \
                                     --build ~{genome_build} \
                                     --o ~{output_prefix}
@@ -351,10 +351,10 @@ task create_abundance_from_talon_db {
     }
 
     command {
-        python3.7 $(which create_abundance_file_from_database.py) --db=~{talon_db} \
-                                                                  -a ~{annotation_name} \
-                                                                  --build ~{genome_build} \
-                                                                  --o=~{output_prefix}
+        talon_abundance --db=~{talon_db} \
+                        -a ~{annotation_name} \
+                        --build ~{genome_build} \
+                        --o=~{output_prefix}
         python3.7 $(which calculate_number_of_genes_detected.py) --abundance ~{output_prefix}_talon_abundance.tsv \
                                                                  --counts_colname ~{output_prefix} \
                                                                  --idprefix ~{idprefix} \
@@ -386,10 +386,10 @@ task create_gtf_from_talon_db {
     }
 
     command {
-        python3.7 $(which create_GTF_from_database.py) --db ~{talon_db} \
-                                                        -a ~{annotation_name} \
-                                                        --build ~{genome_build} \
-                                                        --o ~{output_prefix}
+        talon_create_GTF --db ~{talon_db} \
+                         -a ~{annotation_name} \
+                         --build ~{genome_build} \
+                         --o ~{output_prefix}
         gzip -n ~{output_prefix}_talon.gtf
     }
 
