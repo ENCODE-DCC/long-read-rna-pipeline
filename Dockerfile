@@ -97,7 +97,7 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install TALON v5.0
-RUN git clone -b 'v5.0' --single-branch https://github.com/mortazavilab/TALON.git && cd TALON && pip install .
+RUN git clone -b 'v5.0' --single-branch https://github.com/mortazavilab/TALON.git && cd TALON && python3.7 -m pip install .
 
 # make code within the repo available
 
