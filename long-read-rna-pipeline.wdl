@@ -316,6 +316,7 @@ task talon {
     }
 
     command {
+        export TMPDIR=/tmp
         echo ~{output_prefix},~{output_prefix},~{platform},~{sam} > ~{output_prefix}_talon_config.csv
         cp ~{talon_db} ./~{output_prefix}_talon.db
         talon --f ~{output_prefix}_talon_config.csv \
