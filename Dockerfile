@@ -98,6 +98,7 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
 
 # Install TALON v5.0
 RUN git clone -b 'v5.0' --single-branch https://github.com/mortazavilab/TALON.git && cd TALON && python3.7 -m pip install .
+RUN rm -rf  TALON
 
 # make code within the repo available
 
