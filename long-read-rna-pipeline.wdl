@@ -327,7 +327,7 @@ task talon {
 
     output {
         File talon_config = "~{output_prefix}_talon_config.csv"
-        File talon_log = "~{output_prefix}_talon_QC.log"
+        File talon_log = "~{output_prefix}_QC.log"
         File talon_db_out = "~{output_prefix}_talon.db"
     }
 
