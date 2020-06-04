@@ -35,7 +35,7 @@ install_python_requirements:
     - run: pip install --upgrade pip
     - run: pip install -r requirements.txt
 
- download_file:
+download_file:
   description: "Download a file using wget"
   parameters:
     file_url:
