@@ -23,14 +23,15 @@ machine_defaults: &machine_defaults
 set_env_variables: &set_env_variables
   description: "Set environment ready for docker running and pushing"
   command: |
-    echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" > ${BASH_ENV}
+    echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
+    source ${BASH_ENV}
 
-only_dev_and_master: &only_dev_and_master
-  filters:
-    branches:
-      only: 
-        - /^dev.*/
-        - master
+install_python_requirements:
+  description: "Install pytest workflow requirements"
+  steps:
+    - run: pyenv global 3.7.0
+    - run: pip install --upgrade pip
+    - run: pip install -r requirements.txt
 
 # Jobs
 jobs:
@@ -43,7 +44,6 @@ jobs:
       - run:
           name: build image
           command: |
-            source ${BASH_ENV}
             echo "pulling template!"
             docker pull quay.io/encode-dcc/long-read-rna-pipeline:template
             docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
@@ -60,7 +60,6 @@ jobs:
         - run: *set_env_variables
         - run:
             command: |
-              source ${BASH_ENV}
               docker pull $TAG
               docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
               docker tag $TAG quay.io/encode-dcc/long-read-rna-pipeline:template 
@@ -76,7 +75,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG docker
             python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
             --metadata_json test_get_splice_junctions_input.metadata.json \
@@ -94,7 +92,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json $TAG docker
             python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
             --metadata_json test_minimap2_input.metadata.json \
@@ -112,7 +109,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
@@ -134,7 +130,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
@@ -153,7 +148,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
@@ -172,7 +166,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
@@ -191,7 +184,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_talon.talon.talon_log \
@@ -210,7 +202,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
@@ -230,7 +221,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_gtf_from_talon_db.create_gtf_from_talon_db.gtf \
@@ -249,7 +239,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh test/test_task/test_calculate_spearman.wdl test/test_task/test_calculate_spearman_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect test_calculate_spearman.calculate_spearman.spearman \
@@ -268,7 +257,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
@@ -294,7 +282,6 @@ jobs:
       - run: 
           command: |
             pyenv global 3.5.2
-            source ${BASH_ENV}
             test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json $TAG docker
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
