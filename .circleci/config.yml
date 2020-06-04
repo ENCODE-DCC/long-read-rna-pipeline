@@ -33,8 +33,6 @@ only_dev_and_master: &only_dev_and_master
         - master
 
 # Jobs
-orbs:
-  singularity: singularity/singularity@1.0.3
 jobs:
   build:
     <<: *defaults
@@ -88,27 +86,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_get_splice_junctions_input.result.json
           no_output_timeout: 30m
 
-  test_get_splice_junctions_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG singularity
-            python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
-            --metadata_json test_get_splice_junctions_input.metadata.json \
-            --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
-            --outfile test_get_splice_junctions_input.result.json
-            cat test_get_splice_junctions_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_get_splice_junctions_input.result.json
-          no_output_timeout: 30m
-
   test_minimap2_docker:
     <<: *machine_defaults
     steps:
@@ -127,27 +104,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_minimap2_input.result.json
           no_output_timeout: 30m
 
-  test_minimap2_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json $TAG singularity
-            python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
-            --metadata_json test_minimap2_input.metadata.json \
-            --reference_json test/test_task/test_minimap2_reference_md5.json \
-            --outfile test_minimap2_input.result.json
-            cat test_minimap2_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_minimap2_input.result.json
-          no_output_timeout: 30m
-
   test_transcriptclean_docker:
     <<: *machine_defaults
     steps:
@@ -158,31 +114,6 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json $TAG docker
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
-            test_transcriptclean.transcriptclean.transcript_error_log \
-            test_transcriptclean.transcriptclean.corrected_fasta \
-            test_transcriptclean.skipNfirstlines.output_file \
-            --metadata_json test_transcriptclean_input.metadata.json \
-            --reference_json test/test_task/test_transcriptclean_reference_md5.json \
-            --outfile test_transcriptclean_input.result.json
-            cat test_transcriptclean_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_transcriptclean_input.result.json
-          no_output_timeout: 30m
-
-  test_transcriptclean_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
             test_transcriptclean.transcriptclean.transcript_error_log \
@@ -214,28 +145,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
           no_output_timeout: 30m
 
-  test_filter_transcriptclean_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json $TAG singularity
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
-            --metadata_json test_filter_transcriptclean_input.metadata.json \
-            --reference_json test/test_task/test_filter_transcriptclean_reference_md5.json \
-            --outfile test_filter_transcriptclean_input.result.json
-            cat test_filter_transcriptclean_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
-          no_output_timeout: 30m
-
   test_init_talon_database_docker:
     <<: *machine_defaults
     steps:
@@ -246,28 +155,6 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
-            --metadata_json test_init_talon_db_input.metadata.json \
-            --reference_json test/test_task/test_init_talon_db_reference_md5.json \
-            --outfile test_init_talon_db_input.result.json
-            cat test_init_talon_db_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
-          no_output_timeout: 30m
-
-  test_init_talon_database_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
             --metadata_json test_init_talon_db_input.metadata.json \
@@ -296,28 +183,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_idxprefix_input.result.json
           no_output_timeout: 30m
 
-  test_init_talon_database_idxprefix_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json $TAG singularity
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
-            --metadata_json test_init_talon_db_idxprefix_input.metadata.json \
-            --reference_json test/test_task/test_init_talon_db_idxprefix_reference_md5.json \
-            --outfile test_init_talon_db_idxprefix_input.result.json
-            cat test_init_talon_db_idxprefix_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_idxprefix_input.result.json
-          no_output_timeout: 30m
-
   test_talon_docker:
     <<: *machine_defaults
     steps:
@@ -328,28 +193,6 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json $TAG docker
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_talon.talon.talon_log \
-            --metadata_json test_talon_input.metadata.json \
-            --reference_json test/test_task/test_talon_reference_md5.json \
-            --outfile test_talon_input.result.json
-            cat test_talon_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_talon_input.result.json
-          no_output_timeout: 30m
-
-  test_talon_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect test_talon.talon.talon_log \
             --metadata_json test_talon_input.metadata.json \
@@ -379,29 +222,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
           no_output_timeout: 30m
 
-  test_create_abundance_from_talon_db_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG singularity
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
-                              test_create_abundance_from_talon_db.create_abundance_from_talon_db.number_of_genes_detected \
-            --metadata_json test_create_abundance_from_talon_db_input.metadata.json \
-            --reference_json test/test_task/test_create_abundance_from_talon_db_reference_md5.json \
-            --outfile test_create_abundance_from_talon_db_input.result.json
-            cat test_create_abundance_from_talon_db_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
-          no_output_timeout: 30m
-
   test_create_gtf_from_talon_db_docker:
     <<: *machine_defaults
     steps:
@@ -412,28 +232,6 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json $TAG docker
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_create_gtf_from_talon_db.create_gtf_from_talon_db.gtf \
-            --metadata_json test_create_gtf_from_talon_db_input.metadata.json \
-            --reference_json test/test_task/test_create_gtf_from_talon_db_reference_md5.json \
-            --outfile test_create_gtf_from_talon_db_input.result.json
-            cat test_create_gtf_from_talon_db_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_gtf_from_talon_db_input.result.json
-          no_output_timeout: 30m
-
-  test_create_gtf_from_talon_db_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_gtf_from_talon_db.create_gtf_from_talon_db.gtf \
             --metadata_json test_create_gtf_from_talon_db_input.metadata.json \
@@ -462,28 +260,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_calculate_spearman_input.result.json
           no_output_timeout: 30m
 
-  test_calculate_spearman_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh test/test_task/test_calculate_spearman.wdl test/test_task/test_calculate_spearman_input.json $TAG singularity
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_calculate_spearman.calculate_spearman.spearman \
-            --metadata_json test_calculate_spearman_input.metadata.json \
-            --reference_json test/test_task/test_calculate_spearman_reference_md5.json \
-            --outfile test_calculate_spearman_input.result.json
-            cat test_calculate_spearman_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_calculate_spearman_input.result.json
-          no_output_timeout: 30m
-
   test_workflow_onerep_docker:
     <<: *machine_defaults
     steps:
@@ -494,35 +270,6 @@ jobs:
             pyenv global 3.5.2
             source ${BASH_ENV}
             test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG docker
-            python3 src/compare_md5.py \
-            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
-                              long_read_rna_pipeline.transcriptclean.transcript_log \
-                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
-                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
-                              long_read_rna_pipeline.talon.talon_log \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
-                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
-            --metadata_json test_workflow_input.metadata.json \
-            --reference_json test/test_workflow/test_workflow_reference_md5.json \
-            --outfile test_workflow_input.result.json
-            cat test_workflow_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
-          no_output_timeout: 30m
-
-  test_workflow_onerep_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG singularity
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
                               long_read_rna_pipeline.transcriptclean.transcript_log \
@@ -566,36 +313,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_2reps_input.result.json
           no_output_timeout: 30m
 
-  test_workflow_tworep_singularity:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - run: *set_env_variables
-      - run: sudo apt-get update
-      - singularity/install-go
-      - singularity/debian-install-3
-      - run: 
-          command: |
-            pyenv global 3.5.2
-            source ${BASH_ENV}
-            test/test.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json $TAG singularity
-            python3 src/compare_md5.py \
-            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
-                              long_read_rna_pipeline.transcriptclean.transcript_log \
-                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
-                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
-                              long_read_rna_pipeline.talon.talon_log \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
-                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
-                              long_read_rna_pipeline.calculate_spearman.spearman \
-            --metadata_json test_workflow_2reps_input.metadata.json \
-            --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \
-            --outfile test_workflow_2reps_input.result.json
-            cat test_workflow_2reps_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_2reps_input.result.json
-          no_output_timeout: 30m
-
 # Workflow
 workflows:
   build_workflow:
@@ -604,92 +321,45 @@ workflows:
       - test_get_splice_junctions_docker:
           requires:
             - build
-      - test_get_splice_junctions_singularity:
-          requires:
-            - build
       - test_minimap2_docker:
-          requires:
-            - build
-      - test_minimap2_singularity:
           requires:
             - build
       - test_transcriptclean_docker:
           requires:
             - build
-      - test_transcriptclean_singularity:
-          requires:
-            - build
       - test_init_talon_database_docker:
-          requires:
-            - build
-      - test_init_talon_database_singularity:
           requires:
             - build
       - test_init_talon_database_idxprefix_docker:
           requires:
             - build
-      - test_init_talon_database_idxprefix_singularity:
-          requires:
-            - build
       - test_talon_docker:
-          requires:
-            - build
-      - test_talon_singularity:
           requires:
             - build
       - test_create_abundance_from_talon_db_docker:
           requires:
             - build
-      - test_create_abundance_from_talon_db_singularity:
-          requires:
-            - build
       - test_create_gtf_from_talon_db_docker:
-          requires:
-            - build
-      - test_create_gtf_from_talon_db_singularity:
           requires:
             - build
       - test_calculate_spearman_docker:
           requires:
             - build
-      - test_calculate_spearman_singularity:
-          requires:
-            - build
       - test_workflow_onerep_docker:
-#          <<: *only_dev_and_master
-          requires:
-            - build
-      - test_workflow_onerep_singularity:
-          <<: *only_dev_and_master
           requires:
             - build
       - test_workflow_tworep_docker:
-#          <<: *only_dev_and_master
-          requires:
-            - build
-      - test_workflow_tworep_singularity:
-          <<: *only_dev_and_master
           requires:
             - build
       - push_template:
           requires:
             - test_get_splice_junctions_docker
-            - test_get_splice_junctions_singularity
             - test_minimap2_docker
-            - test_minimap2_singularity
             - test_transcriptclean_docker
-            - test_transcriptclean_singularity
             - test_init_talon_database_docker
-            - test_init_talon_database_singularity
             - test_talon_docker
-            - test_talon_singularity
             - test_create_abundance_from_talon_db_docker
-            - test_create_abundance_from_talon_db_singularity
             - test_create_gtf_from_talon_db_docker
-            - test_create_gtf_from_talon_db_singularity
             - test_calculate_spearman_docker
-            - test_calculate_spearman_singularity
             - test_workflow_onerep_docker
-            - test_workflow_onerep_singularity
             - test_workflow_tworep_docker
-            - test_workflow_tworep_singularity
