@@ -20,38 +20,39 @@ machine_defaults: &machine_defaults
     image: ubuntu-1604:201903-01
   working_directory: ~/long-read-rna-pipeline
 
-set_env_variables:
-  description: "Set environment ready for docker running and pushing"
-  steps:
-    - run:
-        command: |
-          echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
-          source ${BASH_ENV}
+commands:
+  set_env_variables:
+    description: "Set environment ready for docker running and pushing"
+    steps:
+      - run:
+          command: |
+            echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
+            source ${BASH_ENV}
 
-install_python_requirements:
-  description: "Install pytest workflow requirements"
-  steps:
-    - run: pyenv global 3.7.0
-    - run: pip install --upgrade pip
-    - run: pip install -r requirements.txt
+  install_python_requirements:
+    description: "Install pytest workflow requirements"
+    steps:
+      - run: pyenv global 3.7.0
+      - run: pip install --upgrade pip
+      - run: pip install -r requirements.txt
 
-download_file:
-  description: "Download a file using wget"
-  parameters:
-    file_url:
-      type: string
-  steps:
-    - run: wget <<parameters.file_url>>
+  download_file:
+    description: "Download a file using wget"
+    parameters:
+      file_url:
+        type: string
+    steps:
+      - run: wget <<parameters.file_url>>
 
-prepare_pytest_environment:
-  description: "Get machine ready to run caper and pytest-workflow"
-  steps:
-    - set_env_variables
-    - install_python_requirements
-    - download_file:
-        file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/cromwell-49.jar"
-    - download_file:
-        file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/womtool-49.jar"
+  prepare_pytest_environment:
+    description: "Get machine ready to run caper and pytest-workflow"
+    steps:
+      - set_env_variables
+      - install_python_requirements
+      - download_file:
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/cromwell-49.jar"
+      - download_file:
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/womtool-49.jar"
 
 # Jobs
 jobs:
