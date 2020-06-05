@@ -27,6 +27,8 @@ commands:
       - run:
           command: |
             echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
+            echo "export CROMWELL=./cromwell-49.jar" >> ${BASH_ENV}
+            echo "export WOMTOOL=./womtool-49.jar" >> ${BASH_ENV}
             source ${BASH_ENV}
 
   install_python_requirements:
