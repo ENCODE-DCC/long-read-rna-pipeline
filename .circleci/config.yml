@@ -56,6 +56,18 @@ commands:
       - download_file:
           file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/womtool-49.jar"
 
+  run_test_tag:
+    description: "Run tagged test"
+    parameters:
+      tag:
+        type: string
+      wt:
+        type: string
+    steps:
+      - run:
+          command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --symlink --kwd
+          no_output_timeout: 60m
+
 # Jobs
 jobs:
   build:
