@@ -12,13 +12,13 @@ WDL=$1
 INPUT=$2
 DOCKER_IMAGE=$3
 
-if [ -f "cromwell-40.jar" ]; then
-    echo "cromwell-40.jar already available, skipping download."
-else
-    wget -N -c https://github.com/broadinstitute/cromwell/releases/download/40/cromwell-40.jar
-fi
+#if [ -f "cromwell-40.jar" ]; then
+#    echo "cromwell-40.jar already available, skipping download."
+#else
+#    wget -N -c https://github.com/broadinstitute/cromwell/releases/download/40/cromwell-40.jar
+#fi
 
-CROMWELL_JAR=cromwell-40.jar
+CROMWELL_JAR=cromwell-49.jar
 BACKEND_CONF=backends/backend.conf
 RESULT_PREFIX=$(basename ${INPUT} .json)
 METADATA=${RESULT_PREFIX}.metadata.json # metadata
@@ -32,22 +32,6 @@ if [ $4 = "docker" ]; then
     {
         "default_runtime_attributes" : {
             "docker" : "$DOCKER_IMAGE"
-        }
-    }
-EOM
-fi
-
-if [ $4 = "singularity" ]; then
-    #build singularity container
-    SINGULARITY_PULLFOLDER=~/.singularity singularity pull docker://${DOCKER_IMAGE}
-    # Write workflow option JSON file for singularity
-    BACKEND=singularity
-    TMP_WF_OPT=$RESULT_PREFIX.test_longrna_wf_opt.json
-    SINGULARITY_IMAGE=$(echo ${DOCKER_IMAGE} | sed 's/quay\.io\/encode-dcc\///g' | sed 's/:/_/' | sed 's/$/\.sif/')
-    cat > $TMP_WF_OPT << EOM
-    {
-        "default_runtime_attributes" : {
-            "singularity_container" : "~/long-read-rna-pipeline/$SINGULARITY_IMAGE"
         }
     }
 EOM
