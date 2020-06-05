@@ -113,7 +113,7 @@ jobs:
       - prepare_pytest_environment 
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json
             python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
             --metadata_json metadata.json \
             --reference_json test/test_task/test_minimap2_reference_md5.json \
@@ -129,7 +129,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
             test_transcriptclean.transcriptclean.transcript_error_log \
@@ -149,7 +149,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
             --metadata_json metadata.json \
@@ -166,7 +166,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
             --metadata_json metadata.json \
@@ -183,7 +183,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
             --metadata_json metadata.json \
@@ -200,7 +200,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_talon.talon.talon_log \
             --metadata_json metadata.json \
@@ -217,7 +217,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
                               test_create_abundance_from_talon_db.create_abundance_from_talon_db.number_of_genes_detected \
@@ -235,7 +235,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_gtf_from_talon_db.create_gtf_from_talon_db.gtf \
             --metadata_json metadata.json \
@@ -252,7 +252,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh test/test_task/test_calculate_spearman.wdl test/test_task/test_calculate_spearman_input.json $TAG docker
+            test/caper_run.sh test/test_task/test_calculate_spearman.wdl test/test_task/test_calculate_spearman_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_calculate_spearman.calculate_spearman.spearman \
             --metadata_json metadata.json \
@@ -269,7 +269,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json $TAG docker
+            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
                               long_read_rna_pipeline.transcriptclean.transcript_log \
@@ -293,7 +293,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json $TAG docker
+            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
                               long_read_rna_pipeline.transcriptclean.transcript_log \
