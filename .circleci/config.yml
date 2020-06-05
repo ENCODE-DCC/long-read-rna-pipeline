@@ -95,9 +95,9 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
-            test/test.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json $TAG docker
+            test/caper_run.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json
             python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
-            --metadata_json test_get_splice_junctions_input.metadata.json \
+            --metadata_json metadata.json \
             --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
             --outfile test_get_splice_junctions_input.result.json
             cat test_get_splice_junctions_input.result.json
