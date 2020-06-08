@@ -12,7 +12,7 @@ defaults: &defaults
 
 python_defaults: &python_defaults
   docker:
-    - image: quay.io/encode-dcc/long-read-rna-pipeline:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
+    - image: encodedcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}
   working_directory: ~/long-read-rna-pipeline
 
 machine_defaults: &machine_defaults
@@ -26,7 +26,7 @@ commands:
     steps:
       - run:
           command: |
-            echo "export TAG=quay.io/encode-dcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
+            echo "export TAG=encodedcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
             echo "export CROMWELL=./cromwell-49.jar" >> ${BASH_ENV}
             echo "export WOMTOOL=./womtool-49.jar" >> ${BASH_ENV}
             source ${BASH_ENV}
@@ -80,9 +80,9 @@ jobs:
           name: build image
           command: |
             echo "pulling template!"
-            docker pull quay.io/encode-dcc/long-read-rna-pipeline:template
-            docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
-            docker build --cache-from quay.io/encode-dcc/long-read-rna-pipeline:template --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1} --build-arg BRANCH=${CIRCLE_BRANCH} --build-arg BUILD_TAG=${TAG} -t $TAG .
+            docker pull encodedcc/long-read-rna-pipeline:template
+            docker login -u=${DOCKERHUB_USER} -p=${DOCKERHUB_PASS}
+            docker build encodedcc/long-read-rna-pipeline:template --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1} --build-arg BRANCH=${CIRCLE_BRANCH} --build-arg BUILD_TAG=${TAG} -t $TAG .
             docker push $TAG
             docker logout
           no_output_timeout: 30m
@@ -96,9 +96,9 @@ jobs:
         - run:
             command: |
               docker pull $TAG
-              docker login -u=${QUAY_ROBOT_USER} -p=${QUAY_ROBOT_USER_TOKEN} quay.io
-              docker tag $TAG quay.io/encode-dcc/long-read-rna-pipeline:template 
-              docker push quay.io/encode-dcc/long-read-rna-pipeline:template
+              docker login -u=${DOCKERHUB_USER} -p=${DOCKERHUB_PASS}
+              docker tag $TAG encodedcc/long-read-rna-pipeline:template 
+              docker push encodedcc/long-read-rna-pipeline:template
               docker logout
             no_output_timeout: 30m
 
