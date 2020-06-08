@@ -2,13 +2,12 @@ version 1.0
 
 # ENCODE long read rna pipeline: get splice junctions
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
-
 workflow get_splice_junctions {
     meta {
         author: "Otto Jolanki"
-        version: "dev_1.4"
+        version: "dev_2.0.0"
+        caper_docker: "encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
+        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
     }
 
     input {

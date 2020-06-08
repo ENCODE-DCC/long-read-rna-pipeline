@@ -2,13 +2,13 @@ version 1.0
 
 # ENCODE long read rna pipeline
 
-#CAPER docker quay.io/encode-dcc/long-read-rna-pipeline:v1.3
-#CAPER singularity docker://quay.io/encode-dcc/long-read-rna-pipeline:v1.3
-#CROO out_def https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json
 workflow long_read_rna_pipeline {
     meta {
         author: "Otto Jolanki"
-        version: "dev_1.4"
+        version: "dev_2.0.0"
+        caper_docker: "encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
+        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
+        croo_out_def: "https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json"
     }
 
     input {
