@@ -82,7 +82,11 @@ jobs:
             echo "pulling template!"
             docker pull encodedcc/long-read-rna-pipeline:template
             docker login -u=${DOCKERHUB_USER} -p=${DOCKERHUB_PASS}
-            docker build encodedcc/long-read-rna-pipeline:template --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1} --build-arg BRANCH=${CIRCLE_BRANCH} --build-arg BUILD_TAG=${TAG} -t $TAG .
+            docker build --cache-from encodedcc/long-read-rna-pipeline:template \
+                --build-arg GIT_COMMIT_HASH=${CIRCLE_SHA1} \
+                --build-arg BRANCH=${CIRCLE_BRANCH} \
+                --build-arg BUILD_TAG=${TAG} \
+                -t $TAG .
             docker push $TAG
             docker logout
           no_output_timeout: 30m
