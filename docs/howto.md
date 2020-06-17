@@ -17,7 +17,7 @@ Note that the files used in these examples are first restricted to reads from ch
 ## Google Cloud
 
 Make sure you have completed the steps for installation and Google Cloud setup described in the [installation instructions](installation.md#google-cloud). The following assumes your Google Cloud project is `YOUR_PROJECT`, you have created a bucket `gs://YOUR_BUCKET_NAME`, and also directories `input`, `output` and `reference` in the bucket.
-The goal is to run the pipeline with test data using Google Cloud Platform.
+The goal is to run the pipeline with test data using Google Cloud Platform. Make sure caper version is `0.8.2.1` or newer. This is needed for docker image autodetection.
 
 1. Launch a VM into your Google Cloud project, and connect to the instance.
 
@@ -71,6 +71,7 @@ The goal is to run the pipeline with test data using Google Cloud Platform.
 ```bash
   $ caper run long-read-rna-pipeline.wdl -i input.json -b gcp -m testrun_metadata.json
 ```
+
 
 6. Run croo, to to make finding outputs easier:
 
