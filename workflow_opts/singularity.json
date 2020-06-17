@@ -1,6 +1,0 @@
-{
-    "default_runtime_attributes" : {
-        "singularity_container" : "~/.singularity/long-read-rna-pipeline-v1.2.simg",
-        "singularity_bindpath" : "~/"
-    }
-}
