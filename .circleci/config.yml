@@ -113,7 +113,7 @@ jobs:
       - prepare_pytest_environment
       - run_test_tag:
           tag: "unit"
-          wt: 4
+          wt: "4"
 
   test_get_splice_junctions_docker:
     <<: *machine_defaults
