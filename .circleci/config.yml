@@ -106,6 +106,15 @@ jobs:
               docker logout
             no_output_timeout: 30m
 
+  wdl_unit_tests:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run_test_tag:
+          tag: "unit"
+          wt: 4
+
   test_get_splice_junctions_docker:
     <<: *machine_defaults
     steps:
@@ -332,6 +341,9 @@ workflows:
   build_workflow:
     jobs:
       - build
+      - wdl_unit_tests
+          requires:
+            - build
       - test_get_splice_junctions_docker:
           requires:
             - build
@@ -367,6 +379,7 @@ workflows:
             - build
       - push_template:
           requires:
+            - wdl_unit_tests
             - test_get_splice_junctions_docker
             - test_minimap2_docker
             - test_transcriptclean_docker
