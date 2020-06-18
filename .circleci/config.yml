@@ -341,7 +341,7 @@ workflows:
   build_workflow:
     jobs:
       - build
-      - wdl_unit_tests
+      - wdl_unit_tests:
           requires:
             - build
       - test_get_splice_junctions_docker:
