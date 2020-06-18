@@ -1,0 +1,9 @@
+{
+    "test_awk_clean_reference_fasta.fasta": "test_data/dummy.txt",
+    "test_awk_clean_reference_fasta.output_filename": "foo.fa",
+    "test_awk_clean_reference_fasta.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}
