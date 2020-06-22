@@ -32,7 +32,7 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
 
 ```bash
   gsutil cp gsutil cp test_data/chr19_test_10000_reads.fastq.gz gs://YOUR_BUCKET_NAME/input/
-  gsutil cp test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz test_data/splice_junctions.txt test_data/00-common_chr19_only.vcf.gz test_data/gencode.v24.annotation_chr19.gtf.gz gs://YOUR_BUCKET_NAME/reference/
+  gsutil cp test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz test_data/00-common_chr19_only.vcf.gz test_data/gencode.v24.annotation_chr19.gtf.gz gs://YOUR_BUCKET_NAME/reference/
 ```
 
 4. Prepare the `input.json`. In the following template fill in the actual URI of your Google Cloud Bucket and save the file as `input.json` in the `long-read-rna-pipeline` directory.
@@ -43,7 +43,6 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
     "long_read_rna_pipeline.reference_genome" : "gs://YOUR_BUCKET_NAME/reference/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
     "long_read_rna_pipeline.annotation" : "gs://YOUR_BUCKET_NAME/reference/gencode.v24.annotation_chr19.gtf.gz",
     "long_read_rna_pipeline.variants" : "gs://YOUR_BUCKET_NAME/reference/00-common_chr19_only.vcf.gz",
-    "long_read_rna_pipeline.splice_junctions" : "gs://YOUR_BUCKET_NAME/reference/splice_junctions.txt",
     "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
@@ -62,7 +61,12 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
     "long_read_rna_pipeline.talon_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus" : 2,
     "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD"
+    "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
+    "long_read_rna_pipeline.get_splice_junctions_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
 }
 ```
 
@@ -87,21 +91,4 @@ Running on other platforms is similar, because the caper takes care of the detai
 
 ## Using Singularity
 
-Caper comes with built-in support for singularity with `--singularity` option. See [caper documentation](https://github.com/ENCODE-DCC/caper/blob/master/DETAILS.md) for more information. 
-
-## Splice junctions
-
-You may want to run the pipeline using other references than the ones used by ENCODE. In this case you must prepare your own splice junctions file. The workflows for this is in this repo and it is `get-splice-junctions.wdl`. This workflow uses the same Docker/Singularity images as the main pipeline and running this workflow is done in exactly same way as the running of the main pipeline.
-
-`input.json` for splice junction workflow with gencode V29 annotation, and GRCh38 reference genome looks like this:
-
-```
-{
-    "get_splice_junctions.annotation" : "gs://long_read_rna/splice_junctions/inputs/gencode.v29.primary_assembly.annotation_UCSC_names.gtf.gz",
-    "get_splice_junctions.reference_genome" : "gs://long_read_rna/splice_junctions/inputs/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz",
-    "get_splice_junctions.output_prefix" : "gencode_V29_splice_junctions",
-    "get_splice_junctions.ncpus" : 2,
-    "get_splice_junctions.ramGB" : 7,
-    "get_splice_junctions.disks" : "local-disk 50 SSD"
-}
-```
+Caper comes with built-in support for singularity with `--singularity` option. See [caper documentation](https://github.com/ENCODE-DCC/caper/blob/master/DETAILS.md) for more information.

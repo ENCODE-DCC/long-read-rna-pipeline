@@ -1,0 +1,29 @@
+- name: test_gzip_compress
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_gzip_compress.wdl \
+    test/unit/json/test_gzip_compress.json
+  stdout:
+    contains:
+      - "gzip"
+      - "-c"
+      - "-n"
+      - "dummy.txt"
+      - "> dummy.gz"
+
+- name: test_gzip_decompress
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_gzip_decompress.wdl \
+    test/unit/json/test_gzip_decompress.json
+  stdout:
+    contains:
+      - "gzip"
+      - "-c"
+      - "-d"
+      - "dummy.txt"
+      - "> foo.txt"

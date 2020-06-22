@@ -1,0 +1,11 @@
+- name: test_awk_clean_reference_fasta
+  tags:
+    - unit 
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_awk_clean_reference_fasta.wdl \
+    test/unit/json/test_awk_clean_reference_fasta.json
+  stdout:
+    contains:
+      - "awk '{print $1}' dummy.txt > foo.fa" 
+      - "mv dummy.txt foo.fa"

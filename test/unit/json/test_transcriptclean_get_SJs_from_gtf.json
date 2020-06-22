@@ -1,0 +1,10 @@
+{
+    "test_transcriptclean_get_SJs_from_gtf.annotation_gtf": "test_data/dummy.txt",
+    "test_transcriptclean_get_SJs_from_gtf.reference_fasta": "test_data/dummy.txt",
+    "test_transcriptclean_get_SJs_from_gtf.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    },
+    "test_transcriptclean_get_SJs_from_gtf.output_filename": "foo.txt"
+}

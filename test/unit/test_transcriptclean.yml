@@ -1,0 +1,14 @@
+- name: test_transcriptclean_get_SJs_from_gtf
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_transcriptclean_get_SJs_from_gtf.wdl \
+    test/unit/json/test_transcriptclean_get_SJs_from_gtf.json
+  stdout:
+    contains:
+      - "python $(which get_SJs_from_gtf.py)"
+      - "--f dummy.txt"
+      - "--g dummy.txt"
+      - "--o foo.txt"
+
