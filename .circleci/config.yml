@@ -124,7 +124,7 @@ jobs:
           tag: "integration"
           wt: "4"
 
-  test_minimap2_docker:
+  test_minimap2:
     <<: *machine_defaults
     steps:
       - checkout
@@ -140,7 +140,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_minimap2_input.result.json
           no_output_timeout: 30m
 
-  test_transcriptclean_docker:
+  test_transcriptclean:
     <<: *machine_defaults
     steps:
       - checkout
@@ -160,7 +160,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_transcriptclean_input.result.json
           no_output_timeout: 30m
 
-  test_filter_transcriptclean_docker:
+  test_filter_transcriptclean:
     <<: *machine_defaults
     steps:
       - checkout
@@ -177,7 +177,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
           no_output_timeout: 30m
 
-  test_init_talon_database_docker:
+  test_init_talon_database:
     <<: *machine_defaults
     steps:
       - checkout
@@ -194,7 +194,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_input.result.json
           no_output_timeout: 30m
 
-  test_init_talon_database_idxprefix_docker:
+  test_init_talon_database_idxprefix:
     <<: *machine_defaults
     steps:
       - checkout
@@ -211,7 +211,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_init_talon_db_idxprefix_input.result.json
           no_output_timeout: 30m
 
-  test_talon_docker:
+  test_talon:
     <<: *machine_defaults
     steps:
       - checkout
@@ -228,7 +228,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_talon_input.result.json
           no_output_timeout: 30m
 
-  test_create_abundance_from_talon_db_docker:
+  test_create_abundance_from_talon_db:
     <<: *machine_defaults
     steps:
       - checkout
@@ -246,7 +246,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_abundance_from_talon_db_input.result.json
           no_output_timeout: 30m
 
-  test_create_gtf_from_talon_db_docker:
+  test_create_gtf_from_talon_db:
     <<: *machine_defaults
     steps:
       - checkout
@@ -263,7 +263,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_create_gtf_from_talon_db_input.result.json
           no_output_timeout: 30m
 
-  test_calculate_spearman_docker:
+  test_calculate_spearman:
     <<: *machine_defaults
     steps:
       - checkout
@@ -280,7 +280,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_calculate_spearman_input.result.json
           no_output_timeout: 30m
 
-  test_workflow_onerep_docker:
+  test_workflow_onerep:
     <<: *machine_defaults
     steps:
       - checkout
@@ -304,7 +304,7 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
           no_output_timeout: 30m
 
-  test_workflow_tworep_docker:
+  test_workflow_tworep:
     <<: *machine_defaults
     steps:
       - checkout
@@ -340,45 +340,45 @@ workflows:
       - wdl_integration_tests:
           requires:
             - build
-      - test_minimap2_docker:
+      - test_minimap2:
           requires:
             - build
-      - test_transcriptclean_docker:
+      - test_transcriptclean:
           requires:
             - build
-      - test_init_talon_database_docker:
+      - test_init_talon_database:
           requires:
             - build
-      - test_init_talon_database_idxprefix_docker:
+      - test_init_talon_database_idxprefix:
           requires:
             - build
-      - test_talon_docker:
+      - test_talon:
           requires:
             - build
-      - test_create_abundance_from_talon_db_docker:
+      - test_create_abundance_from_talon_db:
           requires:
             - build
-      - test_create_gtf_from_talon_db_docker:
+      - test_create_gtf_from_talon_db:
           requires:
             - build
-      - test_calculate_spearman_docker:
+      - test_calculate_spearman:
           requires:
             - build
-      - test_workflow_onerep_docker:
+      - test_workflow_onerep:
           requires:
             - build
-      - test_workflow_tworep_docker:
+      - test_workflow_tworep:
           requires:
             - build
       - push_template:
           requires:
             - wdl_unit_tests
-            - test_minimap2_docker
-            - test_transcriptclean_docker
-            - test_init_talon_database_docker
-            - test_talon_docker
-            - test_create_abundance_from_talon_db_docker
-            - test_create_gtf_from_talon_db_docker
-            - test_calculate_spearman_docker
-            - test_workflow_onerep_docker
-            - test_workflow_tworep_docker
+            - test_minimap2
+            - test_transcriptclean
+            - test_init_talon_database
+            - test_talon
+            - test_create_abundance_from_talon_db
+            - test_create_gtf_from_talon_db
+            - test_calculate_spearman
+            - test_workflow_onerep
+            - test_workflow_tworep
