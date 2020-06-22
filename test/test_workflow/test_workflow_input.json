@@ -3,7 +3,6 @@
     "long_read_rna_pipeline.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
     "long_read_rna_pipeline.annotation" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
     "long_read_rna_pipeline.variants" : "test_data/00-common_chr19_only_expanded_chrnames.vcf.gz",
-    "long_read_rna_pipeline.splice_junctions" : "test_data/splice_junctions.txt",
     "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
@@ -26,5 +25,10 @@
     "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 1,
     "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD"
+    "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD",
+    "long_read_rna_pipeline.get_splice_junctions_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
 }

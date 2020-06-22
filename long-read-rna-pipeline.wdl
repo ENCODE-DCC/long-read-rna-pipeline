@@ -1,6 +1,8 @@
 version 1.0
 
-# ENCODE long read rna pipeline
+
+import "wdl/subworkflows/get_splice_junctions.wdl"
+
 
 workflow long_read_rna_pipeline {
     meta {
@@ -21,7 +23,7 @@ workflow long_read_rna_pipeline {
         # Variants file, vcf format, gzipped.
         File? variants
         # Splice junctions file, produced by get-splice-juctions.wdl
-        File splice_junctions
+        # File splice_junctions
         # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
         String experiment_prefix = "my_experiment"
         # Is the data from "pacbio" or "nanopore"
@@ -38,6 +40,7 @@ workflow long_read_rna_pipeline {
         # of the run.
         Boolean canonical_only = true
         # Resouces
+        Resources get_splice_junctions_resources
         # Task init_talon_db
         Int init_talon_db_ncpus
         Int init_talon_db_ramGB
@@ -68,6 +71,14 @@ workflow long_read_rna_pipeline {
         String calculate_spearman_disks = "local-disk 20 HDD"
     }
 
+    call get_splice_junctions.get_splice_junctions {
+        input:
+            annotation_gtf=annotation,
+            reference_fasta=reference_genome,
+            resources=get_splice_junctions_resources,
+            splice_junctions_output_filename="SJs.txt",
+    }
+
     scatter (i in range(length(fastqs))) {
 
         String talon_prefix = if length(talon_prefixes) > 0 then talon_prefixes[i] else "TALON"
@@ -96,7 +107,7 @@ workflow long_read_rna_pipeline {
         call transcriptclean { input:
             sam=minimap2.sam,
             reference_genome=reference_genome,
-            splice_junctions=splice_junctions,
+            splice_junctions=get_splice_junctions.splice_junctions,
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
             canonical_only=canonical_only,

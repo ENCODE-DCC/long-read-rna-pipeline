@@ -124,22 +124,6 @@ jobs:
           tag: "integration"
           wt: "4"
 
-  test_get_splice_junctions_docker:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - prepare_pytest_environment
-      - run: 
-          command: |
-            test/caper_run.sh get-splice-junctions.wdl test/test_task/test_get_splice_junctions_input.json
-            python3 src/compare_md5.py --keys_to_inspect get_splice_junctions.get_splice_junctions_.splice_junctions \
-            --metadata_json metadata.json \
-            --reference_json test/test_task/test_get_splice_junctions_reference_md5.json \
-            --outfile test_get_splice_junctions_input.result.json
-            cat test_get_splice_junctions_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_get_splice_junctions_input.result.json
-          no_output_timeout: 30m
-
   test_minimap2_docker:
     <<: *machine_defaults
     steps:
@@ -356,9 +340,6 @@ workflows:
       - wdl_integration_tests:
           requires:
             - build
-      - test_get_splice_junctions_docker:
-          requires:
-            - build
       - test_minimap2_docker:
           requires:
             - build
@@ -392,7 +373,6 @@ workflows:
       - push_template:
           requires:
             - wdl_unit_tests
-            - test_get_splice_junctions_docker
             - test_minimap2_docker
             - test_transcriptclean_docker
             - test_init_talon_database_docker
