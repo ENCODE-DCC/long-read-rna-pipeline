@@ -22,8 +22,6 @@ workflow long_read_rna_pipeline {
         File annotation
         # Variants file, vcf format, gzipped.
         File? variants
-        # Splice junctions file, produced by get-splice-juctions.wdl
-        # File splice_junctions
         # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
         String experiment_prefix = "my_experiment"
         # Is the data from "pacbio" or "nanopore"
