@@ -67,7 +67,12 @@ A typical `input.json` is structured in the following way:
     "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD",
     "long_read_rna_pipeline.calculate_spearman_ncpus" : 2,
     "long_read_rna_pipeline.calculate_spearman_ramGB" : 4,
-    "long_read_rna_pipeline.calculate_spearman_disks" : "local-disk 20 HDD"
+    "long_read_rna_pipeline.calculate_spearman_disks" : "local-disk 20 HDD",
+    "long_read_rna_pipeline.get_splice_junctions_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
 }
 ```
 
@@ -167,7 +172,12 @@ Main pipeline with mouse data:
   "long_read_rna_pipeline.create_abundance_from_talon_db_disks": "local-disk 150 SSD",
   "long_read_rna_pipeline.calculate_spearman_ncpus": 2,
   "long_read_rna_pipeline.calculate_spearman_ramGB": 7,
-  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD"
+  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD",
+  "long_read_rna_pipeline.get_splice_junctions_resources" : {
+      "cpu": 2,
+      "memory_gb": 7,
+      "disks": "local-disk 150 SSD"
+  }
 }
 ```
 
@@ -207,6 +217,11 @@ Main pipeline with human data:
   "long_read_rna_pipeline.create_abundance_from_talon_db_disks": "local-disk 150 SSD",
   "long_read_rna_pipeline.calculate_spearman_ncpus": 2,
   "long_read_rna_pipeline.calculate_spearman_ramGB": 7,
-  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD"
+  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD",
+  "long_read_rna_pipeline.get_splice_junctions_resources" : {
+      "cpu": 2,
+      "memory_gb": 7,
+      "disks": "local-disk 150 SSD"
+  }
 }
 ```
