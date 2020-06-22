@@ -115,6 +115,15 @@ jobs:
           tag: "unit"
           wt: "4"
 
+  wdl_integration_tests:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run_test_tag:
+          tag: "integration"
+          wt: "4"
+
   test_get_splice_junctions_docker:
     <<: *machine_defaults
     steps:
@@ -342,6 +351,9 @@ workflows:
     jobs:
       - build
       - wdl_unit_tests:
+          requires:
+            - build
+      - wdl_integration_tests:
           requires:
             - build
       - test_get_splice_junctions_docker:
