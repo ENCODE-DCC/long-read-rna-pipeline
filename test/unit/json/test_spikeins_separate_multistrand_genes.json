@@ -1,0 +1,8 @@
+{
+    "test_spikeins_separate_multistrand_genes.input_gtf": "test_data/dummy.txt",
+    "test_spikeins_separate_multistrand_genes.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}
