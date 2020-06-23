@@ -88,7 +88,7 @@ ENV PATH="/software/bedtools2/bin:${PATH}"
 
 RUN git clone -b 'v2.0.2' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
-ENV PATH "/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
+ENV PATH="/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
 # Install samtools 1.9
 
@@ -97,8 +97,16 @@ RUN git clone --branch 1.9 --single-branch https://github.com/samtools/samtools.
     cd samtools && make && make install && cd ../ && rm -rf samtools* htslib*
 
 # Install TALON v5.0
+
 RUN git clone -b 'v5.0' --single-branch https://github.com/mortazavilab/TALON.git && cd TALON && python3.7 -m pip install .
 RUN rm -rf  TALON
+
+# Get spikein handling code and python dependency
+
+RUN python3.7 -m pip install xopen==0.9.0
+RUN git clone -b 'v1.0' --single-branch https://github.com/mortazavilab/ENCODE-references.git
+RUN chmod 755 ENCODE-references/SIRV_ERCC/*
+ENV PATH="/software/ENCODE-references/SIRV_ERCC:${PATH}"
 
 # make code within the repo available
 
