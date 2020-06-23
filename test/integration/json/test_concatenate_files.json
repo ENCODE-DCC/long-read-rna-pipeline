@@ -1,0 +1,12 @@
+{
+    "test_concatenate_files.concatenate_files.files": [
+        "test_data/chr19_test_10000_reads.fastq.gz",
+        "test_data/chr19_test_10000_reads_rep2.fastq.gz"
+    ],
+    "test_concatenate_files.concatenate_files.output_filename": "concatenated.fastq.gz",
+    "test_concatenate_files.concatenate_files.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}
