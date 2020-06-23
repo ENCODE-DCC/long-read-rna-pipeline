@@ -1,0 +1,12 @@
+- name: test_talon_talon_reformat_gtf
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_talon_talon_reformat_gtf.wdl \
+    test/unit/json/test_talon_talon_reformat_gtf.json
+  stdout:
+    contains:
+      - "talon_reformat_gtf"
+      - "--gtf dummy.gtf"
+      - "mv dummy_reformatted.gtf reformatted.gtf"
