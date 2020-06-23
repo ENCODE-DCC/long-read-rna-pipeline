@@ -1,0 +1,11 @@
+- name: test_make_gtf_from_spikein_fasta
+  tags:
+    - integration
+  command: >-
+    test/caper_run.sh \
+    test/integration/wdl/test_make_gtf_from_spikein_fasta.wdl \
+    test/integration/json/test_make_gtf_from_spikein_fasta.json
+  stdout:
+    contains:
+      - "ERCC_spikes.gtf.gz"
+
