@@ -1,0 +1,12 @@
+{
+    "test_cat_cat.files": [
+        "test_data/dummy.txt",
+        "test_data/dummy.txt",
+        "test_data/dummy.txt"
+    ],
+    "test_cat_cat.resources": {
+        "cpu": 1,
+        "memory_gb": 2,
+        "disks": "local-disk 10 SSD"
+    }
+}

@@ -1,0 +1,12 @@
+- name: test_cat_cat
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_cat_cat.wdl \
+    test/unit/json/test_cat_cat.json
+  stdout:
+    contains:
+      - "cat"
+      - "dummy.txt"
+      - "> concatenated"
