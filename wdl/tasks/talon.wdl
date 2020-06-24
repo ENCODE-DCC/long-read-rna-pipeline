@@ -18,7 +18,7 @@ task talon_reformat_gtf {
     command {
         ln ~{input_gtf} .
         talon_reformat_gtf \
-            --gtf ~{prefix_gtf}
+            -gtf ~{prefix_gtf}
         mv ~{original_outfn} ~{output_filename}
     }
 

@@ -8,4 +8,6 @@
   stdout:
     contains:
       - "ERCC_spikes.gtf.gz"
-
+  files:
+    - path: "test-output/ERCC_spikes.gtf.gz"
+      md5sum: 476c161e8e409d674dc66f5e956f25e4
