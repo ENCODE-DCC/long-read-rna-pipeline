@@ -124,6 +124,15 @@ jobs:
           tag: "integration"
           wt: "4"
 
+  wdl_functional_tests:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run_test_tag:
+          tag: "functional"
+          wt: "4"
+
   test_minimap2:
     <<: *machine_defaults
     steps:
