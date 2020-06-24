@@ -1,0 +1,9 @@
+{
+    "test_make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta.spikein_fasta": "test_data/ENCFF001RTP.fasta.gz",
+    "test_make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    },
+    "test_make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta.output_filename": "ERCC_spikes.gtf.gz"
+}

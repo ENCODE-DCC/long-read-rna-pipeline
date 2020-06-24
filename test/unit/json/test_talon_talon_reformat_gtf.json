@@ -1,0 +1,8 @@
+{
+    "test_talon_talon_reformat_gtf.input_gtf": "test_data/dummy.gtf",
+    "test_talon_talon_reformat_gtf.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}

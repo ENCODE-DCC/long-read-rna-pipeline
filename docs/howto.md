@@ -66,6 +66,16 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.concatenate_files_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.make_gtf_from_spikein_fasta_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
     }
 }
 ```

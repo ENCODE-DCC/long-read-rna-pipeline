@@ -1,0 +1,25 @@
+- name: test_spikeins_merge_encode_annotations
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_spikeins_merge_encode_annotations.wdl \
+    test/unit/json/test_spikeins_merge_encode_annotations.json
+  stdout:
+    contains:
+      - "python3.7 $(which merge_encode_annotations.py)"
+      - "--o spikeins.gtf"
+      - "dummy.txt"
+
+- name: test_spikeins_separate_multistrand_genes
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_spikeins_separate_multistrand_genes.wdl \
+    test/unit/json/test_spikeins_separate_multistrand_genes.json
+  stdout:
+    contains:
+      - "python3.7 $(which separate_multistrand_genes.py)"
+      - "--f dummy.txt"
+      - "separated.gtf"

@@ -1,7 +1,9 @@
 version 1.0
 
 
+import "wdl/subworkflows/concatenate_files.wdl"
 import "wdl/subworkflows/get_splice_junctions.wdl"
+import "wdl/subworkflows/make_gtf_from_spikein_fasta.wdl"
 
 
 workflow long_read_rna_pipeline {
@@ -20,6 +22,8 @@ workflow long_read_rna_pipeline {
         File reference_genome
         # Annotation file, gtf format, gzipped.
         File annotation
+        # Spikeins file, fasta format, gzipped.
+        File? spikeins
         # Variants file, vcf format, gzipped.
         File? variants
         # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
@@ -38,6 +42,16 @@ workflow long_read_rna_pipeline {
         # of the run.
         Boolean canonical_only = true
         # Resouces
+        Resources concatenate_files_resources = {
+           "cpu": 2,
+           "memory_gb": 4,
+           "disks": "local-disk 50",
+        }
+        Resources make_gtf_from_spikein_fasta_resources = {
+           "cpu": 2,
+           "memory_gb": 4,
+           "disks": "local-disk 50",
+        }
         Resources get_splice_junctions_resources
         # Task init_talon_db
         Int init_talon_db_ncpus
@@ -69,10 +83,36 @@ workflow long_read_rna_pipeline {
         String calculate_spearman_disks = "local-disk 20 HDD"
     }
 
+    if (defined(spikeins)) {
+        File spikes = select_first([spikeins])
+        call make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta {
+            input:
+                spikein_fasta=spikes,
+                resources=make_gtf_from_spikein_fasta_resources,
+        }
+
+        call concatenate_files.concatenate_files as combined_annotation {
+            input:
+               files=[annotation,make_gtf_from_spikein_fasta.spikein_gtf],
+               resources=concatenate_files_resources,
+               output_filename="combined_annotation.gtf.gz",
+        }
+
+        call concatenate_files.concatenate_files as combined_reference {
+            input:
+               files=[reference_genome,spikes],
+               resources=concatenate_files_resources,
+               output_filename="combined_reference.fasta.gz",
+        }
+    }
+
+    File combined_fasta = select_first([combined_reference.concatenated_file,reference_genome])
+    File combined_gtf = select_first([combined_annotation.concatenated_file,annotation])
+
     call get_splice_junctions.get_splice_junctions {
         input:
-            annotation_gtf=annotation,
-            reference_fasta=reference_genome,
+            annotation_gtf=combined_gtf,
+            reference_fasta=combined_fasta,
             resources=get_splice_junctions_resources,
             splice_junctions_output_filename="SJs.txt",
     }
@@ -82,7 +122,7 @@ workflow long_read_rna_pipeline {
         String talon_prefix = if length(talon_prefixes) > 0 then talon_prefixes[i] else "TALON"
 
         call init_talon_db { input:
-            annotation_gtf=annotation,
+            annotation_gtf=combined_gtf,
             annotation_name=annotation_name,
             ref_genome_name=genome_build,
             idprefix=talon_prefix,
@@ -94,7 +134,7 @@ workflow long_read_rna_pipeline {
 
         call minimap2 { input:
             fastq=fastqs[i],
-            reference_genome=reference_genome,
+            reference_genome=combined_fasta,
             output_prefix="rep"+(i+1)+experiment_prefix,
             input_type=input_type,
             ncpus=minimap2_ncpus,
@@ -104,7 +144,7 @@ workflow long_read_rna_pipeline {
 
         call transcriptclean { input:
             sam=minimap2.sam,
-            reference_genome=reference_genome,
+            reference_genome=combined_fasta,
             splice_junctions=get_splice_junctions.splice_junctions,
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
