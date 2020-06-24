@@ -8,5 +8,5 @@
   stdout:
     contains:
       - "talon_reformat_gtf"
-      - "--gtf dummy.gtf"
+      - "-gtf dummy.gtf"
       - "mv dummy_reformatted.gtf reformatted.gtf"
