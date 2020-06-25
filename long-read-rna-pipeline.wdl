@@ -22,8 +22,8 @@ workflow long_read_rna_pipeline {
         File reference_genome
         # Annotation file, gtf format, gzipped.
         File annotation
-        # Spikeins file, fasta format, gzipped.
-        File? spikeins
+        # Spikein files, fasta format, gzipped.
+        Array[File] spikeins = []
         # Variants file, vcf format, gzipped.
         File? variants
         # Prefix that gets added into output filenames. Default "my_experiment", can not be empty.
@@ -83,8 +83,16 @@ workflow long_read_rna_pipeline {
         String calculate_spearman_disks = "local-disk 20 HDD"
     }
 
-    if (defined(spikeins)) {
-        File spikes = select_first([spikeins])
+    if (length(spikeins) > 1) {
+        call concatenate_files.concatenate_files as combined_spikeins {
+            input:
+                files=spikeins,
+                resources=concatenate_files_resources,
+        }
+    }
+
+    if (length(spikeins) > 0) {
+        File spikes = select_first([combined_spikeins.concatenated_file,spikeins[0]])
         call make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta {
             input:
                 spikein_fasta=spikes,
