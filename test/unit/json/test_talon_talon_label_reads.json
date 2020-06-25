@@ -1,0 +1,9 @@
+{
+    "test_talon_talon_label_reads.input_sam": "test_data/dummy.txt",
+    "test_talon_talon_label_reads.reference_genome": "test_data/dummy.txt",
+    "test_talon_talon_label_reads.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}
