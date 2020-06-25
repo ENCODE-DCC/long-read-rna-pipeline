@@ -349,6 +349,9 @@ workflows:
       - wdl_integration_tests:
           requires:
             - build
+      - wdl_functional_tests:
+          requires:
+            - build
       - test_minimap2:
           requires:
             - build
@@ -382,9 +385,12 @@ workflows:
       - push_template:
           requires:
             - wdl_unit_tests
+            - wdl_integration_tests
+            - wdl_functional_tests
             - test_minimap2
             - test_transcriptclean
             - test_init_talon_database
+            - test_init_talon_database_idxprefix
             - test_talon
             - test_create_abundance_from_talon_db
             - test_create_gtf_from_talon_db

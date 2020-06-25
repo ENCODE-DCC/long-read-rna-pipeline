@@ -15,3 +15,21 @@
       md5sum: 023ce260c3215988b174b724d56c0f3c
     - path: "test-output/rep1TEST_WORKFLOW_number_of_genes_detected.json"
       md5sum: 255fa342e6d6d376197487b1d3c719ad
+
+- name: test_pipeline_with_two_spikeins
+  tags:
+    - functional
+  command: >-
+    test/caper_run.sh \
+    long-read-rna-pipeline.wdl \
+    test/functional/json/test_pipeline_with_two_spikeins.json
+  stdout:
+    contains:
+      - "cat"
+  files:
+    - path: "test-output/rep1TEST_WORKFLOW_QC.log"
+      md5sum: 4b3218078c7c1094f5f43eb94127d10d
+    - path: "test-output/rep1TEST_WORKFLOW_clean.TE.log"
+      md5sum: 023ce260c3215988b174b724d56c0f3c
+    - path: "test-output/rep1TEST_WORKFLOW_number_of_genes_detected.json"
+      md5sum: 255fa342e6d6d376197487b1d3c719ad
