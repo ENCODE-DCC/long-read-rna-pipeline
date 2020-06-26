@@ -4,6 +4,7 @@ version 1.0
 import "wdl/subworkflows/concatenate_files.wdl"
 import "wdl/subworkflows/get_splice_junctions.wdl"
 import "wdl/subworkflows/make_gtf_from_spikein_fasta.wdl"
+import "wdl/tasks/gzip.wdl"
 
 
 workflow long_read_rna_pipeline {
@@ -46,6 +47,11 @@ workflow long_read_rna_pipeline {
            "cpu": 2,
            "memory_gb": 4,
            "disks": "local-disk 50",
+        }
+        Resources decompress_references_resources = {
+            "cpu": 2,
+            "memory_gb": 4,
+            "disks": "local-disk 50"
         }
         Resources make_gtf_from_spikein_fasta_resources = {
            "cpu": 2,
@@ -116,6 +122,28 @@ workflow long_read_rna_pipeline {
 
     File combined_fasta = select_first([combined_reference.concatenated_file,reference_genome])
     File combined_gtf = select_first([combined_annotation.concatenated_file,annotation])
+
+    call gzip.gzip as decompressed_reference_genome {
+        input:
+            input_file=combined_fasta,
+            output_filename="combined_reference.fasta",
+            params={
+                "decompress": true,
+                "noname": false,
+            },
+            resources=decompress_references_resources,
+    }
+
+    call gzip.gzip as decompressed_gtf {
+        input:
+            input_file=combined_gtf,
+            output_filename="combined_annotation.gtf",
+            params={
+                "decompress": true,
+                "noname": false,
+            },
+            resources=decompress_references_resources,
+    }
 
     call get_splice_junctions.get_splice_junctions {
         input:
