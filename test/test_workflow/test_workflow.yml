@@ -48,7 +48,6 @@
     contains:
       - "talon_initialize_database"
       - "python3.7 $(which record_init_db_inputs.py)"
-      - "minimap2 -t 2 -ax splice -uf --secondary=no -C5"
       - "gzip"
       - "if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then"
       - "python $(which get_SJs_from_gtf.py)"
