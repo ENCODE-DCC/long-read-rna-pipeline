@@ -32,3 +32,40 @@ task talon_reformat_gtf {
         disks: resources.disks
     }
 }
+
+task talon_label_reads {
+    input {
+        File input_sam
+        File reference_genome
+        Int fraca_range_size=20
+        Resources resources
+        String output_sam_filename = "labeled.sam"
+        String output_tsv_filename = "labeled.tsv"
+    }
+
+    String sam_prefix = basename(input_sam)
+    String reference_prefix = basename(reference_genome)
+
+    command {
+        ln ~{input_sam} .
+        ln ~{reference_genome} .
+        talon_label_reads \
+            --f ~{sam_prefix} \
+            --g ~{reference_prefix} \
+            --t ~{resources.cpu} \
+            --ar ~{fraca_range_size}
+        mv talon_prelabels_labeled.sam ~{output_sam_filename}
+        mv talon_prelabels_read_labels.tsv ~{output_tsv_filename}
+    }
+
+    output {
+        File labeled_sam = output_sam_filename
+        File read_labels_tsv = output_tsv_filename
+    }
+
+    runtime {
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
+    }
+}

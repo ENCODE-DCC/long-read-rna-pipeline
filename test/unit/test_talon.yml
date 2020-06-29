@@ -10,3 +10,20 @@
       - "talon_reformat_gtf"
       - "-gtf dummy.gtf"
       - "mv dummy_reformatted.gtf reformatted.gtf"
+
+- name: test_talon_talon_label_reads
+  tags:
+    - unit
+  command: >-
+    test/caper_run.sh \
+    test/unit/wdl/test_talon_talon_label_reads.wdl \
+    test/unit/json/test_talon_talon_label_reads.json
+  stdout:
+    contains:
+      - "talon_label_reads"
+      - "--f dummy.txt"
+      - "--g dummy.txt"
+      - "--t 1"
+      - "--ar 20"
+      - "mv talon_prelabels_labeled.sam labeled.sam"
+      - "mv talon_prelabels_read_labels.tsv"

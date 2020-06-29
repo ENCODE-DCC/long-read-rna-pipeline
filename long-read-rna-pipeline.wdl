@@ -5,6 +5,7 @@ import "wdl/subworkflows/concatenate_files.wdl"
 import "wdl/subworkflows/get_splice_junctions.wdl"
 import "wdl/subworkflows/make_gtf_from_spikein_fasta.wdl"
 import "wdl/tasks/gzip.wdl"
+import "wdl/tasks/talon.wdl"
 
 
 workflow long_read_rna_pipeline {
@@ -59,6 +60,7 @@ workflow long_read_rna_pipeline {
            "disks": "local-disk 50",
         }
         Resources get_splice_junctions_resources
+        Resources talon_resources
         # Task init_talon_db
         Int init_talon_db_ncpus
         Int init_talon_db_ramGB
@@ -190,9 +192,18 @@ workflow long_read_rna_pipeline {
             disks=transcriptclean_disks,
         }
 
+        call talon.talon_label_reads {
+            input:
+                input_sam=transcriptclean.corrected_sam,
+                output_sam_filename="rep"+(i+1)+experiment_prefix+"_labeled.sam",
+                output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
+                reference_genome=decompressed_reference_genome.out,
+                resources=talon_resources,
+        }
+
         call talon { input:
             talon_db=init_talon_db.database,
-            sam=transcriptclean.corrected_sam,
+            sam=talon_label_reads.labeled_sam,
             genome_build=genome_build,
             output_prefix="rep"+(i+1)+experiment_prefix,
             platform=input_type,
