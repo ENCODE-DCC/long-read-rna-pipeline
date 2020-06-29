@@ -133,6 +133,24 @@ jobs:
           tag: "functional"
           wt: "4"
 
+  wdl_workflow_one_rep_test:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run_test_tag:
+          tag: "workflow_one_replicate"
+          wt: "4"
+
+  wdl_workflow_two_rep_test:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run_test_tag:
+          tag: "workflow_two_replicates"
+          wt: "4"
+
   test_minimap2:
     <<: *machine_defaults
     steps:
@@ -289,55 +307,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_calculate_spearman_input.result.json
           no_output_timeout: 30m
 
-  test_workflow_onerep:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - prepare_pytest_environment
-      - run: 
-          command: |
-            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_input.json
-            python3 src/compare_md5.py \
-            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
-                              long_read_rna_pipeline.transcriptclean.transcript_log \
-                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
-                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
-                              long_read_rna_pipeline.talon.talon_log \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
-                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
-            --metadata_json metadata.json \
-            --reference_json test/test_workflow/test_workflow_reference_md5.json \
-            --outfile test_workflow_input.result.json
-            cat test_workflow_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_input.result.json
-          no_output_timeout: 30m
-
-  test_workflow_tworep:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - prepare_pytest_environment
-      - run: 
-          command: |
-            test/caper_run.sh long-read-rna-pipeline.wdl test/test_workflow/test_workflow_2reps_input.json
-            python3 src/compare_md5.py \
-            --keys_to_inspect long_read_rna_pipeline.minimap2.mapping_qc \
-                              long_read_rna_pipeline.transcriptclean.transcript_log \
-                              long_read_rna_pipeline.transcriptclean.transcript_error_log \
-                              long_read_rna_pipeline.transcriptclean.corrected_fasta \
-                              long_read_rna_pipeline.talon.talon_log \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.number_of_genes_detected \
-                              long_read_rna_pipeline.create_abundance_from_talon_db.talon_abundance \
-                              long_read_rna_pipeline.create_gtf_from_talon_db.gtf \
-                              long_read_rna_pipeline.calculate_spearman.spearman \
-            --metadata_json metadata.json \
-            --reference_json test/test_workflow/test_workflow_2reps_reference_md5.json \
-            --outfile test_workflow_2reps_input.result.json
-            cat test_workflow_2reps_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_workflow_2reps_input.result.json
-          no_output_timeout: 30m
-
 # Workflow
 workflows:
   build_workflow:
@@ -350,6 +319,12 @@ workflows:
           requires:
             - build
       - wdl_functional_tests:
+          requires:
+            - build
+      - wdl_workflow_one_rep_test:
+          requires:
+            - build
+      - wdl_workflow_two_rep_test:
           requires:
             - build
       - test_minimap2:
@@ -376,17 +351,13 @@ workflows:
       - test_calculate_spearman:
           requires:
             - build
-      - test_workflow_onerep:
-          requires:
-            - build
-      - test_workflow_tworep:
-          requires:
-            - build
       - push_template:
           requires:
             - wdl_unit_tests
             - wdl_integration_tests
             - wdl_functional_tests
+            - wdl_workflow_one_rep_test
+            - wdl_workflow_two_rep_test
             - test_minimap2
             - test_transcriptclean
             - test_init_talon_database
@@ -395,5 +366,3 @@ workflows:
             - test_create_abundance_from_talon_db
             - test_create_gtf_from_talon_db
             - test_calculate_spearman
-            - test_workflow_onerep
-            - test_workflow_tworep
