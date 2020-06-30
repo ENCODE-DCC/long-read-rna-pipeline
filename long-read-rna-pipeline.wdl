@@ -257,7 +257,7 @@ task minimap2 {
 
     command <<<
         if [ "~{input_type}" == "pacbio" ]; then
-            minimap2 -t ~{ncpus} -ax splice -uf --secondary=no -C5 \
+            minimap2 -t ~{resources.cpu} -ax splice -uf --secondary=no -C5 \
                 ~{reference_genome} \
                 ~{fastq} \
                 > ~{output_prefix}.sam \
@@ -265,7 +265,7 @@ task minimap2 {
         fi
 
         if [ "~{input_type}" == "nanopore" ]; then
-            minimap2 -t ~{ncpus} -ax splice -uf -k14 \
+            minimap2 -t ~{resources.cpu} -ax splice -uf -k14 \
                 ~{reference_genome} \
                 ~{fastq} \
                 > ~{output_prefix}.sam \
@@ -390,9 +390,6 @@ task create_abundance_from_talon_db {
         String genome_build
         String output_prefix
         String idprefix
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
