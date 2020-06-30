@@ -4,8 +4,5 @@
     "test_minimap2.output_prefix" : "TEST_MINIMAP2",
     "test_minimap2.input_type" : "pacbio",
     "test_minimap2.lines_to_skip" : 2,
-    "test_minimap2.output_fn" : "TEST_MINIMAP_noheader.sam",
-    "test_minimap2.ncpus" : 2,
-    "test_minimap2.ramGB" : 4,
-    "test_minimap2.disks" : "local-disk 20 HDD"
+    "test_minimap2.output_fn" : "TEST_MINIMAP_noheader.sam"
 }

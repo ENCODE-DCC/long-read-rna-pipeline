@@ -12,9 +12,11 @@ workflow test_minimap2 {
         String input_type
         Int lines_to_skip
         String output_fn
-        Int ncpus
-        Int ramGB
-        String disks
+        Resources resources = {
+           "cpu": 1,
+           "memory_gb": 2,
+           "disks": "local-disk 50",
+        }
     }
 
     call longrna.minimap2 { input:
@@ -22,17 +24,13 @@ workflow test_minimap2 {
         reference_genome=reference_genome,
         output_prefix=output_prefix,
         input_type=input_type,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks,
+        resources=resources,
     }
 
     call longrna.skipNfirstlines { input:
         input_file=minimap2.sam,
         output_fn=output_fn,
         lines_to_skip=lines_to_skip,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks,
+        resources=resources,
     }
 }

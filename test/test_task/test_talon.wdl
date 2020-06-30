@@ -11,9 +11,11 @@ workflow test_talon {
         String genome_build
         String output_prefix
         String platform
-        Int ncpus
-        Int ramGB
-        String disks
+        Resources resources = {
+           "cpu": 1,
+           "memory_gb": 2,
+           "disks": "local-disk 50",
+        }
     }
 
     call longrna.talon { input:
@@ -22,8 +24,6 @@ workflow test_talon {
         genome_build=genome_build,
         output_prefix=output_prefix,
         platform=platform,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks
+        resources=resources,
     }
 }

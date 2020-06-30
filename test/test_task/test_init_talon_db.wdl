@@ -11,9 +11,11 @@ workflow test_init_talon_db {
         String ref_genome_name
         String output_prefix
         String? idprefix
-        Int ncpus
-        Int ramGB
-        String disks
+        Resources resources = {
+           "cpu": 1,
+           "memory_gb": 2,
+           "disks": "local-disk 50",
+        }
     }
 
     call longrna.init_talon_db { input:
@@ -22,8 +24,6 @@ workflow test_init_talon_db {
         ref_genome_name=ref_genome_name,
         output_prefix=output_prefix,
         idprefix=idprefix,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks,
+        resources=resources,
     }
 }

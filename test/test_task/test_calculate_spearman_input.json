@@ -3,8 +3,5 @@
     "test_calculate_spearman.rep2_abundance" : "test_data/rep2_talon_abundance.tsv",
     "test_calculate_spearman.rep1_idprefix" : "TALON",
     "test_calculate_spearman.rep2_idprefix" : "TALON",
-    "test_calculate_spearman.output_prefix" : "TEST_CALCULATE_SPEARMAN",
-    "test_calculate_spearman.ncpus" : 2,
-    "test_calculate_spearman.ramGB" : 4,
-    "test_calculate_spearman.disks" : "local-disk 20 HDD"
+    "test_calculate_spearman.output_prefix" : "TEST_CALCULATE_SPEARMAN"
 }

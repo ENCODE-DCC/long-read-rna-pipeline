@@ -47,44 +47,25 @@ A typical `input.json` is structured in the following way:
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
     "long_read_rna_pipeline.talon_prefixes" : ["FOO", "BAR"],
     "long_read_rna_pipeline.canonical_only" : true,
-    "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
-    "long_read_rna_pipeline.init_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.init_talon_db_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.minimap2_ncpus" : 1,
-    "long_read_rna_pipeline.minimap2_ramGB" : 4,
-    "long_read_rna_pipeline.minimap2_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.transcriptclean_ncpus" : 1,
-    "long_read_rna_pipeline.transcriptclean_ramGB" : 4,
-    "long_read_rna_pipeline.transcriptclean_disks": "local-disk 20 HDD",
-    "long_read_rna_pipeline.talon_ncpus" : 1,
-    "long_read_rna_pipeline.talon_ramGB" : 4,
-    "long_read_rna_pipeline.talon_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus" : 1,
-    "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 1,
-    "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.calculate_spearman_ncpus" : 2,
-    "long_read_rna_pipeline.calculate_spearman_ramGB" : 4,
-    "long_read_rna_pipeline.calculate_spearman_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.get_splice_junctions_resources" : {
+    "long_read_rna_pipeline.small_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "long_read_rna_pipeline.concatenate_files_resources" : {
+    "long_read_rna_pipeline.medium_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "long_read_rna_pipeline.make_gtf_from_spikein_fasta_resources" : {
+    "long_read_rna_pipeline.large_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     }
 }
 ```
+
+Note that default resources for running with full sized data have been defined in the main pipeline wdl, and do not need to be defined in the `input.json`, if you are happy with the defaults.
 
 The following elaborates on the meaning of each line in the input file.
 
@@ -144,94 +125,5 @@ The rest of the variables are for adjusting the computational resources of the p
 
 ### Note about resources
 
-The hardware resources needed to run the pipeline depend on the sequencing depth so it is hard to give definitive values that will be good for everyone. Further, some users may value time more than money, and vice versa.
-The resources that get the mapping task finished in a reasonable amount of time are 16 cores with 60GB of RAM. The resources required by TALON related tasks roughly 2cpus with 12GB memory. TranscriptClean should be given 16 cpus and 60GB of memory. See example inputs tested with real ENCODE data on Google Cloud below.
-
-Main pipeline with mouse data:
-
-```
-{
-  "long_read_rna_pipeline.fastqs": ["https://www.encodeproject.org/files/ENCFF103DSA/@@download/ENCFF103DSA.fastq.gz", "https://www.encodeproject.org/files/ENCFF309DMQ/@@download/ENCFF309DMQ.fastq.gz"],
-  "long_read_rna_pipeline.reference_genome": "https://www.encodeproject.org/files/mm10_no_alt_analysis_set_ENCODE/@@download/mm10_no_alt_analysis_set_ENCODE.fasta.gz",
-  "long_read_rna_pipeline.annotation": "https://www.encodeproject.org/files/gencode.vM21.primary_assembly.annotation_UCSC_names/@@download/gencode.vM21.primary_assembly.annotation_UCSC_names.gtf.gz",
-  "long_read_rna_pipeline.experiment_prefix": "ENCSR214HSG",
-  "long_read_rna_pipeline.input_type": "pacbio",
-  "long_read_rna_pipeline.genome_build": "mm10",
-  "long_read_rna_pipeline.annotation_name": "M21",
-  "long_read_rna_pipeline.talon_prefixes" : ["ENCLB278HSI", "ENCLB067AJF"],
-  "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
-  "long_read_rna_pipeline.init_talon_db_ramGB" : 13,
-  "long_read_rna_pipeline.init_talon_db_disks" : "local-disk 150 SSD",
-  "long_read_rna_pipeline.minimap2_ncpus": 16,
-  "long_read_rna_pipeline.minimap2_ramGB": 60,
-  "long_read_rna_pipeline.minimap2_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.transcriptclean_ncpus": 16,
-  "long_read_rna_pipeline.transcriptclean_ramGB": 60,
-  "long_read_rna_pipeline.transcriptclean_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.filter_transcriptclean_ncpus": 2,
-  "long_read_rna_pipeline.filter_transcriptclean_ramGB": 13,
-  "long_read_rna_pipeline.filter_transcriptclean_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.talon_ncpus": 2,
-  "long_read_rna_pipeline.talon_ramGB": 13,
-  "long_read_rna_pipeline.talon_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 2,
-  "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 13,
-  "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 150 HDD",
-  "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus": 2,
-  "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB": 13,
-  "long_read_rna_pipeline.create_abundance_from_talon_db_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.calculate_spearman_ncpus": 2,
-  "long_read_rna_pipeline.calculate_spearman_ramGB": 7,
-  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD",
-  "long_read_rna_pipeline.get_splice_junctions_resources" : {
-      "cpu": 2,
-      "memory_gb": 7,
-      "disks": "local-disk 150 SSD"
-  }
-}
-```
-
-Main pipeline with human data:
-
-```
-{
-  "long_read_rna_pipeline.fastqs": ["https://www.encodeproject.org/files/ENCFF281TNJ/@@download/ENCFF281TNJ.fastq.gz", "https://www.encodeproject.org/files/ENCFF475ORL/@@download/ENCFF475ORL.fastq.gz"],
-  "long_read_rna_pipeline.reference_genome": "https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz",
-  "long_read_rna_pipeline.annotation": "https://www.encodeproject.org/files/gencode.v29.primary_assembly.annotation_UCSC_names/@@download/gencode.v29.primary_assembly.annotation_UCSC_names.gtf.gz",
-  "long_read_rna_pipeline.variants": "https://storage.googleapis.com/documentation_runs/dbsnp-variants-00-common_all_long_chrnames.vcf.gz",
-  "long_read_rna_pipeline.experiment_prefix": "ENCSR706ANY",
-  "long_read_rna_pipeline.input_type": "pacbio",
-  "long_read_rna_pipeline.genome_build": "GRCh38",
-  "long_read_rna_pipeline.annotation_name": "V29",
-  "long_read_rna_pipeline.talon_prefixes" : ["ENCLB027JID", "ENCLB133UBC"],
-  "long_read_rna_pipeline.init_talon_db_ncpus" : 2,
-  "long_read_rna_pipeline.init_talon_db_ramGB" : 13,
-  "long_read_rna_pipeline.init_talon_db_disks" : "local-disk 150 SSD",
-  "long_read_rna_pipeline.minimap2_ncpus": 16,
-  "long_read_rna_pipeline.minimap2_ramGB": 60,
-  "long_read_rna_pipeline.minimap2_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.transcriptclean_ncpus": 16,
-  "long_read_rna_pipeline.transcriptclean_ramGB": 60,
-  "long_read_rna_pipeline.transcriptclean_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.filter_transcriptclean_ncpus": 2,
-  "long_read_rna_pipeline.filter_transcriptclean_ramGB": 13,
-  "long_read_rna_pipeline.filter_transcriptclean_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.talon_ncpus": 2,
-  "long_read_rna_pipeline.talon_ramGB": 13,
-  "long_read_rna_pipeline.talon_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.create_gtf_from_talon_db_ncpus" : 2,
-  "long_read_rna_pipeline.create_gtf_from_talon_db_ramGB" : 13,
-  "long_read_rna_pipeline.create_gtf_from_talon_db_disks" : "local-disk 150 HDD",
-  "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus": 2,
-  "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB": 13,
-  "long_read_rna_pipeline.create_abundance_from_talon_db_disks": "local-disk 150 SSD",
-  "long_read_rna_pipeline.calculate_spearman_ncpus": 2,
-  "long_read_rna_pipeline.calculate_spearman_ramGB": 7,
-  "long_read_rna_pipeline.calculate_spearman_disks": "local-disk 100 SSD",
-  "long_read_rna_pipeline.get_splice_junctions_resources" : {
-      "cpu": 2,
-      "memory_gb": 7,
-      "disks": "local-disk 150 SSD"
-  }
-}
+The hardware resources needed to run the pipeline depend on the sequencing depth so it is hard to give definitive values that will be good for everyone. Further, some users may value time more than money, and vice versa. The defaults have been set with runtime on mind, but should also be quite cost effective.
 ```

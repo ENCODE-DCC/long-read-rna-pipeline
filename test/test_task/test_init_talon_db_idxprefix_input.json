@@ -1,10 +1,7 @@
 {
   "test_init_talon_db.annotation_gtf": "test_data/gencode.v24.annotation_chr19.gtf.gz",
   "test_init_talon_db.annotation_name": "gencode_V24_chr19",
-  "test_init_talon_db.disks": "local-disk 20 SSD",
   "test_init_talon_db.idprefix": "test_prefix",
-  "test_init_talon_db.ncpus": 2,
   "test_init_talon_db.output_prefix": "test_talon_init_db",
-  "test_init_talon_db.ramGB": 4,
   "test_init_talon_db.ref_genome_name": "GRCh38_chr19"
 }
