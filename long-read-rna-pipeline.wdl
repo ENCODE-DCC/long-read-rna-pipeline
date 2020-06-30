@@ -44,58 +44,28 @@ workflow long_read_rna_pipeline {
         # of the run.
         Boolean canonical_only = true
         # Resouces
-        Resources concatenate_files_resources = {
+        Resources small_task_resources = {
            "cpu": 2,
-           "memory_gb": 4,
+           "memory_gb": 7,
            "disks": "local-disk 50",
         }
-        Resources decompress_references_resources = {
-            "cpu": 2,
-            "memory_gb": 4,
-            "disks": "local-disk 50"
-        }
-        Resources make_gtf_from_spikein_fasta_resources = {
+        Resources medium_task_resources = {
            "cpu": 2,
-           "memory_gb": 4,
-           "disks": "local-disk 50",
+           "memory_gb": 13,
+           "disks": "local-disk 100",
         }
-        Resources get_splice_junctions_resources
-        Resources talon_resources
-        # Task init_talon_db
-        Int init_talon_db_ncpus
-        Int init_talon_db_ramGB
-        String init_talon_db_disks
-        # Task minimap2
-        Int minimap2_ncpus
-        Int minimap2_ramGB
-        String minimap2_disks
-        # Task transcriptclean
-        Int transcriptclean_ncpus
-        Int transcriptclean_ramGB
-        String transcriptclean_disks
-        # Task talon
-        Int talon_ncpus
-        Int talon_ramGB
-        String talon_disks
-        # Task create_abundance_from_talon_db
-        Int create_abundance_from_talon_db_ncpus
-        Int create_abundance_from_talon_db_ramGB
-        String create_abundance_from_talon_db_disks
-        # Task create_gtf_from_talon_db
-        Int create_gtf_from_talon_db_ncpus
-        Int create_gtf_from_talon_db_ramGB
-        String create_gtf_from_talon_db_disks
-        # Task calculate_spearman
-        Int calculate_spearman_ncpus = 1
-        Int calculate_spearman_ramGB = 2
-        String calculate_spearman_disks = "local-disk 20 HDD"
+        Resources large_task_resources = {
+           "cpu": 16,
+           "memory_gb": 60,
+           "disks": "local-disk 150",
+        }
     }
 
     if (length(spikeins) > 1) {
         call concatenate_files.concatenate_files as combined_spikeins {
             input:
                 files=spikeins,
-                resources=concatenate_files_resources,
+                resources=small_task_resources,
         }
     }
 
@@ -104,20 +74,20 @@ workflow long_read_rna_pipeline {
         call make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta {
             input:
                 spikein_fasta=spikes,
-                resources=make_gtf_from_spikein_fasta_resources,
+                resources=small_task_resources,
         }
 
         call concatenate_files.concatenate_files as combined_annotation {
             input:
                files=[annotation,make_gtf_from_spikein_fasta.spikein_gtf],
-               resources=concatenate_files_resources,
+               resources=small_task_resources,
                output_filename="combined_annotation.gtf.gz",
         }
 
         call concatenate_files.concatenate_files as combined_reference {
             input:
                files=[reference_genome,spikes],
-               resources=concatenate_files_resources,
+               resources=small_task_resources,
                output_filename="combined_reference.fasta.gz",
         }
     }
@@ -133,7 +103,7 @@ workflow long_read_rna_pipeline {
                 "decompress": true,
                 "noname": false,
             },
-            resources=decompress_references_resources,
+            resources=small_task_resources,
     }
 
     call gzip.gzip as decompressed_gtf {
@@ -144,14 +114,14 @@ workflow long_read_rna_pipeline {
                 "decompress": true,
                 "noname": false,
             },
-            resources=decompress_references_resources,
+            resources=small_task_resources,
     }
 
     call get_splice_junctions.get_splice_junctions {
         input:
             annotation_gtf=combined_gtf,
             reference_fasta=combined_fasta,
-            resources=get_splice_junctions_resources,
+            resources=medium_task_resources,
             splice_junctions_output_filename="SJs.txt",
     }
 
@@ -165,9 +135,7 @@ workflow long_read_rna_pipeline {
             ref_genome_name=genome_build,
             idprefix=talon_prefix,
             output_prefix="rep"+(i+1)+experiment_prefix,
-            ncpus=init_talon_db_ncpus,
-            ramGB=init_talon_db_ramGB,
-            disks=init_talon_db_disks
+            resources=medium_task_resources,
         }
 
         call minimap2 { input:
@@ -175,9 +143,7 @@ workflow long_read_rna_pipeline {
             reference_genome=combined_fasta,
             output_prefix="rep"+(i+1)+experiment_prefix,
             input_type=input_type,
-            ncpus=minimap2_ncpus,
-            ramGB=minimap2_ramGB,
-            disks=minimap2_disks,
+            resources=large_task_resources,
         }
 
         call transcriptclean { input:
@@ -187,9 +153,7 @@ workflow long_read_rna_pipeline {
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
             canonical_only=canonical_only,
-            ncpus=transcriptclean_ncpus,
-            ramGB=transcriptclean_ramGB,
-            disks=transcriptclean_disks,
+            resources=large_task_resources,
         }
 
         call talon.talon_label_reads {
@@ -198,7 +162,7 @@ workflow long_read_rna_pipeline {
                 output_sam_filename="rep"+(i+1)+experiment_prefix+"_labeled.sam",
                 output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
                 reference_genome=decompressed_reference_genome.out,
-                resources=talon_resources,
+                resources=medium_task_resources,
         }
 
         call talon { input:
@@ -207,9 +171,7 @@ workflow long_read_rna_pipeline {
             genome_build=genome_build,
             output_prefix="rep"+(i+1)+experiment_prefix,
             platform=input_type,
-            ncpus=talon_ncpus,
-            ramGB=talon_ramGB,
-            disks=talon_disks,
+            resources=medium_task_resources,
         }
 
         call create_abundance_from_talon_db { input:
@@ -218,9 +180,7 @@ workflow long_read_rna_pipeline {
             genome_build=genome_build,
             output_prefix="rep"+(i+1)+experiment_prefix,
             idprefix=talon_prefix,
-            ncpus=create_abundance_from_talon_db_ncpus,
-            ramGB=create_abundance_from_talon_db_ramGB,
-            disks=create_abundance_from_talon_db_disks,
+            resources=medium_task_resources,
         }
 
         call create_gtf_from_talon_db { input:
@@ -228,9 +188,7 @@ workflow long_read_rna_pipeline {
             annotation_name=annotation_name,
             genome_build=genome_build,
             output_prefix="rep"+(i+1)+experiment_prefix,
-            ncpus=create_abundance_from_talon_db_ncpus,
-            ramGB=create_abundance_from_talon_db_ramGB,
-            disks=create_abundance_from_talon_db_disks,
+            resources=medium_task_resources,
         }
     }
 
@@ -244,10 +202,8 @@ workflow long_read_rna_pipeline {
             rep2_abundance=create_abundance_from_talon_db.talon_abundance[1],
             rep1_idprefix=rep1_idprefix,
             rep2_idprefix=rep2_idprefix,
+            resources=small_task_resources,
             output_prefix=experiment_prefix,
-            ncpus=calculate_spearman_ncpus,
-            ramGB=calculate_spearman_ramGB,
-            disks=calculate_spearman_disks,
         }
     }
 }
@@ -255,13 +211,11 @@ workflow long_read_rna_pipeline {
 task init_talon_db {
     input {
         File annotation_gtf
+        Resources resources
         String annotation_name
         String ref_genome_name
         String output_prefix
         String? idprefix
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
@@ -286,9 +240,9 @@ task init_talon_db {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
 }
 
@@ -296,11 +250,9 @@ task minimap2 {
     input {
        File fastq
        File reference_genome
+       Resources resources
        String output_prefix
        String input_type
-       Int ncpus
-       Int ramGB
-       String disks
     }
 
     command <<<
@@ -334,9 +286,9 @@ task minimap2 {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
 }
 
@@ -346,11 +298,9 @@ task transcriptclean {
         File reference_genome
         File splice_junctions
         File? variants
+        Resources resources
         String output_prefix
         Boolean canonical_only
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command <<<
@@ -376,7 +326,7 @@ task transcriptclean {
             --correctSJs true \
             --primaryOnly \
             --outprefix ~{output_prefix} \
-            --threads ~{ncpus} \
+            --threads ~{resources.cpu} \
             ~{if canonical_only then "--canonOnly" else ""}
 
         samtools view -S -b ~{output_prefix}_clean.sam > ~{output_prefix}_clean.bam
@@ -393,9 +343,9 @@ task transcriptclean {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
 }
 
@@ -403,12 +353,10 @@ task talon {
     input {
         File talon_db
         File sam
+        Resources resources
         String genome_build
         String output_prefix
         String platform
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
@@ -428,16 +376,16 @@ task talon {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
-
 }
 
 task create_abundance_from_talon_db {
     input {
         File talon_db
+        Resources resources
         String annotation_name
         String genome_build
         String output_prefix
@@ -464,22 +412,19 @@ task create_abundance_from_talon_db {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
-
 }
 
 task create_gtf_from_talon_db {
     input {
         File talon_db
+        Resources resources
         String annotation_name
         String genome_build
         String output_prefix
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
@@ -495,23 +440,20 @@ task create_gtf_from_talon_db {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
-
 }
 
 task calculate_spearman {
     input {
         File rep1_abundance
         File rep2_abundance
+        Resources resources
         String rep1_idprefix
         String rep2_idprefix
         String output_prefix
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
@@ -527,20 +469,18 @@ task calculate_spearman {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
-
 }
+
 task skipNfirstlines {
     input {
         File input_file
+        Resources resources
         String output_fn
         Int lines_to_skip
-        Int ncpus
-        Int ramGB
-        String disks
     }
 
     command {
@@ -552,8 +492,8 @@ task skipNfirstlines {
     }
 
     runtime {
-        cpu: ncpus
-        memory: "~{ramGB} GB"
-        disks: disks
+        cpu: resources.cpu
+        memory: "~{resources.memory_gb} GB"
+        disks: resources.disks
     }
 }
