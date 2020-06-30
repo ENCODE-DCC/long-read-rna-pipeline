@@ -65,6 +65,8 @@ A typical `input.json` is structured in the following way:
 }
 ```
 
+Note that default resources for running with full sized data have been defined in the main pipeline wdl, and do not need to be defined in the `input.json`, if you are happy with the defaults.
+
 The following elaborates on the meaning of each line in the input file.
 
 * `long_read_rna_pipeline.fastqs` Is a list of gzipped input fastqs, one file per replicate.
