@@ -1,5 +1,5 @@
 {
-  "test_init_talon_db.annotation_gtf": "test_data/gencode.v24.annotation_chr19.gtf.gz",
+  "test_init_talon_db.annotation_gtf": "test_data/gencode.v24.annotation_chr19.gtf",
   "test_init_talon_db.annotation_name": "gencode_V24_chr19",
   "test_init_talon_db.idprefix": "test_prefix",
   "test_init_talon_db.output_prefix": "test_talon_init_db",
