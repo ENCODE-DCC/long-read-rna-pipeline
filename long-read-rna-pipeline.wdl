@@ -130,7 +130,7 @@ workflow long_read_rna_pipeline {
         String talon_prefix = if length(talon_prefixes) > 0 then talon_prefixes[i] else "TALON"
 
         call init_talon_db { input:
-            annotation_gtf=combined_gtf,
+            annotation_gtf=decompressed_gtf.out,
             annotation_name=annotation_name,
             ref_genome_name=genome_build,
             idprefix=talon_prefix,
@@ -148,7 +148,7 @@ workflow long_read_rna_pipeline {
 
         call transcriptclean { input:
             sam=minimap2.sam,
-            reference_genome=combined_fasta,
+            reference_genome=decompressed_reference_genome.out,
             splice_junctions=get_splice_junctions.splice_junctions,
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
@@ -219,10 +219,8 @@ task init_talon_db {
     }
 
     command {
-        gzip -cd ~{annotation_gtf} > anno.gtf
-        rm ~{annotation_gtf}
         talon_initialize_database \
-            --f anno.gtf \
+            --f ~{annotation_gtf} \
             --a ~{annotation_name} \
             --g ~{ref_genome_name} \
             ~{"--idprefix " + idprefix} \
@@ -304,12 +302,10 @@ task transcriptclean {
     }
 
     command <<<
-        gzip -cd ~{reference_genome} > ref.fasta
-
-        if [ $(head -n 1 ref.fasta | awk '{print NF}') -gt 1 ]; then
-            cat ref.fasta | awk '{print $1}' > reference.fasta
+        if [ $(head -n 1 ~{reference_genome} | awk '{print NF}') -gt 1 ]; then
+            cat ~{reference_genome} | awk '{print $1}' > reference.fasta
         else
-            mv ref.fasta reference.fasta
+            mv ~{reference_genome} reference.fasta
         fi
 
         test -f ~{variants} && gzip -cd ~{variants} > variants.vcf
