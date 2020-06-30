@@ -47,32 +47,17 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
-    "long_read_rna_pipeline.minimap2_ncpus" : 2,
-    "long_read_rna_pipeline.minimap2_ramGB" : 4,
-    "long_read_rna_pipeline.minimap2_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.transcriptclean_ncpus" : 2,
-    "long_read_rna_pipeline.transcriptclean_ramGB" : 4,
-    "long_read_rna_pipeline.transcriptclean_disks": "local-disk 20 HDD",
-    "long_read_rna_pipeline.filter_transcriptclean_ncpus" : 2,
-    "long_read_rna_pipeline.filter_transcriptclean_ramGB" : 4,
-    "long_read_rna_pipeline.filter_transcriptclean_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.talon_ncpus" : 2,
-    "long_read_rna_pipeline.talon_ramGB" : 4,
-    "long_read_rna_pipeline.talon_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.create_abundance_from_talon_db_ncpus" : 2,
-    "long_read_rna_pipeline.create_abundance_from_talon_db_ramGB" : 4,
-    "long_read_rna_pipeline.create_abundance_from_talon_db_disks" : "local-disk 20 HDD",
-    "long_read_rna_pipeline.get_splice_junctions_resources" : {
+    "long_read_rna_pipeline.small_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "long_read_rna_pipeline.concatenate_files_resources" : {
+    "long_read_rna_pipeline.medium_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "long_read_rna_pipeline.make_gtf_from_spikein_fasta_resources" : {
+    "long_read_rna_pipeline.large_task_resources" : {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
