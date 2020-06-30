@@ -14,9 +14,11 @@ workflow test_transcriptclean {
         String output_prefix
         Int lines_to_skip
         String output_fn
-        Int ncpus
-        Int ramGB
-        String disks
+        Resources resources = {
+           "cpu": 1,
+           "memory_gb": 2,
+           "disks": "local-disk 50",
+        }
     }
 
     call longrna.transcriptclean { input:
@@ -26,17 +28,13 @@ workflow test_transcriptclean {
         variants=variants,
         output_prefix=output_prefix,
         canonical_only=canonical_only,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks,
+        resources=resources,
     }
 
     call longrna.skipNfirstlines { input:
         input_file=transcriptclean.corrected_sam,
         output_fn=output_fn,
         lines_to_skip=lines_to_skip,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks,
+        resources=resources,
     }
 }

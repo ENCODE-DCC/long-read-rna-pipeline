@@ -11,9 +11,11 @@ workflow test_calculate_spearman {
         String rep1_idprefix
         String rep2_idprefix
         String output_prefix
-        Int ncpus
-        Int ramGB
-        String disks
+        Resources resources = {
+           "cpu": 1,
+           "memory_gb": 2,
+           "disks": "local-disk 50",
+        }
     }
 
     call longrna.calculate_spearman { input:
@@ -22,8 +24,6 @@ workflow test_calculate_spearman {
         rep1_idprefix=rep1_idprefix,
         rep2_idprefix=rep2_idprefix,
         output_prefix=output_prefix,
-        ncpus=ncpus,
-        ramGB=ramGB,
-        disks=disks
+        resources=resources,
     }
 }
