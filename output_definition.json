@@ -60,6 +60,21 @@
         }
     },
 
+    "long_read_rna_pipeline.talon_label_reads": {
+        "labeled_bam": {
+            "path": "talon_label_reads/rep${i+1}/${basename}",
+            "table": "TALON_Label_Reads/Replicate ${i+1}/Labeled BAM"
+        },
+        "labeled_sam": {
+            "path": "talon_label_reads/rep${i+1}/${basename}",
+            "table": "TALON_Label_Reads/Replicate ${i+1}/Labeled SAM"
+        },
+        "read_labels_tsv": {
+            "path": "talon_label_reads/rep${i+1}/${basename}",
+            "table": "TALON_Label_Reads/Replicate ${i+1}/Read label TSV"
+        }
+    },
+
     "long_read_rna_pipeline.create_abundance_from_talon_db": {
         "talon_abundance": {
             "path": "create_abundance_from_talon_db/rep${i+1}/${basename}",
