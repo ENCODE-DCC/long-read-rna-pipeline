@@ -47,17 +47,17 @@ workflow long_read_rna_pipeline {
         Resources small_task_resources = {
            "cpu": 2,
            "memory_gb": 7,
-           "disks": "local-disk 50",
+           "disks": "local-disk 50 SSD",
         }
         Resources medium_task_resources = {
            "cpu": 2,
            "memory_gb": 13,
-           "disks": "local-disk 100",
+           "disks": "local-disk 100 SSD",
         }
         Resources large_task_resources = {
            "cpu": 16,
            "memory_gb": 60,
-           "disks": "local-disk 150",
+           "disks": "local-disk 150 SSD",
         }
     }
 
