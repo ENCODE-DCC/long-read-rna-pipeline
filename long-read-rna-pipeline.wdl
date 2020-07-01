@@ -159,6 +159,7 @@ workflow long_read_rna_pipeline {
         call talon.talon_label_reads {
             input:
                 input_sam=transcriptclean.corrected_sam,
+                output_bam_filename="rep"+(i+1)+experiment_prefix+"_labeled.bam",
                 output_sam_filename="rep"+(i+1)+experiment_prefix+"_labeled.sam",
                 output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
                 reference_genome=decompressed_reference_genome.out,

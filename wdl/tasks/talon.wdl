@@ -39,6 +39,7 @@ task talon_label_reads {
         File reference_genome
         Int fraca_range_size=20
         Resources resources
+        String output_bam_filename = "labeled.bam"
         String output_sam_filename = "labeled.sam"
         String output_tsv_filename = "labeled.tsv"
     }
@@ -56,9 +57,11 @@ task talon_label_reads {
             --ar ~{fraca_range_size}
         mv talon_prelabels_labeled.sam ~{output_sam_filename}
         mv talon_prelabels_read_labels.tsv ~{output_tsv_filename}
+        samtools view -S -b ~{output_sam_filename} > ~{output_bam_filename}
     }
 
     output {
+        File labeled_bam = output_bam_filename
         File labeled_sam = output_sam_filename
         File read_labels_tsv = output_tsv_filename
     }
