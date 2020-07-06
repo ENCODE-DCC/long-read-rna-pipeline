@@ -59,6 +59,11 @@ workflow long_read_rna_pipeline {
            "memory_gb": 60,
            "disks": "local-disk 150 SSD",
         }
+        Resources xlarge_task_resources = {
+           "cpu": 20,
+           "memory_gb": 120,
+           "disks": "local-disk 150 SSD",
+        }
     }
 
     if (length(spikeins) > 1) {
@@ -153,7 +158,7 @@ workflow long_read_rna_pipeline {
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
             canonical_only=canonical_only,
-            resources=large_task_resources,
+            resources=xlarge_task_resources,
         }
 
         call talon.talon_label_reads {
