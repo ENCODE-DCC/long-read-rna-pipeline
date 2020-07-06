@@ -61,6 +61,11 @@ A typical `input.json` is structured in the following way:
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.xlarge_task_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
     }
 }
 ```

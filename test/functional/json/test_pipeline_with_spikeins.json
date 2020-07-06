@@ -23,5 +23,10 @@
         "cpu": 2,
         "memory_gb": 4,
         "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.xlarge_task_resources" : {
+        "cpu": 2,
+        "memory_gb": 4,
+        "disks": "local-disk 10 SSD"
     }
 }
