@@ -49,6 +49,6 @@ If you are intending to run the pipeline on Google Cloud platform, follow the [c
 
 If you are intending to run the pipeline on AWS, follow the [caper setup instructions for AWS](https://github.com/ENCODE-DCC/caper/blob/master/docs/conf_aws.md).
 
-## Cromwell (optional)
+## Cromwell
 
-We recommend using `caper` for running the pipeline, although it is possible to use Cromwell directly. Backend file and workflow options files necessary for direct Cromwell use are included in the repository for local testing purposes, but they are not actively maintained to follow cloud API changes etc.
+Behind the scenes, caper uses [Cromwell](https://github.com/broadinstitute/cromwell/releases). Pipeline has been tested using version 49 of Cromwell.

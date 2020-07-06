@@ -27,7 +27,7 @@ Transcriptclean runs on python 2.7, and other parts utilize 3.7.
 
 [Transcriptclean](https://github.com/dewyman/TranscriptClean) is a program that corrects for mismatches, microindels and non-canonical splice junctions. For publication describing the software in detail, see [Paper by Dana Wyman, Ali Mortazavi](https://doi.org/10.1093/bioinformatics/bty483). Version 2.x is an extensive rewrite of the first version, featuring parallel processing and very significant improvements in memory efficiency.
 
-### TALON v4.2
+### TALON v5.0
 
 [TALON](https://github.com/dewyman/TALON) is a Python program for identifying known and novel genes/isoforms in long read transcriptome data sets. TALON is technology-agnostic in that it works from mapped SAM files, allowing data from different sequencing platforms (i.e. PacBio and Oxford Nanopore) to be analyzed side by side.
 
@@ -109,6 +109,12 @@ The rest of the variables are for adjusting the computational resources of the p
 * `transcript_log ` Each row represents a transcript. The columns track the mapping status of the transcript, as well as how many errors of each type were found and corrected/not corrected in the transcript.
 * `transcript_error_log` Each row represents a potential error in a given transcript. The column values track whether the error was corrected or not and why.
 * `report` Report of the cleaning process in .pdf format.
+
+#### Task Talon_label_reads
+
+* `labeled_sam` SAM file with internal priming events flagged.
+* `labeled_bam` BAM file with internal priming events flagged.
+* `read_labels_tsv` TSV with read labels
 
 #### Task TALON
 
