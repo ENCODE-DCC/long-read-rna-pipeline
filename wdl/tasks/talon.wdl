@@ -47,9 +47,13 @@ task talon_label_reads {
     String sam_prefix = basename(input_sam)
     String reference_prefix = basename(reference_genome)
 
-    command {
+    command <<< 
         ln ~{input_sam} .
-        ln ~{reference_genome} .
+        if [ $(head -n 1 ~{reference_genome} | awk '{print NF}') -gt 1 ]; then
+            cat ~{reference_genome} | awk '{print $1}' > ~{reference_prefix}
+        else
+            mv ~{reference_genome} ~{reference_prefix}
+        fi
         talon_label_reads \
             --f ~{sam_prefix} \
             --g ~{reference_prefix} \
@@ -58,7 +62,7 @@ task talon_label_reads {
         mv talon_prelabels_labeled.sam ~{output_sam_filename}
         mv talon_prelabels_read_labels.tsv ~{output_tsv_filename}
         samtools view -S -b ~{output_sam_filename} > ~{output_bam_filename}
-    }
+    >>>
 
     output {
         File labeled_bam = output_bam_filename
