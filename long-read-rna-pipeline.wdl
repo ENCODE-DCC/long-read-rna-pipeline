@@ -303,18 +303,10 @@ task transcriptclean {
         Boolean canonical_only
     }
 
-    command <<<
-        if [ $(head -n 1 ~{reference_genome} | awk '{print NF}') -gt 1 ]; then
-            cat ~{reference_genome} | awk '{print $1}' > reference.fasta
-        else
-            mv ~{reference_genome} reference.fasta
-        fi
-
+    command { 
         test -f ~{variants} && gzip -cd ~{variants} > variants.vcf
-
-
         python3.7 $(which TranscriptClean.py) --sam ~{sam} \
-            --genome reference.fasta \
+            --genome ~{reference_genome} \
             --spliceJns ~{splice_junctions} \
             ~{if defined(variants) then "--variants variants.vcf" else ""} \
             --maxLenIndel 5 \
@@ -329,7 +321,7 @@ task transcriptclean {
 
         samtools view -S -b ~{output_prefix}_clean.sam > ~{output_prefix}_clean.bam
         Rscript $(which generate_report.R) ~{output_prefix}
-    >>>
+    }
 
     output {
         File corrected_bam = "~{output_prefix}_clean.bam"
