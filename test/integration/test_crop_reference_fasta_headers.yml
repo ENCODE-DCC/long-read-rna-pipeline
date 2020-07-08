@@ -1,0 +1,19 @@
+- name: test_crop_reference_fasta_headers
+  tags:
+    - integration
+  command: >-
+    test/caper_run.sh \
+    test/integration/wdl/test_crop_reference_fasta_headers.wdl \
+    test/integration/json/test_crop_reference_fasta_headers.json
+  stdout:
+    contains:
+      - "gzip"
+      - "awk"
+      - "-n"
+      - "-c"
+      - "-d"
+  files:
+    - path: "test-output/clean_ref.fasta"
+      md5sum: fef7a56bdde104f2f3e7d051fc68af6d
+    - path: "test-output/clean_ref.fasta.gz"
+      md5sum: 7952c0a82b112f6e389cc16473154134
