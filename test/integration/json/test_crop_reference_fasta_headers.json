@@ -1,0 +1,8 @@
+{
+    "test_crop_reference_fasta_headers.crop_reference_fasta_headers.reference_fasta": "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
+    "test_crop_reference_fasta_headers.crop_reference_fasta_headers.resources": {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    }
+}
