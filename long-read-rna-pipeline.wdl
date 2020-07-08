@@ -3,10 +3,10 @@ version 1.0
 
 import "wdl/subworkflows/concatenate_files.wdl"
 import "wdl/subworkflows/crop_reference_fasta_headers.wdl"
-import "wdl/subworkflows/get_splice_junctions.wdl"
 import "wdl/subworkflows/make_gtf_from_spikein_fasta.wdl"
 import "wdl/tasks/gzip.wdl"
 import "wdl/tasks/talon.wdl"
+import "wdl/tasks/transcriptclean.wdl"
 
 
 workflow long_read_rna_pipeline {
@@ -101,17 +101,6 @@ workflow long_read_rna_pipeline {
     File combined_fasta = select_first([combined_reference.concatenated_file,reference_genome])
     File combined_gtf = select_first([combined_annotation.concatenated_file,annotation])
 
-    #call gzip.gzip as decompressed_reference_genome {
-    #    input:
-    #        input_file=combined_fasta,
-    #        output_filename="combined_reference.fasta",
-    #        params={
-    #            "decompress": true,
-    #            "noname": false,
-    #        },
-    #        resources=small_task_resources,
-    #}
-
     call crop_reference_fasta_headers.crop_reference_fasta_headers as clean_reference {
         input:
             reference_fasta=combined_fasta,
@@ -129,12 +118,12 @@ workflow long_read_rna_pipeline {
             resources=small_task_resources,
     }
 
-    call get_splice_junctions.get_splice_junctions {
+    call transcriptclean.get_SJs_from_gtf as get_splice_junctions {
         input:
-            annotation_gtf=combined_gtf,
-            reference_fasta=clean_reference.compressed,
+            annotation_gtf=decompressed_gtf.out,
+            reference_fasta=clean_reference.decompressed,
             resources=medium_task_resources,
-            splice_junctions_output_filename="SJs.txt",
+            output_filename="SJs.txt",
     }
 
     scatter (i in range(length(fastqs))) {
