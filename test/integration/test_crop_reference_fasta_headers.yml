@@ -7,9 +7,11 @@
     test/integration/json/test_crop_reference_fasta_headers.json
   stdout:
     contains:
-      - "gzip -cd"
+      - "gzip"
       - "awk"
-      - "gzip -n"
+      - "-n"
+      - "-c"
+      - "-d"
   files:
     - path: "test-output/clean_ref.fasta"
       md5sum: fef7a56bdde104f2f3e7d051fc68af6d
