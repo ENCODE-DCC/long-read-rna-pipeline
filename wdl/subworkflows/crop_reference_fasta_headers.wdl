@@ -41,7 +41,7 @@ workflow crop_reference_fasta_headers {
     }
 
     output {
-        File clean_reference_compressed = clean_compressed.out
-        File clean_reference_decompressed = clean_decompressed.cleaned_fasta
+        File compressed = clean_compressed.out
+        File decompressed = clean_decompressed.cleaned_fasta
     }
 }

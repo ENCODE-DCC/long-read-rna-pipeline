@@ -2,6 +2,7 @@ version 1.0
 
 
 import "wdl/subworkflows/concatenate_files.wdl"
+import "wdl/subworkflows/crop_reference_fasta_headers.wdl"
 import "wdl/subworkflows/get_splice_junctions.wdl"
 import "wdl/subworkflows/make_gtf_from_spikein_fasta.wdl"
 import "wdl/tasks/gzip.wdl"
@@ -100,14 +101,20 @@ workflow long_read_rna_pipeline {
     File combined_fasta = select_first([combined_reference.concatenated_file,reference_genome])
     File combined_gtf = select_first([combined_annotation.concatenated_file,annotation])
 
-    call gzip.gzip as decompressed_reference_genome {
+    #call gzip.gzip as decompressed_reference_genome {
+    #    input:
+    #        input_file=combined_fasta,
+    #        output_filename="combined_reference.fasta",
+    #        params={
+    #            "decompress": true,
+    #            "noname": false,
+    #        },
+    #        resources=small_task_resources,
+    #}
+
+    call crop_reference_fasta_headers.crop_reference_fasta_headers as clean_reference {
         input:
-            input_file=combined_fasta,
-            output_filename="combined_reference.fasta",
-            params={
-                "decompress": true,
-                "noname": false,
-            },
+            reference_fasta=combined_fasta,
             resources=small_task_resources,
     }
 
@@ -125,7 +132,7 @@ workflow long_read_rna_pipeline {
     call get_splice_junctions.get_splice_junctions {
         input:
             annotation_gtf=combined_gtf,
-            reference_fasta=combined_fasta,
+            reference_fasta=clean_reference.compressed,
             resources=medium_task_resources,
             splice_junctions_output_filename="SJs.txt",
     }
@@ -145,7 +152,7 @@ workflow long_read_rna_pipeline {
 
         call minimap2 { input:
             fastq=fastqs[i],
-            reference_genome=combined_fasta,
+            reference_genome=clean_reference.compressed,
             output_prefix="rep"+(i+1)+experiment_prefix,
             input_type=input_type,
             resources=large_task_resources,
@@ -153,7 +160,7 @@ workflow long_read_rna_pipeline {
 
         call transcriptclean { input:
             sam=minimap2.sam,
-            reference_genome=decompressed_reference_genome.out,
+            reference_genome=clean_reference.decompressed,
             splice_junctions=get_splice_junctions.splice_junctions,
             variants=variants,
             output_prefix="rep"+(i+1)+experiment_prefix,
@@ -167,7 +174,7 @@ workflow long_read_rna_pipeline {
                 output_bam_filename="rep"+(i+1)+experiment_prefix+"_labeled.bam",
                 output_sam_filename="rep"+(i+1)+experiment_prefix+"_labeled.sam",
                 output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
-                reference_genome=decompressed_reference_genome.out,
+                reference_genome=clean_reference.decompressed,
                 resources=medium_task_resources,
         }
 
