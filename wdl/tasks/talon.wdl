@@ -53,7 +53,7 @@ task talon_label_reads {
         talon_label_reads \
             --f ~{sam_prefix} \
             --g ~{reference_prefix} \
-            --t ~{resources.cpu} \
+            --t 1 \
             --ar ~{fraca_range_size}
         mv talon_prelabels_labeled.sam ~{output_sam_filename}
         mv talon_prelabels_read_labels.tsv ~{output_tsv_filename}
