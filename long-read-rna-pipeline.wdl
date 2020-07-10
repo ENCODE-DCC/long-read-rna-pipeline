@@ -12,9 +12,9 @@ import "wdl/tasks/transcriptclean.wdl"
 workflow long_read_rna_pipeline {
     meta {
         author: "Otto Jolanki"
-        version: "dev_2.0.0"
-        caper_docker: "encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
-        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.0.0-alpha"
+        version: "v1.4.0"
+        caper_docker: "encodedcc/long-read-rna-pipeline:v1.4.0"
+        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v1.4.0"
         croo_out_def: "https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json"
     }
 
