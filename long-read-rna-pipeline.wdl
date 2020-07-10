@@ -164,7 +164,7 @@ workflow long_read_rna_pipeline {
                 output_sam_filename="rep"+(i+1)+experiment_prefix+"_labeled.sam",
                 output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
                 reference_genome=clean_reference.decompressed,
-                resources=medium_task_resources,
+                resources=small_task_resources,
         }
 
         call talon { input:
