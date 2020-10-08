@@ -7,7 +7,7 @@
 version: 2.1
 defaults: &defaults
   docker:
-    - image: circleci/buildpack-deps:xenial-scm
+    - image: cimg/base@sha256:d75b94c6eae6e660b6db36761709626b93cabe8c8da5b955bfbf7832257e4201
   working_directory: ~/long-read-rna-pipeline
 
 python_defaults: &python_defaults
@@ -17,7 +17,7 @@ python_defaults: &python_defaults
 
 machine_defaults: &machine_defaults
   machine:
-    image: ubuntu-1604:201903-01
+    image: ubuntu-1604:202007-01 
   working_directory: ~/long-read-rna-pipeline
 
 commands:
@@ -34,7 +34,7 @@ commands:
   install_python_requirements:
     description: "Install pytest workflow requirements"
     steps:
-      - run: pyenv global 3.7.0
+      - run: pyenv global 3.7.8
       - run: pip install --upgrade pip
       - run: pip install -r requirements.txt
 
