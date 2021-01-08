@@ -1,5 +1,5 @@
 {
-    "long_read_rna_pipeline.fastqs" : ["test_data/chr19_test_10000_reads.fastq.gz"],
+    "long_read_rna_pipeline.fastqs" : [["test_data/chr19_test_10000_reads.fastq.gz"]],
     "long_read_rna_pipeline.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
     "long_read_rna_pipeline.annotation" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
     "long_read_rna_pipeline.variants" : "test_data/00-common_chr19_only_expanded_chrnames.vcf.gz",
