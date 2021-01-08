@@ -56,38 +56,38 @@
       - "talon_abundance"
       - "python3.7 $(which calculate_number_of_genes_detected.py)"
   files:
-    - path: "test-output/TEST_WORKFLOW_spearman.json"
+    - path: "test-output/TEST_WORKFLOW2_spearman.json"
       md5sum: 60b24464a1900f2192677ca145054e9f
-    - path: "test-output/rep1TEST_WORKFLOW_QC.log"
+    - path: "test-output/rep1TEST_WORKFLOW2_QC.log"
       md5sum: 4b3218078c7c1094f5f43eb94127d10d
-    - path: "test-output/rep1TEST_WORKFLOW_clean.TE.log"
+    - path: "test-output/rep1TEST_WORKFLOW2_clean.TE.log"
       md5sum: 078be510c933242636a466091c075bb6
-    - path: "test-output/rep1TEST_WORKFLOW_clean.fa"
+    - path: "test-output/rep1TEST_WORKFLOW2_clean.fa"
       md5sum: 58806053ec670ef74aa6326547ac165c
-    - path: "test-output/rep1TEST_WORKFLOW_clean.log"
+    - path: "test-output/rep1TEST_WORKFLOW2_clean.log"
       md5sum: eaf281d39087034e66c3fce4595d7898
-    - path: "test-output/rep1TEST_WORKFLOW_mapping_qc.json"
+    - path: "test-output/rep1TEST_WORKFLOW2_mapping_qc.json"
       md5sum: 5745442e83a3559a2789ce7ea6c2ac42
-    - path: "test-output/rep1TEST_WORKFLOW_number_of_genes_detected.json"
+    - path: "test-output/rep1TEST_WORKFLOW2_number_of_genes_detected.json"
       md5sum: 255fa342e6d6d376197487b1d3c719ad
-    - path: "test-output/rep1TEST_WORKFLOW_talon.gtf.gz"
+    - path: "test-output/rep1TEST_WORKFLOW2_talon.gtf.gz"
       md5sum: 4979e6db9f360b361722acf09eee8b76
-    - path: "test-output/rep1TEST_WORKFLOW_talon_abundance.tsv"
+    - path: "test-output/rep1TEST_WORKFLOW2_talon_abundance.tsv"
       md5sum: a0354c7f9cd3f1c99931131e035d1f62
-    - path: "test-output/rep2TEST_WORKFLOW_QC.log"
+    - path: "test-output/rep2TEST_WORKFLOW2_QC.log"
       md5sum: 1f52b5ad77576a157cbdbb40c74765ae
-    - path: "test-output/rep2TEST_WORKFLOW_clean.TE.log"
+    - path: "test-output/rep2TEST_WORKFLOW2_clean.TE.log"
       md5sum: 6fd5820cfa7e69ec1a3b429178aaec05
-    - path: "test-output/rep2TEST_WORKFLOW_clean.fa"
+    - path: "test-output/rep2TEST_WORKFLOW2_clean.fa"
       md5sum: 5509a5c5af095160b7b9f050b0caebf7
-    - path: "test-output/rep2TEST_WORKFLOW_clean.log"
+    - path: "test-output/rep2TEST_WORKFLOW2_clean.log"
       md5sum: 7004a8970eab5d0c9559bda607316d37
-    - path: "test-output/rep2TEST_WORKFLOW_mapping_qc.json"
+    - path: "test-output/rep2TEST_WORKFLOW2_mapping_qc.json"
       md5sum: 5745442e83a3559a2789ce7ea6c2ac42
-    - path: "test-output/rep2TEST_WORKFLOW_number_of_genes_detected.json"
+    - path: "test-output/rep2TEST_WORKFLOW2_number_of_genes_detected.json"
       md5sum: 841f505e683b1b3979d94a61d275e205
-    - path: "test-output/rep2TEST_WORKFLOW_talon.gtf.gz"
+    - path: "test-output/rep2TEST_WORKFLOW2_talon.gtf.gz"
       md5sum: 939431b1de6ee59c9123b249d5391af6
-    - path: "test-output/rep2TEST_WORKFLOW_talon_abundance.tsv"
+    - path: "test-output/rep2TEST_WORKFLOW2_talon_abundance.tsv"
       md5sum: a8bc6b69a34928398204b038b3ed8664
 

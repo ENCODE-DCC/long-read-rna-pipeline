@@ -27,9 +27,9 @@
     contains:
       - "cat"
   files:
-    - path: "test-output/rep1TEST_WORKFLOW_QC.log"
+    - path: "test-output/rep1TEST_WORKFLOW2_QC.log"
       md5sum: 4b3218078c7c1094f5f43eb94127d10d
-    - path: "test-output/rep1TEST_WORKFLOW_clean.TE.log"
+    - path: "test-output/rep1TEST_WORKFLOW2_clean.TE.log"
       md5sum: 023ce260c3215988b174b724d56c0f3c
-    - path: "test-output/rep1TEST_WORKFLOW_number_of_genes_detected.json"
+    - path: "test-output/rep1TEST_WORKFLOW2_number_of_genes_detected.json"
       md5sum: 255fa342e6d6d376197487b1d3c719ad

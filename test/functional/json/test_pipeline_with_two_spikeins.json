@@ -4,7 +4,7 @@
     "long_read_rna_pipeline.annotation" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
     "long_read_rna_pipeline.variants" : "test_data/00-common_chr19_only_expanded_chrnames.vcf.gz",
     "long_read_rna_pipeline.spikeins": ["test_data/ENCFF001RTP_part1.fasta.gz","test_data/ENCFF001RTP_part2.fasta.gz"],
-    "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
+    "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW2",
     "long_read_rna_pipeline.input_type" : "pacbio",
     "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
     "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
