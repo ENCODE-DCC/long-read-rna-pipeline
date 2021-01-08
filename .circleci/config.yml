@@ -66,7 +66,7 @@ commands:
         type: string
     steps:
       - run:
-          command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --symlink --kwd
+          command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> # --symlink --kwd
           no_output_timeout: 60m
 
   add_docker_image_tag_to_inputs:
