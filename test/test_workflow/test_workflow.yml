@@ -51,7 +51,7 @@
       - "python $(which get_SJs_from_gtf.py)"
       - "python3.7 $(which TranscriptClean.py)"
       - "talon_label_reads"
-      - "talon --f rep1TEST_WORKFLOW_talon_config.csv"
+      - "talon --f"
       - "talon_create_GTF"
       - "talon_abundance"
       - "python3.7 $(which calculate_number_of_genes_detected.py)"
@@ -59,7 +59,7 @@
     - path: "test-output/TEST_WORKFLOW2_spearman.json"
       md5sum: 60b24464a1900f2192677ca145054e9f
     - path: "test-output/rep1TEST_WORKFLOW2_QC.log"
-      md5sum: 4b3218078c7c1094f5f43eb94127d10d
+      md5sum: d6d199998c78304b47a01d3859eee5d6 
     - path: "test-output/rep1TEST_WORKFLOW2_clean.TE.log"
       md5sum: 078be510c933242636a466091c075bb6
     - path: "test-output/rep1TEST_WORKFLOW2_clean.fa"
@@ -73,9 +73,9 @@
     - path: "test-output/rep1TEST_WORKFLOW2_talon.gtf.gz"
       md5sum: 4979e6db9f360b361722acf09eee8b76
     - path: "test-output/rep1TEST_WORKFLOW2_talon_abundance.tsv"
-      md5sum: a0354c7f9cd3f1c99931131e035d1f62
+      md5sum: df942c37e1710b233067c0069dcb4b94
     - path: "test-output/rep2TEST_WORKFLOW2_QC.log"
-      md5sum: 1f52b5ad77576a157cbdbb40c74765ae
+      md5sum: f1c71a712de5a0c55cc25da58a1a49e0
     - path: "test-output/rep2TEST_WORKFLOW2_clean.TE.log"
       md5sum: 6fd5820cfa7e69ec1a3b429178aaec05
     - path: "test-output/rep2TEST_WORKFLOW2_clean.fa"
@@ -89,5 +89,5 @@
     - path: "test-output/rep2TEST_WORKFLOW2_talon.gtf.gz"
       md5sum: 939431b1de6ee59c9123b249d5391af6
     - path: "test-output/rep2TEST_WORKFLOW2_talon_abundance.tsv"
-      md5sum: a8bc6b69a34928398204b038b3ed8664
+      md5sum: 1ae14decbbeb702c2617f08c96559f1e
 

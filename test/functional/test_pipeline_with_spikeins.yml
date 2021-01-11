@@ -10,7 +10,7 @@
       - "cat"
   files:
     - path: "test-output/rep1TEST_WORKFLOW_QC.log"
-      md5sum: 4b3218078c7c1094f5f43eb94127d10d
+      md5sum: d6d199998c78304b47a01d3859eee5d6
     - path: "test-output/rep1TEST_WORKFLOW_clean.TE.log"
       md5sum: 023ce260c3215988b174b724d56c0f3c
     - path: "test-output/rep1TEST_WORKFLOW_number_of_genes_detected.json"
@@ -28,7 +28,7 @@
       - "cat"
   files:
     - path: "test-output/rep1TEST_WORKFLOW2_QC.log"
-      md5sum: 4b3218078c7c1094f5f43eb94127d10d
+      md5sum: d6d199998c78304b47a01d3859eee5d6
     - path: "test-output/rep1TEST_WORKFLOW2_clean.TE.log"
       md5sum: 023ce260c3215988b174b724d56c0f3c
     - path: "test-output/rep1TEST_WORKFLOW2_number_of_genes_detected.json"
