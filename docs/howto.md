@@ -8,6 +8,7 @@ Note that the files used in these examples are first restricted to reads from ch
 # CONTENTS
 
 [Google Cloud](howto.md#google-cloud)  
+[Truwl](howto.md#truwl)     
 [Other Platforms](howto.md#other-platforms)  
 [Splice Junctions](howto.md#splice-junctions)  
 
@@ -84,6 +85,12 @@ The goal is to run the pipeline with test data using Google Cloud Platform. Make
 ```
 
 This command will output into the bucket an HTML table, that shows the locations of the outputs nicely organized. Note that if your output bucket is not public, you need to be logged into your google account to be able to follow the links.
+
+## Truwl
+
+You can run this pipeline on [truwl.com](https://truwl.com/workflows/library/ENCODE%20Long%20read%20RNA-seq%20pipeline/v2.0.0). This provides a web interface that allows you to define inputs and parameters, run the job on GCP, and monitor progress in a ready-to-go environment. To run it you will need to create an account on the platform then request early access by emailing [info@truwl.com](mailto:info@truwl.com) to get the right permissions. You can see the 2-rep example case from this repo [here](https://truwl.com/workflows/library/ENCODE%20Long%20read%20RNA-seq%20pipeline/v2.0.0/instances/WF_308a61.8f.181f). The example job (or other jobs) can be forked to pre-populate the inputs for your own job.
+
+If you do not run the pipeline on Truwl, you can still share your use-case/job on the platform by getting in touch at [info@truwl.com](mailto:info@truwl.com) and providing your inputs.json file.
 
 ## Other platforms
 
