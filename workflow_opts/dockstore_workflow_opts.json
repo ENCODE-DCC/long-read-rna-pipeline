@@ -1,0 +1,5 @@
+{
+  "default_runtime_attributes": {
+    "docker": "encodedcc/long-read-rna-pipeline:v2.0.0"
+  }
+}
