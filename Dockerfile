@@ -66,7 +66,7 @@ RUN python3.7 -m pip install pybedtools==0.8.0 pyfasta==0.5.2 numpy pandas
 
 # splice junction finding accessory script from TC still runs in python2 and requires pyfasta, which in turn requires numpy
 
-RUN python -m pip install --upgrade pip
+RUN python -m pip install --upgrade pip==20.1
 RUN python -m pip install pyfasta==0.5.2 numpy
 
 # Install qc-utils to python 3.7
@@ -86,7 +86,7 @@ ENV PATH="/software/bedtools2/bin:${PATH}"
 
 # Get transcriptclean v2.0.3
 
-RUN git clone -b 'v2.0.3' --single-branch https://github.com/dewyman/TranscriptClean.git
+RUN git clone -b 'v2.0.3' --single-branch https://github.com/mortazavilab/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
 ENV PATH="/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
