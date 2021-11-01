@@ -84,9 +84,9 @@ RUN tar xzvf bedtools-2.29.0.tar.gz
 RUN cd bedtools2/ && make
 ENV PATH="/software/bedtools2/bin:${PATH}"
 
-# Get transcriptclean v2.0.2
+# Get transcriptclean v2.0.3
 
-RUN git clone -b 'v2.0.2' --single-branch https://github.com/dewyman/TranscriptClean.git
+RUN git clone -b 'v2.0.3' --single-branch https://github.com/dewyman/TranscriptClean.git
 RUN chmod 755 TranscriptClean/accessory_scripts/* TranscriptClean/TranscriptClean.py TranscriptClean/generate_report.R
 ENV PATH="/software/TranscriptClean/accessory_scripts:/software/TranscriptClean:${PATH}"
 
