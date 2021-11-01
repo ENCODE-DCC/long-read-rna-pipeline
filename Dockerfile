@@ -60,7 +60,7 @@ RUN echo "r <- getOption('repos'); r['CRAN'] <- 'https://cloud.r-project.org'; o
     Rscript -e "install.packages('reshape2')"
 
 # Install TC dependencies
-RUN python3.7 -m pip install --upgrade pip==20.1
+RUN python3.7 -m pip install --upgrade pip
 RUN python3.7 -m pip install cython
 RUN python3.7 -m pip install pybedtools==0.8.0 pyfasta==0.5.2 numpy pandas
 
