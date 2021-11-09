@@ -77,10 +77,11 @@ commands:
     steps:
       - run:
           command: |
-            for json in <<parameters.path_to_inputs>>;
+            for json in <<parameters.path_to_inputs>>
             do
               prefix=$(basename $json .json)
               test/add_docker_tag_to_inputs.sh $json $prefix
+            done
 
 # Jobs
 jobs:
