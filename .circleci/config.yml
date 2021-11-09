@@ -69,6 +69,19 @@ commands:
           command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --symlink --kwd
           no_output_timeout: 60m
 
+  add_docker_tag_to_inputs:
+    description: "Add docker tag"
+    parameters:
+      path_to_inputs:
+        type: string
+    steps:
+      - run:
+          command: |
+            for json in <<parameters.path_to_inputs>>;
+            do
+              prefix=$(basename $json .json)
+              test/add_docker_tag_to_inputs.sh $json $prefix
+
 # Jobs
 jobs:
   build:
@@ -112,6 +125,8 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - add_docker_tag_to_inputs:
+          path_to_inputs: "test/unit/json/*.json"
       - run_test_tag:
           tag: "unit"
           wt: "4"

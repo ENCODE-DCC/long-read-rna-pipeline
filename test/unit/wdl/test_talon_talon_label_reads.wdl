@@ -9,12 +9,19 @@ workflow test_talon_talon_label_reads {
         File input_sam
         File reference_genome
         Resources resources
+        String docker
+        String singularity = ""
     }
 
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
+    }
     call talon.talon_label_reads {
         input:
             input_sam=input_sam,
             reference_genome=reference_genome,
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 }
