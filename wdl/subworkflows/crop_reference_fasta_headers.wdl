@@ -10,6 +10,7 @@ workflow crop_reference_fasta_headers {
     input {
         File reference_fasta
         Resources resources
+        RuntimeEnvironment runtime_environment
     }
 
     call gzip.gzip as decompressed_reference {
@@ -20,6 +21,7 @@ workflow crop_reference_fasta_headers {
                 "noname": false,
             },
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     call awk.clean_reference_fasta as clean_decompressed {
@@ -27,6 +29,7 @@ workflow crop_reference_fasta_headers {
             fasta=decompressed_reference.out,
             output_filename="clean_ref.fasta",
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     call gzip.gzip as clean_compressed {
@@ -38,6 +41,7 @@ workflow crop_reference_fasta_headers {
                 "noname": true,
             },
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     output {

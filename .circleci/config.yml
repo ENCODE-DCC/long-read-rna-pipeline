@@ -17,7 +17,7 @@ python_defaults: &python_defaults
 
 machine_defaults: &machine_defaults
   machine:
-    image: ubuntu-1604:202007-01 
+    image: ubuntu-2004:202107-02
   working_directory: ~/long-read-rna-pipeline
 
 commands:
@@ -27,15 +27,16 @@ commands:
       - run:
           command: |
             echo "export TAG=encodedcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
-            echo "export CROMWELL=./cromwell-49.jar" >> ${BASH_ENV}
-            echo "export WOMTOOL=./womtool-49.jar" >> ${BASH_ENV}
+            echo "export CROMWELL=./cromwell-70.jar" >> ${BASH_ENV}
+            echo "export WOMTOOL=./womtool-70.jar" >> ${BASH_ENV}
             source ${BASH_ENV}
 
   install_python_requirements:
     description: "Install pytest workflow requirements"
     steps:
+      - run: pyenv install 3.7.8
       - run: pyenv global 3.7.8
-      - run: pip install --upgrade pip
+      - run: pip install --upgrade pip==21.3.1
       - run: pip install -r requirements.txt
 
   download_file:
@@ -52,9 +53,9 @@ commands:
       - set_env_variables
       - install_python_requirements
       - download_file:
-          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/cromwell-49.jar"
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/70/cromwell-70.jar"
       - download_file:
-          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/womtool-49.jar"
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/70/womtool-70.jar"
 
   run_test_tag:
     description: "Run tagged test"

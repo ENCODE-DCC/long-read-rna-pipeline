@@ -2,6 +2,7 @@ version 1.0
 
 
 import "../structs/resources.wdl"
+import "../structs/runtime.wdl"
 
 
 task clean_reference_fasta {
@@ -9,6 +10,7 @@ task clean_reference_fasta {
         File fasta
         Resources resources
         String output_filename = "clean.fasta"
+        RuntimeEnvironment runtime_environment
     }
 
     String prefix = basename(fasta)
@@ -30,5 +32,7 @@ task clean_reference_fasta {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }

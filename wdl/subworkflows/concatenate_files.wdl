@@ -9,6 +9,7 @@ workflow concatenate_files {
         Array[File] files
         Resources resources
         String output_filename = "concatenated"
+        RuntimeEnvironment runtime_environment
     }
 
     call cat.cat {
@@ -16,6 +17,7 @@ workflow concatenate_files {
             files=files,
             resources=resources,
             out=output_filename,
+            runtime_environment=runtime_environment,
     }
 
     output {

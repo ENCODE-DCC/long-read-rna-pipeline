@@ -2,6 +2,7 @@ version 1.0
 
 
 import "../structs/resources.wdl"
+import "../structs/runtime.wdl"
 
 
 task merge_encode_annotations {
@@ -9,6 +10,7 @@ task merge_encode_annotations {
         File spikein_fasta
         Resources resources
         String output_filename="spikeins.gtf"
+        RuntimeEnvironment runtime_environment
     }
 
     String prefix = basename(spikein_fasta)
@@ -28,6 +30,8 @@ task merge_encode_annotations {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -37,6 +41,7 @@ task separate_multistrand_genes {
         File input_gtf
         Resources resources
         String output_filename="separated.gtf"
+        RuntimeEnvironment runtime_environment
     }
 
     String prefix = basename(input_gtf)
@@ -56,5 +61,7 @@ task separate_multistrand_genes {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
