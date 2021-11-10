@@ -2,7 +2,7 @@
     "test_gzip_decompress.params": {
         "decompress": true
     },
-    "test_gzip_decompress.input_file": "test_gzip_data/dummy.txt",
+    "test_gzip_decompress.input_file": "test_data/dummy.txt",
     "test_gzip_decompress.resources": {
         "cpu": 1,
         "memory_gb": 1,
