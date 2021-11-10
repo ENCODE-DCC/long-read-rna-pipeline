@@ -4,7 +4,7 @@ version 1.0
 import "../../../wdl/tasks/gzip.wdl"
 
 
-workflow test_compress {
+workflow test_gzip_compress {
     input {
         File input_file
         GzipParams params

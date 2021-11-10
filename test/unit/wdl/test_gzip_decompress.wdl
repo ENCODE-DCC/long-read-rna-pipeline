@@ -4,7 +4,7 @@ version 1.0
 import "../../../wdl/tasks/gzip.wdl"
 
 
-workflow test_decompress {
+workflow test_gzip_decompress {
     input {
         File input_file
         GzipParams params

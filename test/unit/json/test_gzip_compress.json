@@ -1,12 +1,12 @@
 {
-    "test_compress.params": {
+    "test_gzip_compress.params": {
         "noname": true
     },
-    "test_compress.input_file": "test_data/dummy.txt",
-    "test_compress.resources": {
+    "test_gzip_compress.input_file": "test_gzip_data/dummy.txt",
+    "test_gzip_compress.resources": {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "test_compress.output_filename": "dummy.gz"
+    "test_gzip_compress.output_filename": "dummy.gz"
 }

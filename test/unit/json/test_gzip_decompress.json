@@ -1,12 +1,12 @@
 {
-    "test_decompress.params": {
+    "test_gzip_decompress.params": {
         "decompress": true
     },
-    "test_decompress.input_file": "test_data/dummy.txt",
-    "test_decompress.resources": {
+    "test_gzip_decompress.input_file": "test_gzip_data/dummy.txt",
+    "test_gzip_decompress.resources": {
         "cpu": 1,
         "memory_gb": 1,
         "disks": "local-disk 10 SSD"
     },
-    "test_decompress.output_filename": "foo.txt"
+    "test_gzip_decompress.output_filename": "foo.txt"
 }
