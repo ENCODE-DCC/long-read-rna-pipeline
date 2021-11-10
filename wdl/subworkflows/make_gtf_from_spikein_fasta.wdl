@@ -43,7 +43,7 @@ workflow make_gtf_from_spikein_fasta {
                 "decompress": false,
                 "noname": true,
             },
-            sources=resources,
+            resources=resources,
             runtime_environment=runtime_environment,
     }
 
