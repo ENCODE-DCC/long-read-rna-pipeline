@@ -16,6 +16,13 @@ workflow test_init_talon_db {
            "memory_gb": 2,
            "disks": "local-disk 50",
         }
+        String docker
+        String singularity=""
+    }
+
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
     }
 
     call longrna.init_talon_db { input:
@@ -25,5 +32,6 @@ workflow test_init_talon_db {
         output_prefix=output_prefix,
         idprefix=idprefix,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 }

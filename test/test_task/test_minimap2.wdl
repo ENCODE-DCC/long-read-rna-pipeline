@@ -17,6 +17,13 @@ workflow test_minimap2 {
            "memory_gb": 2,
            "disks": "local-disk 50",
         }
+        String docker
+        String singularity=""
+    }
+
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
     }
 
     call longrna.minimap2 { input:
@@ -25,6 +32,7 @@ workflow test_minimap2 {
         output_prefix=output_prefix,
         input_type=input_type,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 
     call longrna.skipNfirstlines { input:
@@ -32,5 +40,6 @@ workflow test_minimap2 {
         output_fn=output_fn,
         lines_to_skip=lines_to_skip,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 }
