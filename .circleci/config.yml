@@ -85,6 +85,22 @@ commands:
               rm tmp.json
             done
 
+  add_runtime_environment_to_inputs:
+    description: "Add runtime environment"
+    parameters:
+      path_to_inputs:
+        type: string
+    steps:
+      - run:
+          command: |
+            for json in <<parameters.path_to_inputs>>
+            do
+              prefix=$(basename $json .json)
+          cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
+              cp tmp.json $json 
+              rm tmp.json
+            done
+
 # Jobs
 jobs:
   build:
@@ -139,6 +155,8 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - add_runtime_environment_to_inputs:
+          path_to_inputs: "test/integration/json/*.json"
       - run_test_tag:
           tag: "integration"
           wt: "4"
@@ -148,6 +166,8 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/functional/json/test_pipeline_with_spikeins.json long_read_rna_pipeline
+      - run: test/add_docker_image_tag_to_input.sh test/functional/json/test_pipeline_with_two_spikeins.json  long_read_rna_pipeline
       - run_test_tag:
           tag: "functional"
           wt: "4"
