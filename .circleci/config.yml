@@ -96,7 +96,7 @@ commands:
             for json in <<parameters.path_to_inputs>>
             do
               prefix=$(basename $json .json)
-          cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
+              cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
               cp tmp.json $json 
               rm tmp.json
             done
