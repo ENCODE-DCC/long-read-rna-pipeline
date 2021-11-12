@@ -85,21 +85,22 @@ commands:
               rm tmp.json
             done
 
-  add_runtime_environment_to_inputs:
+  add_runtime_environment_to_input:
     description: "Add runtime environment"
     parameters:
-      path_to_inputs:
+      path_to_input:
+        type: string
+      prefix:
         type: string
     steps:
       - run:
           command: |
-            for json in <<parameters.path_to_inputs>>
-            do
-              prefix=$(basename $json .json)
-              cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
-              cp tmp.json $json 
-              rm tmp.json
-            done
+            json=<<parameters.path_to_input>>
+            prefix=<<parameters.prefix>>
+            cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
+            cp tmp.json $json 
+            rm tmp.json
+
 
 # Jobs
 jobs:
@@ -155,8 +156,15 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
-      - add_runtime_environment_to_inputs:
-          path_to_inputs: "test/integration/json/*.json"
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_concatenate_files.json"
+          prefix: "test_concatenate_files.concatenate_files" 
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_crop_reference_fasta_headers.json"
+          prefix: "test_crop_reference_fasta_headers.crop_reference_fasta_headers"
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_make_gtf_from_spikein_fasta.json"
+          prefix: "test_make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta" 
       - run_test_tag:
           tag: "integration"
           wt: "4"
