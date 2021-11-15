@@ -1,0 +1,31 @@
+{
+    "long_read_rna_pipeline.fastqs" : ["https://storage.googleapis.com/dockstore_test_input/long-read-rna-pipeline/chr19_test_10000_reads.fastq.gz"],
+    "long_read_rna_pipeline.reference_genome" : "https://storage.googleapis.com/dockstore_test_input/long-read-rna-pipeline/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
+    "long_read_rna_pipeline.annotation" : "https://storage.googleapis.com/dockstore_test_input/long-read-rna-pipeline/gencode.v24.annotation_chr19.gtf.gz",
+    "long_read_rna_pipeline.variants" : "https://storage.googleapis.com/dockstore_test_input/long-read-rna-pipeline/00-common_chr19_only_expanded_chrnames.vcf.gz",
+    "long_read_rna_pipeline.experiment_prefix" : "TEST_WORKFLOW",
+    "long_read_rna_pipeline.input_type" : "pacbio",
+    "long_read_rna_pipeline.genome_build" : "GRCh38_chr19",
+    "long_read_rna_pipeline.annotation_name" : "gencode_V24_chr19",
+    "long_read_rna_pipeline.canonical_only" : true,
+    "long_read_rna_pipeline.small_task_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.medium_task_resources" : {
+        "cpu": 1,
+        "memory_gb": 1,
+        "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.large_task_resources" : {
+        "cpu": 2,
+        "memory_gb": 4,
+        "disks": "local-disk 10 SSD"
+    },
+    "long_read_rna_pipeline.xlarge_task_resources" : {
+        "cpu": 2,
+        "memory_gb": 4,
+        "disks": "local-disk 10 SSD"
+    }
+}

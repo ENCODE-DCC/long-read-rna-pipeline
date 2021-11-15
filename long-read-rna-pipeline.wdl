@@ -16,6 +16,7 @@ workflow long_read_rna_pipeline {
         caper_docker: "encodedcc/long-read-rna-pipeline:v2.0.0"
         caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.0.0"
         croo_out_def: "https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json"
+        description: "ENCODE Long-read-rna pipeline, see https://github.com/ENCODE-DCC/long-read-rna-pipeline for details."
     }
 
     input {
