@@ -16,6 +16,13 @@ workflow test_calculate_spearman {
            "memory_gb": 2,
            "disks": "local-disk 50",
         }
+        String docker
+        String singularity=""
+    }
+
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
     }
 
     call longrna.calculate_spearman { input:
@@ -25,5 +32,6 @@ workflow test_calculate_spearman {
         rep2_idprefix=rep2_idprefix,
         output_prefix=output_prefix,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 }

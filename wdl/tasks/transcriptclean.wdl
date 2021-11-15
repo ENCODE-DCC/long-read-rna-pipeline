@@ -2,6 +2,7 @@ version 1.0
 
 
 import "../structs/resources.wdl"
+import "../structs/runtime.wdl"
 
 
 task get_SJs_from_gtf {
@@ -9,6 +10,7 @@ task get_SJs_from_gtf {
         File annotation_gtf
         File reference_fasta
         Resources resources
+        RuntimeEnvironment runtime_environment
         String output_filename = "SJs.txt"
     }
 
@@ -32,5 +34,7 @@ task get_SJs_from_gtf {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }

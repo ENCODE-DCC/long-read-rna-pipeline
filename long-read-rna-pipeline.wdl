@@ -44,6 +44,9 @@ workflow long_read_rna_pipeline {
         # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end
         # of the run.
         Boolean canonical_only = true
+        String docker = "encodedcc/long-read-rna-pipeline:v2.0.0"
+        String singularity = "docker://encodedcc/long-read-rna-pipeline:v2.0.0"
+
         # Resouces
         Resources small_task_resources = {
            "cpu": 2,
@@ -67,11 +70,17 @@ workflow long_read_rna_pipeline {
         }
     }
 
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
+    }
+
     if (length(spikeins) > 1) {
         call concatenate_files.concatenate_files as combined_spikeins {
             input:
                 files=spikeins,
                 resources=small_task_resources,
+                runtime_environment=runtime_environment,
         }
     }
 
@@ -81,6 +90,7 @@ workflow long_read_rna_pipeline {
             input:
                 spikein_fasta=spikes,
                 resources=small_task_resources,
+                runtime_environment=runtime_environment,
         }
 
         call concatenate_files.concatenate_files as combined_annotation {
@@ -88,6 +98,7 @@ workflow long_read_rna_pipeline {
                files=[annotation,make_gtf_from_spikein_fasta.spikein_gtf],
                resources=small_task_resources,
                output_filename="combined_annotation.gtf.gz",
+               runtime_environment=runtime_environment,
         }
 
         call concatenate_files.concatenate_files as combined_reference {
@@ -95,6 +106,7 @@ workflow long_read_rna_pipeline {
                files=[reference_genome,spikes],
                resources=small_task_resources,
                output_filename="combined_reference.fasta.gz",
+               runtime_environment=runtime_environment,
         }
     }
 
@@ -105,6 +117,7 @@ workflow long_read_rna_pipeline {
         input:
             reference_fasta=combined_fasta,
             resources=small_task_resources,
+            runtime_environment=runtime_environment,
     }
 
     call gzip.gzip as decompressed_gtf {
@@ -116,6 +129,7 @@ workflow long_read_rna_pipeline {
                 "noname": false,
             },
             resources=small_task_resources,
+            runtime_environment=runtime_environment,
     }
 
     call transcriptclean.get_SJs_from_gtf as get_splice_junctions {
@@ -124,6 +138,7 @@ workflow long_read_rna_pipeline {
             reference_fasta=clean_reference.decompressed,
             resources=medium_task_resources,
             output_filename="SJs.txt",
+            runtime_environment=runtime_environment,
     }
 
     scatter (i in range(length(fastqs))) {
@@ -137,6 +152,7 @@ workflow long_read_rna_pipeline {
             idprefix=talon_prefix,
             output_prefix="rep"+(i+1)+experiment_prefix,
             resources=medium_task_resources,
+            runtime_environment=runtime_environment,
         }
 
         call minimap2 { input:
@@ -145,6 +161,7 @@ workflow long_read_rna_pipeline {
             output_prefix="rep"+(i+1)+experiment_prefix,
             input_type=input_type,
             resources=large_task_resources,
+            runtime_environment=runtime_environment,
         }
 
         call transcriptclean { input:
@@ -155,6 +172,7 @@ workflow long_read_rna_pipeline {
             output_prefix="rep"+(i+1)+experiment_prefix,
             canonical_only=canonical_only,
             resources=xlarge_task_resources,
+            runtime_environment=runtime_environment,
         }
 
         call talon.talon_label_reads {
@@ -165,6 +183,7 @@ workflow long_read_rna_pipeline {
                 output_tsv_filename="rep"+(i+1)+experiment_prefix+"_labeled.tsv",
                 reference_genome=clean_reference.decompressed,
                 resources=small_task_resources,
+                runtime_environment=runtime_environment,
         }
 
         call talon { input:
@@ -174,6 +193,7 @@ workflow long_read_rna_pipeline {
             output_prefix="rep"+(i+1)+experiment_prefix,
             platform=input_type,
             resources=medium_task_resources,
+            runtime_environment=runtime_environment,
         }
 
         call create_abundance_from_talon_db { input:
@@ -183,6 +203,7 @@ workflow long_read_rna_pipeline {
             output_prefix="rep"+(i+1)+experiment_prefix,
             idprefix=talon_prefix,
             resources=medium_task_resources,
+            runtime_environment=runtime_environment,
         }
 
         call create_gtf_from_talon_db { input:
@@ -191,6 +212,7 @@ workflow long_read_rna_pipeline {
             genome_build=genome_build,
             output_prefix="rep"+(i+1)+experiment_prefix,
             resources=medium_task_resources,
+            runtime_environment=runtime_environment,
         }
     }
 
@@ -206,6 +228,7 @@ workflow long_read_rna_pipeline {
             rep2_idprefix=rep2_idprefix,
             resources=small_task_resources,
             output_prefix=experiment_prefix,
+            runtime_environment=runtime_environment,
         }
     }
 }
@@ -218,6 +241,7 @@ task init_talon_db {
         String ref_genome_name
         String output_prefix
         String? idprefix
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -243,6 +267,8 @@ task init_talon_db {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -253,6 +279,7 @@ task minimap2 {
        Resources resources
        String output_prefix
        String input_type
+       RuntimeEnvironment runtime_environment
     }
 
     command <<<
@@ -289,6 +316,8 @@ task minimap2 {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -301,6 +330,7 @@ task transcriptclean {
         Resources resources
         String output_prefix
         Boolean canonical_only
+        RuntimeEnvironment runtime_environment
     }
 
     command { 
@@ -336,6 +366,8 @@ task transcriptclean {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -347,6 +379,7 @@ task talon {
         String genome_build
         String output_prefix
         String platform
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -369,6 +402,8 @@ task talon {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -380,6 +415,7 @@ task create_abundance_from_talon_db {
         String genome_build
         String output_prefix
         String idprefix
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -402,6 +438,8 @@ task create_abundance_from_talon_db {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -412,6 +450,7 @@ task create_gtf_from_talon_db {
         String annotation_name
         String genome_build
         String output_prefix
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -430,6 +469,8 @@ task create_gtf_from_talon_db {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -441,6 +482,7 @@ task calculate_spearman {
         String rep1_idprefix
         String rep2_idprefix
         String output_prefix
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -459,6 +501,8 @@ task calculate_spearman {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -468,6 +512,7 @@ task skipNfirstlines {
         Resources resources
         String output_fn
         Int lines_to_skip
+        RuntimeEnvironment runtime_environment
     }
 
     command {
@@ -482,5 +527,7 @@ task skipNfirstlines {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }

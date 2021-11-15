@@ -15,6 +15,13 @@ workflow test_create_gtf_from_talon_db {
            "memory_gb": 2,
            "disks": "local-disk 50",
         }
+        String docker
+        String singularity=""
+    }
+
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
     }
 
     call longrna.create_gtf_from_talon_db { input:
@@ -23,5 +30,6 @@ workflow test_create_gtf_from_talon_db {
         genome_build=genome_build,
         output_prefix=output_prefix,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 }

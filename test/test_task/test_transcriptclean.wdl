@@ -19,6 +19,13 @@ workflow test_transcriptclean {
            "memory_gb": 2,
            "disks": "local-disk 50",
         }
+        String docker
+        String singularity=""
+    }
+
+    RuntimeEnvironment runtime_environment = {
+      "docker": docker,
+      "singularity": singularity
     }
 
     call longrna.transcriptclean { input:
@@ -29,6 +36,7 @@ workflow test_transcriptclean {
         output_prefix=output_prefix,
         canonical_only=canonical_only,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 
     call longrna.skipNfirstlines { input:
@@ -36,5 +44,6 @@ workflow test_transcriptclean {
         output_fn=output_fn,
         lines_to_skip=lines_to_skip,
         resources=resources,
+        runtime_environment=runtime_environment,
     }
 }

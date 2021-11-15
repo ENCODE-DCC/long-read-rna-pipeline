@@ -17,7 +17,7 @@ python_defaults: &python_defaults
 
 machine_defaults: &machine_defaults
   machine:
-    image: ubuntu-1604:202007-01 
+    image: ubuntu-2004:202107-02
   working_directory: ~/long-read-rna-pipeline
 
 commands:
@@ -27,15 +27,16 @@ commands:
       - run:
           command: |
             echo "export TAG=encodedcc/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}_${CIRCLE_WORKFLOW_ID}" >> ${BASH_ENV}
-            echo "export CROMWELL=./cromwell-49.jar" >> ${BASH_ENV}
-            echo "export WOMTOOL=./womtool-49.jar" >> ${BASH_ENV}
+            echo "export CROMWELL=./cromwell-70.jar" >> ${BASH_ENV}
+            echo "export WOMTOOL=./womtool-70.jar" >> ${BASH_ENV}
             source ${BASH_ENV}
 
   install_python_requirements:
     description: "Install pytest workflow requirements"
     steps:
+      - run: pyenv install 3.7.8
       - run: pyenv global 3.7.8
-      - run: pip install --upgrade pip
+      - run: pip install --upgrade pip==21.3.1
       - run: pip install -r requirements.txt
 
   download_file:
@@ -52,9 +53,9 @@ commands:
       - set_env_variables
       - install_python_requirements
       - download_file:
-          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/cromwell-49.jar"
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/70/cromwell-70.jar"
       - download_file:
-          file_url: "https://github.com/broadinstitute/cromwell/releases/download/49/womtool-49.jar"
+          file_url: "https://github.com/broadinstitute/cromwell/releases/download/70/womtool-70.jar"
 
   run_test_tag:
     description: "Run tagged test"
@@ -67,6 +68,39 @@ commands:
       - run:
           command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --symlink --kwd
           no_output_timeout: 60m
+
+  add_docker_image_tag_to_inputs:
+    description: "Add docker tag"
+    parameters:
+      path_to_inputs:
+        type: string
+    steps:
+      - run:
+          command: |
+            for json in <<parameters.path_to_inputs>>
+            do
+              prefix=$(basename $json .json)
+              cat $json | jq ".+{\"${prefix}.docker\": \"${TAG}\"}" > tmp.json
+              cp tmp.json $json 
+              rm tmp.json
+            done
+
+  add_runtime_environment_to_input:
+    description: "Add runtime environment"
+    parameters:
+      path_to_input:
+        type: string
+      prefix:
+        type: string
+    steps:
+      - run:
+          command: |
+            json=<<parameters.path_to_input>>
+            prefix=<<parameters.prefix>>
+            cat $json | jq ".+{\"${prefix}.runtime_environment\": {\"docker\": \"${TAG}\", \"singularity\": \"\"}}" > tmp.json
+            cp tmp.json $json 
+            rm tmp.json
+
 
 # Jobs
 jobs:
@@ -111,6 +145,8 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - add_docker_image_tag_to_inputs:
+          path_to_inputs: "test/unit/json/*.json"
       - run_test_tag:
           tag: "unit"
           wt: "4"
@@ -120,6 +156,15 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_concatenate_files.json"
+          prefix: "test_concatenate_files.concatenate_files" 
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_crop_reference_fasta_headers.json"
+          prefix: "test_crop_reference_fasta_headers.crop_reference_fasta_headers"
+      - add_runtime_environment_to_input:
+          path_to_input: "test/integration/json/test_make_gtf_from_spikein_fasta.json"
+          prefix: "test_make_gtf_from_spikein_fasta.make_gtf_from_spikein_fasta" 
       - run_test_tag:
           tag: "integration"
           wt: "4"
@@ -129,6 +174,8 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/functional/json/test_pipeline_with_spikeins.json long_read_rna_pipeline
+      - run: test/add_docker_image_tag_to_input.sh test/functional/json/test_pipeline_with_two_spikeins.json  long_read_rna_pipeline
       - run_test_tag:
           tag: "functional"
           wt: "4"
@@ -138,6 +185,7 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/test_workflow/json/test_workflow_input.json long_read_rna_pipeline
       - run_test_tag:
           tag: "workflow_one_replicate"
           wt: "4"
@@ -147,6 +195,7 @@ jobs:
     steps:
       - checkout
       - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/test_workflow/json/test_workflow_2reps_input.json long_read_rna_pipeline
       - run_test_tag:
           tag: "workflow_two_replicates"
           wt: "4"
@@ -158,6 +207,7 @@ jobs:
       - prepare_pytest_environment 
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_minimap2_input.json test_minimap2
             test/caper_run.sh test/test_task/test_minimap2.wdl test/test_task/test_minimap2_input.json
             python3 src/compare_md5.py --keys_to_inspect test_minimap2.skipNfirstlines.output_file test_minimap2.minimap2.mapping_qc \
             --metadata_json metadata.json \
@@ -174,6 +224,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_transcriptclean_input.json test_transcriptclean
             test/caper_run.sh test/test_task/test_transcriptclean.wdl test/test_task/test_transcriptclean_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_transcriptclean.transcriptclean.transcript_log \
@@ -187,23 +238,6 @@ jobs:
             python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_transcriptclean_input.result.json
           no_output_timeout: 30m
 
-  test_filter_transcriptclean:
-    <<: *machine_defaults
-    steps:
-      - checkout
-      - prepare_pytest_environment
-      - run: 
-          command: |
-            test/caper_run.sh test/test_task/test_filter_transcriptclean.wdl test/test_task/test_filter_transcriptclean_input.json
-            python3 src/compare_md5.py \
-            --keys_to_inspect test_filter_transcriptclean.skipNfirstlines.output_file \
-            --metadata_json metadata.json \
-            --reference_json test/test_task/test_filter_transcriptclean_reference_md5.json \
-            --outfile test_filter_transcriptclean_input.result.json
-            cat test_filter_transcriptclean_input.result.json
-            python3 -c "import sys; import json; data=json.loads(sys.stdin.read()); sys.exit(int(not data['match_overall']))" < test_filter_transcriptclean_input.result.json
-          no_output_timeout: 30m
-
   test_init_talon_database:
     <<: *machine_defaults
     steps:
@@ -211,6 +245,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_init_talon_db_input.json test_init_talon_db
             test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
@@ -228,6 +263,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_init_talon_db_idxprefix_input.json test_init_talon_db
             test/caper_run.sh test/test_task/test_init_talon_db.wdl test/test_task/test_init_talon_db_idxprefix_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_init_talon_db.init_talon_db.database test_init_talon_db.init_talon_db.talon_inputs \
@@ -245,6 +281,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_talon_input.json test_talon
             test/caper_run.sh test/test_task/test_talon.wdl test/test_task/test_talon_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_talon.talon.talon_log \
@@ -262,6 +299,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_create_abundance_from_talon_db_input.json test_create_abundance_from_talon_db
             test/caper_run.sh test/test_task/test_create_abundance_from_talon_db.wdl test/test_task/test_create_abundance_from_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_abundance_from_talon_db.create_abundance_from_talon_db.talon_abundance \
@@ -280,6 +318,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_create_gtf_from_talon_db_input.json test_create_gtf_from_talon_db
             test/caper_run.sh test/test_task/test_create_gtf_from_talon_db.wdl test/test_task/test_create_gtf_from_talon_db_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_create_gtf_from_talon_db.create_gtf_from_talon_db.gtf \
@@ -297,6 +336,7 @@ jobs:
       - prepare_pytest_environment
       - run: 
           command: |
+            test/add_docker_image_tag_to_input.sh test/test_task/test_calculate_spearman_input.json test_calculate_spearman
             test/caper_run.sh test/test_task/test_calculate_spearman.wdl test/test_task/test_calculate_spearman_input.json
             python3 src/compare_md5.py \
             --keys_to_inspect test_calculate_spearman.calculate_spearman.spearman \

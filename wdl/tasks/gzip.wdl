@@ -3,6 +3,7 @@ version 1.0
 
 import "../structs/gzip.wdl"
 import "../structs/resources.wdl"
+import "../structs/runtime.wdl"
 
 
 task gzip {
@@ -11,6 +12,7 @@ task gzip {
         String output_filename = "out"
         GzipParams params
         Resources resources
+        RuntimeEnvironment runtime_environment
     }
 
     String prefix = basename(input_file)
@@ -33,5 +35,7 @@ task gzip {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }

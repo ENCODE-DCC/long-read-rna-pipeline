@@ -2,12 +2,14 @@ version 1.0
 
 
 import "../structs/resources.wdl"
+import "../structs/runtime.wdl"
 
 
 task talon_reformat_gtf {
     input {
         File input_gtf
         Resources resources
+        RuntimeEnvironment runtime_environment
         String output_filename = "reformatted.gtf"
     }
 
@@ -30,6 +32,8 @@ task talon_reformat_gtf {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }
 
@@ -39,6 +43,7 @@ task talon_label_reads {
         File reference_genome
         Int fraca_range_size=20
         Resources resources
+        RuntimeEnvironment runtime_environment
         String output_bam_filename = "labeled.bam"
         String output_sam_filename = "labeled.sam"
         String output_tsv_filename = "labeled.tsv"
@@ -70,5 +75,7 @@ task talon_label_reads {
         cpu: resources.cpu
         memory: "~{resources.memory_gb} GB"
         disks: resources.disks
+        docker: runtime_environment.docker
+        singularity: runtime_environment.singularity
     }
 }

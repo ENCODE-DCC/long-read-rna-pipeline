@@ -11,24 +11,28 @@ workflow make_gtf_from_spikein_fasta {
         File spikein_fasta
         Resources resources
         String output_filename = "from_spikein_fasta.gtf.gz"
+        RuntimeEnvironment runtime_environment
     }
 
     call spikeins.merge_encode_annotations {
         input:
             resources=resources,
             spikein_fasta=spikein_fasta,
+            runtime_environment=runtime_environment,
     }
 
     call spikeins.separate_multistrand_genes {
         input:
             input_gtf=merge_encode_annotations.spikein_gtf,
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     call talon.talon_reformat_gtf {
         input:
             input_gtf=separate_multistrand_genes.separated_gtf,
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     call gzip.gzip {
@@ -40,6 +44,7 @@ workflow make_gtf_from_spikein_fasta {
                 "noname": true,
             },
             resources=resources,
+            runtime_environment=runtime_environment,
     }
 
     output {
