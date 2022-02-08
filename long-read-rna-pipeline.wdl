@@ -151,6 +151,7 @@ workflow long_read_rna_pipeline {
                 files=fastqs[i],
                 resources=small_task_resources,
                 output_filename="combined_"+(i+1)+"_fastq.gz",
+                runtime_environment=runtime_environment,
         }
 
         call init_talon_db { input:
