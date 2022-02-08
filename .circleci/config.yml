@@ -408,6 +408,7 @@ workflows:
             - wdl_functional_tests
             - wdl_workflow_one_rep_test
             - wdl_workflow_two_rep_test
+            - wdl_workflow_tech_rep_test
             - test_minimap2
             - test_transcriptclean
             - test_init_talon_database
