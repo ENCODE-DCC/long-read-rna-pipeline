@@ -20,7 +20,7 @@
       - "python3.7 $(which calculate_number_of_genes_detected.py)"
   files:
     - path: "test-output/rep1TEST_TECHREPS_QC.log"
-      md5sum: 4b3218078c7c1094f5f43eb94127d10d
+      md5sum: 129a220b806b256395994ffe8465e353 
     - path: "test-output/rep1TEST_TECHREPS_clean.TE.log"
       md5sum: 078be510c933242636a466091c075bb6
     - path: "test-output/rep1TEST_TECHREPS_clean.fa"
@@ -34,7 +34,7 @@
     - path: "test-output/rep1TEST_TECHREPS_talon.gtf.gz"
       md5sum: 83fb977175cad1c60d1c4f333eee97da
     - path: "test-output/rep1TEST_TECHREPS_talon_abundance.tsv"
-      md5sum: f275c2b9265b82fda240a15f9afc6675
+      md5sum: 35538e7f43f45b245cf0c826fbc414d5 
 
 - name: test_workflow_onerep
   tags:
