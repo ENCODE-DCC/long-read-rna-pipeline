@@ -200,6 +200,16 @@ jobs:
           tag: "workflow_two_replicates"
           wt: "4"
 
+  wdl_workflow_tech_rep_test:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/test_workflow/json/test_workflow_2techreps_input.json long_read_rna_pipeline
+      - run_test_tag:
+          tag: "workflow_techreps"
+          wt: "4"
+
   test_minimap2:
     <<: *machine_defaults
     steps:
