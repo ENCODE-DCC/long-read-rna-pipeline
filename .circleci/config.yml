@@ -377,6 +377,9 @@ workflows:
       - wdl_workflow_two_rep_test:
           requires:
             - build
+      - wdl_workflow_tech_rep_test:
+          requires:
+            - build
       - test_minimap2:
           requires:
             - build
