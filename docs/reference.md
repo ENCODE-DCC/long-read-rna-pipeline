@@ -37,7 +37,7 @@ A typical `input.json` is structured in the following way:
 
 ```
 {
-    "long_read_rna_pipeline.fastqs" : ["test_data/chr19_test_10000_reads.fastq.gz", "test_data/chr19_test_10000_reads_rep2.fastq.gz"],
+    "long_read_rna_pipeline.fastqs" : [["test_data/chr19_test_10000_reads.fastq.gz"], ["test_data/chr19_test_10000_reads_rep2.fastq.gz"]],
     "long_read_rna_pipeline.reference_genome" : "test_data/GRCh38_no_alt_analysis_set_GCA_000001405.15_chr19_only.fasta.gz",
     "long_read_rna_pipeline.annotation" : "test_data/gencode.v24.annotation_chr19.gtf.gz",
     "long_read_rna_pipeline.variants" : "test_data/00-common_chr19_only.vcf.gz",
@@ -74,7 +74,7 @@ Note that default resources for running with full sized data have been defined i
 
 The following elaborates on the meaning of each line in the input file.
 
-* `long_read_rna_pipeline.fastqs` Is a list of gzipped input fastqs, one file per replicate.
+* `long_read_rna_pipeline.fastqs` Is a list of lists of gzipped input fastqs, one list per replicate. For example if your first replicate consists of 2 fastq files `A.fastq.gz` and `B.fastq.gz`, and your second replicate only has one file `C.fastq.gz`, then then input would be `[["A.fastq.gz", "B.fastq.gz"], ["C.fastq.gz"]]. In the case of multiple fastqs per replicate, the fastqs are concatenated and mapped as one.
 * `long_read_rna_pipeline.reference_genome` Is the gzipped fasta file containing the reference genome used in mapping. Files for [human](https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/) and [mouse](https://www.encodeproject.org/files/mm10_no_alt_analysis_set_ENCODE/) are available on the [ENCODE Portal](https://https://www.encodeproject.org/).
 * `long_read_rna_pipeline.annotation` Is the gzipped gtf file containing the annotations. Files for [human V29](https://www.encodeproject.org/files/gencode.v29.primary_assembly.annotation_UCSC_names/) and [mouse M21](https://www.encodeproject.org/files/gencode.vM21.primary_assembly.annotation_UCSC_names/) are available on the [ENCODE Portal](https://https://www.encodeproject.org/).
 * `long_read_rna_pipeline.variants` Is the gzipped vcf file containing variants. File for [human]((https://www.encodeproject.org/files/ENCFF911UGW/) is available on the [ENCODE Portal](https://https://www.encodeproject.org/). Variants file used in the pipeline is derived from dbsnp variants [file](https://www.encodeproject.org/files/ENCFF744NWL/) by modifying the chromosome names to match the ones in the reference genome. The original file uses short chromosome names (1,2,3 etc.) and the reference uses longer names (chr1, chr2, chr3, etc.). This input is optional and can be left undefined. Defining variants input prevents TranscriptClean from correcting away known variants.
