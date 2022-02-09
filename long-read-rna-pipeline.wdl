@@ -21,7 +21,7 @@ workflow long_read_rna_pipeline {
 
     input {
         # Input fastqs, gzipped.
-        Array[File] fastqs
+        Array[Array[File]] fastqs
         # Reference genome. Fasta format, gzipped.
         File reference_genome
         # Annotation file, gtf format, gzipped.
@@ -146,6 +146,14 @@ workflow long_read_rna_pipeline {
 
         String talon_prefix = if length(talon_prefixes) > 0 then talon_prefixes[i] else "TALON"
 
+        call concatenate_files.concatenate_files as combined_fastq {
+            input:
+                files=fastqs[i],
+                resources=small_task_resources,
+                output_filename="combined_"+(i+1)+"_fastq.gz",
+                runtime_environment=runtime_environment,
+        }
+
         call init_talon_db { input:
             annotation_gtf=decompressed_gtf.out,
             annotation_name=annotation_name,
@@ -157,7 +165,7 @@ workflow long_read_rna_pipeline {
         }
 
         call minimap2 { input:
-            fastq=fastqs[i],
+            fastq=combined_fastq.concatenated_file,
             reference_genome=clean_reference.compressed,
             output_prefix="rep"+(i+1)+experiment_prefix,
             input_type=input_type,

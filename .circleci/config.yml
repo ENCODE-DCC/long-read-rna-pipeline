@@ -66,7 +66,7 @@ commands:
         type: string
     steps:
       - run:
-          command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --symlink --kwd
+          command: pytest -v --tag <<parameters.tag>> --wt <<parameters.wt>> --kwd
           no_output_timeout: 60m
 
   add_docker_image_tag_to_inputs:
@@ -198,6 +198,16 @@ jobs:
       - run: test/add_docker_image_tag_to_input.sh test/test_workflow/json/test_workflow_2reps_input.json long_read_rna_pipeline
       - run_test_tag:
           tag: "workflow_two_replicates"
+          wt: "4"
+
+  wdl_workflow_tech_rep_test:
+    <<: *machine_defaults
+    steps:
+      - checkout
+      - prepare_pytest_environment
+      - run: test/add_docker_image_tag_to_input.sh test/test_workflow/json/test_workflow_2techreps_input.json long_read_rna_pipeline
+      - run_test_tag:
+          tag: "workflow_techreps"
           wt: "4"
 
   test_minimap2:
@@ -367,6 +377,9 @@ workflows:
       - wdl_workflow_two_rep_test:
           requires:
             - build
+      - wdl_workflow_tech_rep_test:
+          requires:
+            - build
       - test_minimap2:
           requires:
             - build
@@ -398,6 +411,7 @@ workflows:
             - wdl_functional_tests
             - wdl_workflow_one_rep_test
             - wdl_workflow_two_rep_test
+            - wdl_workflow_tech_rep_test
             - test_minimap2
             - test_transcriptclean
             - test_init_talon_database
