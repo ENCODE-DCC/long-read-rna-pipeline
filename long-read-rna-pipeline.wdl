@@ -12,9 +12,9 @@ import "wdl/tasks/transcriptclean.wdl"
 workflow long_read_rna_pipeline {
     meta {
         author: "Otto Jolanki"
-        version: "v2.0.0"
-        caper_docker: "encodedcc/long-read-rna-pipeline:v2.0.0"
-        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.0.0"
+        version: "v2.1.0"
+        caper_docker: "encodedcc/long-read-rna-pipeline:v2.1.0"
+        caper_singularity: "docker://encodedcc/long-read-rna-pipeline:v2.1.0"
         croo_out_def: "https://storage.googleapis.com/encode-pipeline-output-definition/longreadrna.output_definition.json"
         description: "ENCODE Long-read-rna pipeline, see https://github.com/ENCODE-DCC/long-read-rna-pipeline for details."
     }
@@ -45,8 +45,8 @@ workflow long_read_rna_pipeline {
         # or that contain annotated noncanonical junctions to the clean SAM and Fasta files at the end
         # of the run.
         Boolean canonical_only = true
-        String docker = "encodedcc/long-read-rna-pipeline:v2.0.0"
-        String singularity = "docker://encodedcc/long-read-rna-pipeline:v2.0.0"
+        String docker = "encodedcc/long-read-rna-pipeline:v2.1.0"
+        String singularity = "docker://encodedcc/long-read-rna-pipeline:v2.1.0"
 
         # Resouces
         Resources small_task_resources = {
